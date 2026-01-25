@@ -44,22 +44,22 @@ type WidgetDataTemplate(node: IViewNode, templateFn: obj -> Widget) as this =
 
         item
 
-type WidgetTreeDataTemplate(node: IViewNode, childrenFn: obj -> IEnumerable, templateFn: obj -> Widget) =
+//type WidgetTreeDataTemplate(node: IViewNode, childrenFn: obj -> IEnumerable, templateFn: obj -> Widget) =
 
-    interface ITreeDataTemplate with
-        member this.ItemsSelector(item) =
-            InstancedBinding.OneTime(childrenFn item)
+//    interface ITreeDataTemplate with
+//        member this.ItemsSelector(item) =
+//            InstancedBinding.OneTime(childrenFn item)
 
-        member this.Match(_data) = true
+//        member this.Match(_data) = true
 
-        member this.Build(data: obj) =
-            let widget = templateFn data
-            let definition = WidgetDefinitionStore.get widget.Key
+//        member this.Build(data: obj) =
+//            let widget = templateFn data
+//            let definition = WidgetDefinitionStore.get widget.Key
 
-            let struct (_, view) =
-                definition.CreateView(widget, node.EnvironmentContext, node.TreeContext, ValueSome node)
+//            let struct (_, view) =
+//                definition.CreateView(widget, node.EnvironmentContext, node.TreeContext, ValueSome node)
 
-            view :?> Control
+//            view :?> Control
 
 type WidgetItemsPanel(node: IViewNode, widget: Widget) as this =
     inherit FuncTemplate<Panel>(fun _ -> this.BuildPanel())

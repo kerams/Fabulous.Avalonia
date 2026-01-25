@@ -15,7 +15,7 @@ module ItemsControl =
         Attributes.defineAvaloniaNonGenericListWidgetCollection "ItemsControl_Items" (fun target ->
             let target = target :?> ItemsControl
 
-            if target.Items = null then
+            if isNull target.Items then
                 let newColl = ItemCollection.Empty
                 target.Items.Add newColl |> ignore
                 newColl
@@ -82,5 +82,5 @@ type ItemsControlModifiers =
     /// <param name="this">Current widget.</param>
     /// <param name="value">The DisplayMemberBinding value.</param>
     [<Extension>]
-    static member inline displayMemberBinding(this: WidgetBuilder<'msg, #IFabItemsControl>, value: IBinding) =
+    static member inline displayMemberBinding(this: WidgetBuilder<'msg, #IFabItemsControl>, value: BindingBase) =
         this.AddScalar(ItemsControl.DisplayMemberBinding.WithValue(value))

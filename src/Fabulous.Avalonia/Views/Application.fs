@@ -21,11 +21,8 @@ type FabApplication() =
     inherit Application()
 
     let _windows = List<FabWindow>()
-
     let mutable _mainView: Control = null
-
     let mutable _shutdownMode: ShutdownMode = ShutdownMode.OnLastWindowClose
-
     let mutable _onFrameworkInitialized: Application -> unit = fun _ -> ()
 
     member this.InternalWindows = _windows :> IList<FabWindow>
@@ -60,12 +57,18 @@ type FabApplication() =
 
     override this.OnFrameworkInitializationCompleted() =
         this.OnFrameworkInitialized(this)
+
+        match this.ApplicationLifetime with
+        | :? IActivityApplicationLifetime as activityLifetime -> activityLifetime.MainViewFactory <- fun () -> _mainView
+        | _ -> ()
+
         base.OnFrameworkInitializationCompleted()
 
     member private this.UpdateLifetime() =
         match this.ApplicationLifetime with
-        | :? IClassicDesktopStyleApplicationLifetime as desktopLifetime when _windows.Count > 0 -> desktopLifetime.MainWindow <- _windows[0]
+        | :? IActivityApplicationLifetime -> ()
         | :? ISingleViewApplicationLifetime as singleViewLifetime -> singleViewLifetime.MainView <- _mainView
+        | :? IClassicDesktopStyleApplicationLifetime as desktopLifetime when _windows.Count > 0 -> desktopLifetime.MainWindow <- _windows[0]
         | _ -> ()
 
     /// <summary>Gets the top-level window or view for the application.</summary>
@@ -203,11 +206,11 @@ module Application =
             (fun target -> (target :?> FabApplication).InsetsManager.IsSystemBarVisible)
             (fun target value -> (target :?> FabApplication).InsetsManager.IsSystemBarVisible <- value)
 
-    let DisplayEdgeToEdge =
+    let DisplayEdgeToEdgePreference =
         Attributes.definePropertyWithGetSet
-            "Application_DisplayEdgeToEdge"
-            (fun target -> (target :?> FabApplication).InsetsManager.DisplayEdgeToEdge)
-            (fun target value -> (target :?> FabApplication).InsetsManager.DisplayEdgeToEdge <- value)
+            "Application_DisplayEdgeToEdgePreference"
+            (fun target -> (target :?> FabApplication).InsetsManager.DisplayEdgeToEdgePreference)
+            (fun target value -> (target :?> FabApplication).InsetsManager.DisplayEdgeToEdgePreference <- value)
 
     let SystemBarColor =
         Attributes.definePropertyWithGetSet
@@ -268,8 +271,8 @@ type ApplicationModifiers =
     /// <param name="this">Current widget.</param>
     /// <param name="value">Display edge to edge to be used for the application.</param>
     [<Extension>]
-    static member inline displayEdgeToEdge(this: WidgetBuilder<'msg, #IFabApplication>, value: bool) =
-        this.AddScalar(Application.DisplayEdgeToEdge.WithValue(value))
+    static member inline displayEdgeToEdgePreference(this: WidgetBuilder<'msg, #IFabApplication>, value: bool) =
+        this.AddScalar(Application.DisplayEdgeToEdgePreference.WithValue(value))
 
     /// <summary>Sets the application system bar color.</summary>
     /// <param name="this">Current widget.</param>

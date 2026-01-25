@@ -5,7 +5,7 @@
     <DisableImplicitFSharpCoreReference>true</DisableImplicitFSharpCoreReference>
     <DisableImplicitSystemValueTupleReference>true</DisableImplicitSystemValueTupleReference>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
-    <AvaloniaVersion>11.3.0</AvaloniaVersion>
+    <AvaloniaVersion>12.0.999-cibuild0061581-alpha</AvaloniaVersion>
     <AvaloniaLabsVersion>11.3.0</AvaloniaLabsVersion>
     <FabulousVersion>3.0.0-pre22</FabulousVersion>
   </PropertyGroup>
