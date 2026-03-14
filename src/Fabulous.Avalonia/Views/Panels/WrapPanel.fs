@@ -52,7 +52,6 @@ module WrapPanelBuilders =
                 AttributesBundle(
                     StackList.two(WrapPanel.Orientation.WithValue(Orientation.Vertical), WrapPanel.ItemsAlignment.WithValue(alignment)),
                     [||],
-                    [||],
                     [||]
                 )
             )
@@ -72,7 +71,6 @@ module WrapPanelBuilders =
                 Panel.Children,
                 AttributesBundle(
                     StackList.two(WrapPanel.Orientation.WithValue(Orientation.Horizontal), WrapPanel.ItemsAlignment.WithValue(alignment)),
-                    [||],
                     [||],
                     [||]
                 )

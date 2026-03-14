@@ -40,7 +40,6 @@ module ComponentExpanderBuilders =
                 AttributesBundle(
                     StackList.one(ContentControl.ContentString.WithValue(content)),
                     [| HeaderedContentControl.HeaderWidget.WithValue(header.Compile()) |],
-                    [||],
                     [||]
                 )
             )
@@ -54,7 +53,6 @@ module ComponentExpanderBuilders =
                 AttributesBundle(
                     StackList.one(HeaderedContentControl.HeaderString.WithValue(header)),
                     [| ContentControl.ContentWidget.WithValue(content.Compile()) |],
-                    [||],
                     [||]
                 )
             )
@@ -69,7 +67,6 @@ module ComponentExpanderBuilders =
                     StackList.empty(),
                     [| HeaderedContentControl.HeaderWidget.WithValue(header.Compile())
                        ContentControl.ContentWidget.WithValue(content.Compile()) |],
-                    [||],
                     [||]
                 )
             )

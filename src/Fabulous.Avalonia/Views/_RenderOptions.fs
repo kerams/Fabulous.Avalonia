@@ -38,16 +38,6 @@ module RenderOptions =
                 let target = target :?> Visual
                 RenderOptions.SetEdgeMode(target, value))
 
-    let TextRenderingMode =
-        Attributes.definePropertyWithGetSet
-            "RenderOptions_TextRenderingMode"
-            (fun target ->
-                let target = target :?> Visual
-                RenderOptions.GetTextRenderingMode(target))
-            (fun target value ->
-                let target = target :?> Visual
-                RenderOptions.SetTextRenderingMode(target, value))
-
 type RenderOptionsModifiers =
     /// <summary>Sets the BitmapInterpolationMode property.</summary>
     /// <param name="this">Current widget.</param>
@@ -69,10 +59,3 @@ type RenderOptionsModifiers =
     [<Extension>]
     static member inline edgeMode(this: WidgetBuilder<'msg, #IFabElement>, value: EdgeMode) =
         this.AddScalar(RenderOptions.EdgeMode.WithValue(value))
-
-    /// <summary>Sets the TextRenderingMode property.</summary>
-    /// <param name="this">Current widget.</param>
-    /// <param name="value">The TextRenderingMode value.</param>
-    [<Extension>]
-    static member inline textRenderingMode(this: WidgetBuilder<'msg, #IFabElement>, value: TextRenderingMode) =
-        this.AddScalar(RenderOptions.TextRenderingMode.WithValue(value))

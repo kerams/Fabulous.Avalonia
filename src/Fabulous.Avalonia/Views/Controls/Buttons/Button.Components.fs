@@ -29,7 +29,6 @@ module ComponentButtonBuilders =
                 AttributesBundle(
                     StackList.one(ComponentButton.Clicked.WithValue(fn)),
                     [| ContentControl.ContentWidget.WithValue(content.Compile()) |],
-                    [||],
                     [||]
                 )
             )

@@ -1,4 +1,4 @@
-﻿namespace Fabulous.Avalonia
+namespace Fabulous.Avalonia
 
 open Avalonia.Controls
 open Avalonia.Controls.Primitives
@@ -59,7 +59,6 @@ module SplitViewBuilders =
                     StackList.empty(),
                     [| SplitView.Pane.WithValue(pane.Compile())
                        ContentControl.ContentWidget.WithValue(content.Compile()) |],
-                    [||],
                     [||]
                 )
             )

@@ -5,6 +5,7 @@ open Avalonia.Controls
 open Avalonia.Interactivity
 open Fabulous
 open Fabulous.Avalonia
+open Avalonia.Input
 
 module MvuControl =
 

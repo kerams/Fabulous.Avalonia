@@ -104,7 +104,7 @@ module Attributes =
             | ValueSome v -> target.SetValue(directProperty, v) |> ignore)
 
     /// Define an attribute storing a Widget for an AvaloniaProperty
-    let inline defineAvaloniaPropertyWidget (property: AvaloniaProperty<'T>) =
+    let inline defineAvaloniaPropertyWidget (property: AvaloniaProperty<'T | null>) =
         Attributes.definePropertyWidget property.Name (fun target -> (target :?> AvaloniaObject).GetValue(property)) (fun target value ->
             let avaloniaObject = target :?> AvaloniaObject
 

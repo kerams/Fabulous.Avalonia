@@ -21,7 +21,7 @@ type FabApplication() =
     inherit Application()
 
     let _windows = List<FabWindow>()
-    let mutable _mainView: Control = null
+    let mutable _mainView: Control | null = null
     let mutable _shutdownMode: ShutdownMode = ShutdownMode.OnLastWindowClose
     let mutable _onFrameworkInitialized: Application -> unit = fun _ -> ()
 
@@ -59,7 +59,7 @@ type FabApplication() =
         this.OnFrameworkInitialized(this)
 
         match this.ApplicationLifetime with
-        | :? IActivityApplicationLifetime as activityLifetime -> activityLifetime.MainViewFactory <- fun () -> _mainView
+        | :? IActivityApplicationLifetime as activityLifetime -> activityLifetime.MainViewFactory <- fun () -> Unchecked.nonNull _mainView
         | _ -> ()
 
         base.OnFrameworkInitializationCompleted()
@@ -104,13 +104,6 @@ type FabApplication() =
         match this.ApplicationLifetime with
         | :? IClassicDesktopStyleApplicationLifetime when _windows.Count > 0 -> TopLevel.GetTopLevel(_windows[0]).FocusManager
         | :? ISingleViewApplicationLifetime when not(isNull _mainView) -> TopLevel.GetTopLevel(_mainView).FocusManager
-        | _ -> failwith "ApplicationLifetime is not supported"
-
-    /// <summary>Gets the platform-specific settings for the application.</summary>
-    member this.PlatformSettings =
-        match this.ApplicationLifetime with
-        | :? IClassicDesktopStyleApplicationLifetime when _windows.Count > 0 -> TopLevel.GetTopLevel(_windows[0]).PlatformSettings
-        | :? ISingleViewApplicationLifetime when not(isNull _mainView) -> TopLevel.GetTopLevel(_mainView).PlatformSettings
         | _ -> failwith "ApplicationLifetime is not supported"
 
     /// <summary>Gets the platform-specific insets manager for the application.</summary>
@@ -159,7 +152,7 @@ module Application =
             let target = target :?> FabApplication
             let trayIcons = TrayIcon.GetIcons(target)
 
-            if trayIcons = null then
+            if isNull trayIcons then
                 let trayIcons = TrayIcons()
                 TrayIcon.SetIcons(target, trayIcons)
                 trayIcons
@@ -237,7 +230,7 @@ module ApplicationBuilders =
             CollectionBuilder<'msg, IFabApplication, IFabWindow>(
                 Application.WidgetKey,
                 Application.Windows,
-                AttributesBundle(StackList.empty(), [||], [||], [||])
+                AttributesBundle(StackList.empty(), [||], [||])
             )
 
         /// <summary>Creates a SingleViewApplication widget with a content widget.</summary>

@@ -1,4 +1,4 @@
-﻿namespace Fabulous.Avalonia
+namespace Fabulous.Avalonia
 
 open System
 open System.Runtime.CompilerServices
@@ -51,7 +51,6 @@ module HyperlinkButtonBuilders =
                 AttributesBundle(
                     StackList.one(HyperlinkButton.NavigateUri.WithValue(uri)),
                     [| ContentControl.ContentWidget.WithValue(content.Compile()) |],
-                    [||],
                     [||]
                 )
             )
@@ -65,7 +64,6 @@ module HyperlinkButtonBuilders =
                 AttributesBundle(
                     StackList.one(HyperlinkButton.NavigateUri.WithValue(Uri(uri))),
                     [| ContentControl.ContentWidget.WithValue(content.Compile()) |],
-                    [||],
                     [||]
                 )
             )

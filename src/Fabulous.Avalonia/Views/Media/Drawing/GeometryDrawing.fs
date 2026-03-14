@@ -39,7 +39,6 @@ module GeometryDrawingBuilders =
                     StackList.empty(),
                     [| GeometryDrawing.BrushWidget.WithValue(brush.Compile())
                        GeometryDrawing.GeometryWidget.WithValue(geometry.Compile()) |],
-                    [||],
                     [||]
                 )
             )
@@ -53,7 +52,6 @@ module GeometryDrawingBuilders =
                 AttributesBundle(
                     StackList.one(GeometryDrawing.Geometry.WithValue(StreamGeometry.Parse(geometry))),
                     [| GeometryDrawing.BrushWidget.WithValue(brush.Compile()) |],
-                    [||],
                     [||]
                 )
             )
@@ -91,7 +89,6 @@ module GeometryDrawingBuilders =
                 AttributesBundle(
                     StackList.one(GeometryDrawing.Brush.WithValue(brush)),
                     [| GeometryDrawing.GeometryWidget.WithValue(geometry.Compile()) |],
-                    [||],
                     [||]
                 )
             )
@@ -104,7 +101,6 @@ module GeometryDrawingBuilders =
                 GeometryDrawing.WidgetKey,
                 AttributesBundle(
                     StackList.two(GeometryDrawing.Brush.WithValue(brush), GeometryDrawing.Geometry.WithValue(StreamGeometry.Parse(geometry))),
-                    [||],
                     [||],
                     [||]
                 )

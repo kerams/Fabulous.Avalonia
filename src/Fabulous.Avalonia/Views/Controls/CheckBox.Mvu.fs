@@ -35,7 +35,6 @@ module MvuCheckBoxBuilders =
                 AttributesBundle(
                     StackList.one(MvuToggleButton.CheckedChanged.WithValue(ValueEventData.create isChecked fn)),
                     [| ContentControl.ContentWidget.WithValue(content.Compile()) |],
-                    [||],
                     [||]
                 )
             )
@@ -77,7 +76,6 @@ module MvuCheckBoxBuilders =
                         ToggleButton.IsThreeState.WithValue(true)
                     ),
                     [| ContentControl.ContentWidget.WithValue(content.Compile()) |],
-                    [||],
                     [||]
                 )
             )

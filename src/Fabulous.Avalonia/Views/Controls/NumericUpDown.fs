@@ -1,4 +1,4 @@
-﻿namespace Fabulous.Avalonia
+namespace Fabulous.Avalonia
 
 open Avalonia.Controls
 open Avalonia.Data.Converters
@@ -79,8 +79,8 @@ module NumericUpDown =
     let TextConverter =
         Attributes.defineAvaloniaPropertyWithEquality NumericUpDown.TextConverterProperty
 
-    let Watermark =
-        Attributes.defineAvaloniaPropertyWithEquality NumericUpDown.WatermarkProperty
+    let PlaceholderText =
+        Attributes.defineAvaloniaPropertyWithEquality NumericUpDown.PlaceholderTextProperty
 
     let TextAlignment =
         Attributes.defineAvaloniaPropertyWithEquality NumericUpDown.TextAlignmentProperty
@@ -183,8 +183,8 @@ type NumericUpDownModifiers =
     /// <param name="this">Current widget.</param>
     /// <param name="value">The Watermark value.</param>
     [<Extension>]
-    static member inline watermark(this: WidgetBuilder<'msg, #IFabNumericUpDown>, value: string) =
-        this.AddScalar(NumericUpDown.Watermark.WithValue(value))
+    static member inline placeholderText(this: WidgetBuilder<'msg, #IFabNumericUpDown>, value: string) =
+        this.AddScalar(NumericUpDown.PlaceholderText.WithValue(value))
 
     /// <summary>Sets the TextAlignment property.</summary>
     /// <param name="this">Current widget.</param>

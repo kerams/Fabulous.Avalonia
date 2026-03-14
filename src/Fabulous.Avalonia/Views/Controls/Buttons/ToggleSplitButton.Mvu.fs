@@ -34,7 +34,6 @@ module MvuToggleSplitButtonBuilders =
                 AttributesBundle(
                     StackList.one(MvuToggleSplitButton.CheckedChanged.WithValue(ValueEventData.create isChecked fn)),
                     [| ContentControl.ContentWidget.WithValue(content.Compile()) |],
-                    [||],
                     [||]
                 )
             )

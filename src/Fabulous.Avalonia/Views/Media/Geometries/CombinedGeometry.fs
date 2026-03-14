@@ -35,7 +35,6 @@ module CombinedGeometryBuilders =
                     StackList.empty(),
                     [| CombinedGeometry.Geometry1.WithValue(geometry1.Compile())
                        CombinedGeometry.Geometry2.WithValue(geometry2.Compile()) |],
-                    [||],
                     [||]
                 )
             )

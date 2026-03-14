@@ -15,7 +15,7 @@ type WidgetOps<'T when 'T :> AvaloniaObject and 'T: (new: unit -> 'T)> = 'T
 
 module Widgets =
     /// Registers a widget with the given factory function.
-    let registerWithFactory<'T when 'T :> AvaloniaObject> (factory: unit -> 'T) =
+    let registerWithFactory<'T when 'T :> AvaloniaObject and 'T: not null> (factory: unit -> 'T) =
         let key = WidgetDefinitionStore.getNextKey()
 
         let definition =
@@ -23,7 +23,7 @@ module Widgets =
               Name = typeof<'T>.Name
               TargetType = typeof<'T>
               CreateView =
-                fun (widget, envContext, treeContext, parentNode) ->
+                fun (widget, treeContext, parentNode) ->
                     treeContext.Logger.Debug("Creating view for {0}", typeof<'T>.Name)
 
                     let view = factory()
@@ -34,16 +34,16 @@ module Widgets =
                         | ValueNone -> None
                         | ValueSome node -> Some node
 
-                    let node = new ViewNode(parentNode, envContext, treeContext, weakReference)
+                    let node = new ViewNode(parentNode, treeContext, weakReference)
 
                     ViewNode.set node view
 
                     // additionalSetup view node
 
                     Reconciler.update treeContext.CanReuseView ValueNone widget node
-                    struct (node :> IViewNode, box view)
+                    struct (node :> IViewNode, box view |> Unchecked.nonNull)
               AttachView =
-                fun (widget, envContext, treeContext, parentNode, view) ->
+                fun (widget, treeContext, parentNode, view) ->
                     treeContext.Logger.Debug("Attaching view for {0}", typeof<'T>.Name)
 
                     let weakReference = WeakReference(view)
@@ -53,7 +53,7 @@ module Widgets =
                         | ValueNone -> None
                         | ValueSome node -> Some node
 
-                    let node = new ViewNode(parentNode, envContext, treeContext, weakReference)
+                    let node = new ViewNode(parentNode, treeContext, weakReference)
 
                     ViewNode.set node view
 
@@ -66,7 +66,7 @@ module Widgets =
         key
 
     /// Registers a widget with the given constructor.
-    let register<'T when WidgetOps<'T>> () = registerWithFactory(fun () -> new 'T())
+    let register<'T when WidgetOps<'T> and 'T: not null> () = registerWithFactory(fun () -> new 'T())
 
 module WidgetHelpers =
     /// Compiles the templateBuilder into a template.
@@ -89,4 +89,4 @@ module WidgetHelpers =
 
     /// Creates a widget with the given key and attributes.
     let inline buildWidgets<'msg, 'marker when 'msg: equality> (key: WidgetKey) scalars (attrs: WidgetAttribute[]) =
-        WidgetBuilder<'msg, 'marker>(key, struct (scalars, attrs, [||], [||]))
+        WidgetBuilder<'msg, 'marker>(key, struct (scalars, attrs, [||]))

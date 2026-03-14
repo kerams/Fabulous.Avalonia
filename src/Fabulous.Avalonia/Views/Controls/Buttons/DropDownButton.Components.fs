@@ -1,4 +1,4 @@
-﻿namespace Fabulous.Avalonia
+namespace Fabulous.Avalonia
 
 open Avalonia.Interactivity
 open Fabulous
@@ -28,7 +28,6 @@ module ComponentDropDownButtonBuilders =
                 AttributesBundle(
                     StackList.one(ComponentButton.Clicked.WithValue(msg)),
                     [| ContentControl.ContentWidget.WithValue(content.Compile()) |],
-                    [||],
                     [||]
                 )
             )

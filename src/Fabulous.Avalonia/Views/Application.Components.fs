@@ -28,11 +28,6 @@ module ComponentApplication =
             (FabApplication.Current.TryGetFeature(typeof<IActivatableLifetime>) :?> IActivatableLifetime)
                 .Deactivated)
 
-    let ColorValuesChanged =
-        Attributes.Component.defineEvent "PlatformSettings_ColorValuesChanged" (fun target ->
-            (target :?> FabApplication)
-                .PlatformSettings.ColorValuesChanged)
-
     let SafeAreaChanged =
         Attributes.Component.defineEvent "PlatformSettings_SafeAreaChanged" (fun target -> (target :?> FabApplication).InsetsManager.SafeAreaChanged)
 
@@ -73,13 +68,6 @@ type ComponentApplicationModifiers =
     [<Extension>]
     static member inline onDeactivated(this: WidgetBuilder<'msg, #IFabApplication>, fn: ActivatedEventArgs -> unit) =
         this.AddScalar(ComponentApplication.Deactivated.WithValue(fn))
-
-    /// <summary>Listens to the PlatformSettings color values changed event.</summary>
-    /// <param name="this">Current widget.</param>
-    /// <param name="fn">Raised when current system color values are changed. Including changing of a dark mode and accent colors.</param>
-    [<Extension>]
-    static member inline onColorValuesChanged(this: WidgetBuilder<'msg, #IFabApplication>, fn: Platform.PlatformColorValues -> unit) =
-        this.AddScalar(ComponentApplication.ColorValuesChanged.WithValue(fn))
 
     /// <summary>Listens to the PlatformSettings safe area changed event.</summary>
     /// <param name="this">Current widget.</param>

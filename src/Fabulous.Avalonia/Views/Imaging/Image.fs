@@ -80,7 +80,7 @@ module ImageBuilders =
         static member Image(source: WidgetBuilder<'msg, #IFabDrawingImage>) =
             WidgetBuilder<'msg, IFabImage>(
                 Image.WidgetKey,
-                AttributesBundle(StackList.one(Image.Stretch.WithValue(Stretch.Uniform)), [| Image.SourceWidget.WithValue(source.Compile()) |], [||], [||])
+                AttributesBundle(StackList.one(Image.Stretch.WithValue(Stretch.Uniform)), [| Image.SourceWidget.WithValue(source.Compile()) |], [||])
             )
 
         /// <summary>Creates an Image widget.</summary>
@@ -89,7 +89,7 @@ module ImageBuilders =
         static member Image(stretch: Stretch, source: WidgetBuilder<'msg, #IFabDrawingImage>) =
             WidgetBuilder<'msg, IFabImage>(
                 Image.WidgetKey,
-                AttributesBundle(StackList.one(Image.Stretch.WithValue(stretch)), [| Image.SourceWidget.WithValue(source.Compile()) |], [||], [||])
+                AttributesBundle(StackList.one(Image.Stretch.WithValue(stretch)), [| Image.SourceWidget.WithValue(source.Compile()) |], [||])
             )
 
         /// <summary>Creates an Image widget.</summary>
@@ -97,7 +97,7 @@ module ImageBuilders =
         static member Image(source: WidgetBuilder<'msg, IFabCroppedBitmap>) =
             WidgetBuilder<'msg, IFabImage>(
                 Image.WidgetKey,
-                AttributesBundle(StackList.one(Image.Stretch.WithValue(Stretch.Uniform)), [| Image.SourceWidget.WithValue(source.Compile()) |], [||], [||])
+                AttributesBundle(StackList.one(Image.Stretch.WithValue(Stretch.Uniform)), [| Image.SourceWidget.WithValue(source.Compile()) |], [||])
             )
 
         /// <summary>Creates an Image widget.</summary>
@@ -106,7 +106,7 @@ module ImageBuilders =
         static member Image(stretch: Stretch, source: WidgetBuilder<'msg, IFabCroppedBitmap>) =
             WidgetBuilder<'msg, IFabImage>(
                 Image.WidgetKey,
-                AttributesBundle(StackList.one(Image.Stretch.WithValue(stretch)), [| Image.SourceWidget.WithValue(source.Compile()) |], [||], [||])
+                AttributesBundle(StackList.one(Image.Stretch.WithValue(stretch)), [| Image.SourceWidget.WithValue(source.Compile()) |], [||])
             )
 
 type ImageModifiers =

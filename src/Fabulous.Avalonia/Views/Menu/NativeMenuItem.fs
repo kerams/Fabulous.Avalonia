@@ -60,13 +60,6 @@ type NativeMenuItemModifiers =
     static member inline isChecked(this: WidgetBuilder<'msg, #IFabNativeMenuItem>, value: bool) =
         this.AddScalar(NativeMenuItem.IsChecked.WithValue(value))
 
-    /// <summary>Sets the ToggleType property.</summary>
-    /// <param name="this">Current widget.</param>
-    /// <param name="value">The ToggleType value.</param>
-    [<Extension>]
-    static member inline toggleType(this: WidgetBuilder<'msg, #IFabNativeMenuItem>, value: NativeMenuItemToggleType) =
-        this.AddScalar(NativeMenuItem.ToggleType.WithValue(value))
-
     /// <summary>Sets the IsEnabled property.</summary>
     /// <param name="this">Current widget.</param>
     /// <param name="value">The IsEnabled value.</param>

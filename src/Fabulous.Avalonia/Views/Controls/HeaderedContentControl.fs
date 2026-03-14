@@ -30,7 +30,6 @@ module HeaderedContentControlBuilders =
                 AttributesBundle(
                     StackList.one(HeaderedContentControl.HeaderString.WithValue(header)),
                     [| ContentControl.ContentWidget.WithValue(content.Compile()) |],
-                    [||],
                     [||]
                 )
             )
@@ -45,7 +44,6 @@ module HeaderedContentControlBuilders =
                     StackList.empty(),
                     [| HeaderedContentControl.HeaderWidget.WithValue(header.Compile())
                        ContentControl.ContentWidget.WithValue(content.Compile()) |],
-                    [||],
                     [||]
                 )
             )
