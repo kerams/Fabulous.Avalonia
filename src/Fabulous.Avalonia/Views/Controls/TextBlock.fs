@@ -99,11 +99,13 @@ module ComponentTextBlockBuilders =
         /// <summary>Creates a TextBlock widget.</summary>
         /// <param name="text">The text to display.</param>
         static member inline TextBlock(text: string) =
-            WidgetBuilder<'msg, IFabTextBlock>(TextBlock.WidgetKey, TextBlock.Text.WithValue(text))
+            let attr = TextBlock.Text.WithValue(text)
+            WidgetBuilder<'msg, IFabTextBlock>(TextBlock.WidgetKey, &attr)
 
         /// <summary>Creates a TextBlock widget.</summary>
         static member inline TextBlock() =
-            CollectionBuilder<'msg, IFabTextBlock, IFabInline>(TextBlock.WidgetKey, TextBlock.Inlines)
+            let attr = TextBlock.Inlines
+            CollectionBuilder<'msg, IFabTextBlock, IFabInline>(TextBlock.WidgetKey, attr)
 
 type TextBlockModifiers =
     /// <summary>Sets the Background property.</summary>
@@ -111,7 +113,8 @@ type TextBlockModifiers =
     /// <param name="value">The Background value.</param>
     [<Extension>]
     static member inline background(this: WidgetBuilder<'msg, #IFabTextBlock>, value: WidgetBuilder<'msg, #IFabBrush>) =
-        this.AddWidget(TextBlock.BackgroundWidget.WithValue(value.Compile()))
+        let widget = TextBlock.BackgroundWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the Background property.</summary>
     /// <param name="this">Current widget.</param>
@@ -181,7 +184,8 @@ type TextBlockModifiers =
     /// <param name="value">The Foreground value.</param>
     [<Extension>]
     static member inline foreground(this: WidgetBuilder<'msg, #IFabTextBlock>, value: WidgetBuilder<'msg, #IFabBrush>) =
-        this.AddWidget(TextBlock.ForegroundWidget.WithValue(value.Compile()))
+        let widget = TextBlock.ForegroundWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the Foreground property.</summary>
     /// <param name="this">Current widget.</param>
@@ -331,25 +335,29 @@ type InlineCollectionModifiers =
     /// <param name="this">Current widget.</param>
     [<Extension>]
     static member inline textDecorations<'msg, 'marker when 'msg: equality and 'marker :> IFabInline>(this: WidgetBuilder<'msg, 'marker>) =
-        AttributeCollectionBuilder<'msg, 'marker, IFabTextDecoration>(this, Inline.TextDecorations)
+        let attr = Inline.TextDecorations
+        AttributeCollectionBuilder<'msg, 'marker, IFabTextDecoration>(&this, &attr)
 
     /// <summary>Sets the TextDecorations property.</summary>
     /// <param name="this">Current widget.</param>
     /// <param name="value">The TextDecoration value.</param>
     [<Extension>]
     static member inline textDecoration(this: WidgetBuilder<'msg, #IFabInline>, value: WidgetBuilder<'msg, IFabTextDecoration>) =
-        AttributeCollectionBuilder<'msg, 'marker, IFabTextDecoration>(this, Inline.TextDecorations) { value }
+        let attr = Inline.TextDecorations
+        AttributeCollectionBuilder<'msg, 'marker, IFabTextDecoration>(&this, &attr) { value }
 
 type TextBlockCollectionModifiers =
     /// <summary>Sets the TextDecorations property.</summary>
     /// <param name="this">Current widget.</param>
     [<Extension>]
     static member inline textDecorations<'msg, 'marker when 'msg: equality and 'marker :> IFabTextBlock>(this: WidgetBuilder<'msg, 'marker>) =
-        AttributeCollectionBuilder<'msg, 'marker, IFabTextDecoration>(this, TextBlock.TextDecorations)
+        let attr = TextBlock.TextDecorations
+        AttributeCollectionBuilder<'msg, 'marker, IFabTextDecoration>(&this, &attr)
 
     /// <summary>Sets the TextDecorations property.</summary>
     /// <param name="this">Current widget.</param>
     /// <param name="value">The TextDecoration value.</param>
     [<Extension>]
     static member inline textDecoration(this: WidgetBuilder<'msg, #IFabTextBlock>, value: WidgetBuilder<'msg, IFabTextDecoration>) =
-        AttributeCollectionBuilder<'msg, 'marker, IFabTextDecoration>(this, TextBlock.TextDecorations) { value }
+        let attr = TextBlock.TextDecorations
+        AttributeCollectionBuilder<'msg, 'marker, IFabTextDecoration>(&this, &attr) { value }

@@ -29,10 +29,12 @@ module DropShadowEffectBuilders =
         /// <param name="offsetX">The X offset of the shadow.</param>
         /// <param name="offsetY">The Y offset of the shadow.</param>
         static member DropShadowEffect(offsetX: float, offsetY: float) =
+            let s1 = DropShadowEffect.OffsetX.WithValue(offsetX)
+            let s2 = DropShadowEffect.OffsetY.WithValue(offsetY)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
             WidgetBuilder<'msg, IFabDropShadowEffect>(
                 DropShadowEffect.WidgetKey,
-                DropShadowEffect.OffsetX.WithValue(offsetX),
-                DropShadowEffect.OffsetY.WithValue(offsetY)
+                &bundle
             )
 
 type DropShadowEffectModifiers =

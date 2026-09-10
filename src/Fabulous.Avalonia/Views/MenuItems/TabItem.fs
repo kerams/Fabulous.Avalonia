@@ -22,28 +22,20 @@ module TabItemBuilders =
         /// <param name="header">The header of the TabItem.</param>
         /// <param name="content">The content of the TabItem.</param>
         static member TabItem(header: string, content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabTabItem>(
-                TabItem.WidgetKey,
-                AttributesBundle(
-                    StackList.one(HeaderedContentControl.HeaderString.WithValue(header)),
+            let bundle = AttributesBundle(StackList.one(HeaderedContentControl.HeaderString.WithValue(header)),
                     [| ContentControl.ContentWidget.WithValue(content.Compile()) |],
-                    [||]
-                )
-            )
+                    [||])
+            WidgetBuilder<'msg, IFabTabItem>(TabItem.WidgetKey, &bundle)
 
         /// <summary>Creates a TabItem widget.</summary>
         /// <param name="header">The header of the TabItem.</param>
         /// <param name="content">The content of the TabItem.</param>
         static member TabItem(header: WidgetBuilder<'msg, #IFabControl>, content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabTabItem>(
-                TabItem.WidgetKey,
-                AttributesBundle(
-                    StackList.empty(),
+            let bundle = AttributesBundle(StackList.empty(),
                     [| HeaderedContentControl.HeaderWidget.WithValue(header.Compile())
                        ContentControl.ContentWidget.WithValue(content.Compile()) |],
-                    [||]
-                )
-            )
+                    [||])
+            WidgetBuilder<'msg, IFabTabItem>(TabItem.WidgetKey, &bundle)
 
 
 type TabItemModifiers =

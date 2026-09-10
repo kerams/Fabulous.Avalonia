@@ -58,15 +58,15 @@ module StyledElement =
     let ShowSuggestions =
         Attributes.defineAvaloniaPropertyWithEquality TextInputOptions.ShowSuggestionsProperty
 
-    let StyleInclude =
-        Attributes.defineProperty "StyledElement_StyleInclude" Unchecked.defaultof<string list> (fun target values ->
-            let target = (target :?> StyledElement)
-            target.Styles.Clear()
+    //let StyleInclude =
+    //    Attributes.defineProperty "StyledElement_StyleInclude" Unchecked.defaultof<string[]> (fun target values ->
+    //        let target = (target :?> StyledElement)
+    //        target.Styles.Clear()
 
-            for value in values do
-                let style = StyleInclude(baseUri = null)
-                style.Source <- Uri(value)
-                target.Styles.Add(style))
+    //        for value in values do
+    //            let style = StyleInclude(baseUri = null)
+    //            style.Source <- Uri(value)
+    //            target.Styles.Add(style))
 
     let ThemeKey =
         Attributes.defineSimpleScalarWithEquality<string> "StyledElement_ThemeKey" (fun _ newValueOpt node ->
@@ -80,10 +80,14 @@ module StyledElement =
                     match value with
                     | :? ControlTheme as controlTheme -> target.Theme <- controlTheme
                     | _ ->
+#if DEBUG
                         node.TreeContext.Logger.Warn("The resource '{0}' is not a ControlTheme. The theme has been unset.", themeKey)
+#endif
                         target.Theme <- null
                 | _ ->
+#if DEBUG
                     node.TreeContext.Logger.Warn("The resource '{0}' was not found. The theme has been unset", themeKey)
+#endif
                     target.Theme <- null)
 
 type StyledElementModifiers =
@@ -98,7 +102,7 @@ type StyledElementModifiers =
     /// <param name="this">Current widget.</param>
     /// <param name="value">The Classes value.</param>
     [<Extension>]
-    static member inline classes(this: WidgetBuilder<'msg, #IFabStyledElement>, value: string list) =
+    static member inline classes(this: WidgetBuilder<'msg, #IFabStyledElement>, value: string[]) =
         this.AddScalar(StyledElement.Classes.WithValue(value))
 
     /// <summary>Sets the Classes property.</summary>
@@ -106,7 +110,7 @@ type StyledElementModifiers =
     /// <param name="value">The Classes value.</param>
     [<Extension>]
     static member inline classes(this: WidgetBuilder<'msg, #IFabStyledElement>, value: string) =
-        this.AddScalar(StyledElement.Classes.WithValue([ value ]))
+        this.AddScalar(StyledElement.Classes.WithValue([| value |]))
 
     /// <summary>Sets the ContentType property.</summary>
     /// <param name="this">Current widget.</param>
@@ -157,19 +161,19 @@ type StyledElementModifiers =
     static member inline isSensitive(this: WidgetBuilder<'msg, #IFabStyledElement>, value: bool) =
         this.AddScalar(StyledElement.IsSensitive.WithValue(value))
 
-    /// <summary>Sets the application styles.</summary>
-    /// <param name="this">Current widget.</param>
-    /// <param name="value">Application styles to be used for the control.</param>
-    [<Extension>]
-    static member inline styleInclude(this: WidgetBuilder<'msg, #IFabStyledElement>, value: string list) =
-        this.AddScalar(StyledElement.StyleInclude.WithValue(value))
+    ///// <summary>Sets the application styles.</summary>
+    ///// <param name="this">Current widget.</param>
+    ///// <param name="value">Application styles to be used for the control.</param>
+    //[<Extension>]
+    //static member inline styleInclude(this: WidgetBuilder<'msg, #IFabStyledElement>, value: string[]) =
+    //    this.AddScalar(StyledElement.StyleInclude.WithValue(value))
 
-    /// <summary>Sets the application styles.</summary>
-    /// <param name="this">Current widget.</param>
-    /// <param name="value">Application styles to be used for the control.</param>
-    [<Extension>]
-    static member inline styleInclude(this: WidgetBuilder<'msg, #IFabStyledElement>, value: string) =
-        StyledElementModifiers.styleInclude(this, [ value ])
+    ///// <summary>Sets the application styles.</summary>
+    ///// <param name="this">Current widget.</param>
+    ///// <param name="value">Application styles to be used for the control.</param>
+    //[<Extension>]
+    //static member inline styleInclude(this: WidgetBuilder<'msg, #IFabStyledElement>, value: string) =
+    //    StyledElementModifiers.styleInclude(this, [| value |])
 
     /// <summary>Sets the ShowSuggestions property.</summary>
     /// <param name="this">Current widget.</param>

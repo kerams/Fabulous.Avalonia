@@ -21,12 +21,14 @@ module LabelBuilders =
         /// <summary>Creates a Label widget.</summary>
         /// <param name="text">The text to display.</param>
         static member inline Label(text: string) =
-            WidgetBuilder<'msg, IFabLabel>(Label.WidgetKey, ContentControl.ContentString.WithValue(text))
+            let attr = ContentControl.ContentString.WithValue(text)
+            WidgetBuilder<'msg, IFabLabel>(Label.WidgetKey, &attr)
 
         /// <summary>Creates a Label widget.</summary>
         /// <param name="content">The content to display.</param>
         static member inline Label(content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabLabel>(Label.WidgetKey, ContentControl.ContentWidget.WithValue(content.Compile()))
+            let widget = ContentControl.ContentWidget.WithValue(content.Compile())
+            WidgetBuilder<'msg, IFabLabel>(Label.WidgetKey, &widget)
 
 type LabelModifiers =
     /// <summary>Sets the Target property.</summary>

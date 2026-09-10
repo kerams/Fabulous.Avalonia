@@ -13,13 +13,14 @@ module MvuRepeatButtonBuilders =
         /// <param name="text">The text to display.</param>
         /// <param name="msg">Raised when the button is clicked.</param>
         static member RepeatButton(text: string, msg: RoutedEventArgs -> 'msg) =
-            WidgetBuilder<'msg, IFabRepeatButton>(RepeatButton.WidgetKey, ContentControl.ContentString.WithValue(text), MvuButton.Clicked.WithValue(msg))
+            let s1 = ContentControl.ContentString.WithValue(text)
+            let s2 = MvuButton.Clicked.WithValue(msg)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabRepeatButton>(RepeatButton.WidgetKey, &bundle)
 
         /// <summary>Creates a RepeatButton widget.</summary>
         /// <param name="content">The content to display.</param>
         /// M<param name="fn">Raised when the button is clicked.</param>
         static member RepeatButton(fn: RoutedEventArgs -> 'msg, content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabRepeatButton>(
-                RepeatButton.WidgetKey,
-                AttributesBundle(StackList.one(MvuButton.Clicked.WithValue(fn)), [| ContentControl.ContentWidget.WithValue(content.Compile()) |], [||])
-            )
+            let bundle = AttributesBundle(StackList.one(MvuButton.Clicked.WithValue(fn)), [| ContentControl.ContentWidget.WithValue(content.Compile()) |], [||])
+            WidgetBuilder<'msg, IFabRepeatButton>(RepeatButton.WidgetKey, &bundle)

@@ -58,7 +58,8 @@ type ButtonModifiers =
     /// <param name="value">The Flyout value.</param>
     [<Extension>]
     static member inline flyout(this: WidgetBuilder<'msg, #IFabButton>, value: WidgetBuilder<'msg, #IFabFlyoutBase>) =
-        this.AddWidget(Button.Flyout.WithValue(value.Compile()))
+        let widget = Button.Flyout.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Link a ViewRef to access the direct Button control instance.</summary>
     /// <param name="this">Current widget.</param>

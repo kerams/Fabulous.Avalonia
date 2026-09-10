@@ -51,7 +51,8 @@ type ShapeModifiers =
     /// <param name="value">The Fill value.</param>
     [<Extension>]
     static member inline fill(this: WidgetBuilder<'msg, #IFabShape>, value: WidgetBuilder<'msg, #IFabBrush>) =
-        this.AddWidget(Shape.FillWidget.WithValue(value.Compile()))
+        let widget = Shape.FillWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the Fill property.</summary>
     /// <param name="this">Current widget.</param>
@@ -86,7 +87,8 @@ type ShapeModifiers =
     /// <param name="value">The Stroke value.</param>
     [<Extension>]
     static member inline stroke(this: WidgetBuilder<'msg, #IFabShape>, value: WidgetBuilder<'msg, #IFabBrush>) =
-        this.AddWidget(Shape.StrokeWidget.WithValue(value.Compile()))
+        let widget = Shape.StrokeWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the Stroke property.</summary>
     /// <param name="this">Current widget.</param>

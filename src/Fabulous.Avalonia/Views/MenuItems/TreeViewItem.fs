@@ -21,12 +21,14 @@ module TreeViewItemBuilders =
         /// <summary>Creates a TreeViewItem widget.</summary>
         /// <param name="content">The content of the TreeViewItem.</param>
         static member TreeViewItem(content: string) =
-            WidgetBuilder<'msg, IFabTreeViewItem>(TreeViewItem.WidgetKey, HeaderedItemsControl.HeaderString.WithValue(content))
+            let attr = HeaderedItemsControl.HeaderString.WithValue(content)
+            WidgetBuilder<'msg, IFabTreeViewItem>(TreeViewItem.WidgetKey, &attr)
 
         /// <summary>Creates a TreeViewItem widget.</summary>
         /// <param name="content">The content of the TreeViewItem.</param>
         static member TreeViewItem(content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabTreeViewItem>(TreeViewItem.WidgetKey, HeaderedItemsControl.HeaderWidget.WithValue(content.Compile()))
+            let widget = HeaderedItemsControl.HeaderWidget.WithValue(content.Compile())
+            WidgetBuilder<'msg, IFabTreeViewItem>(TreeViewItem.WidgetKey, &widget)
 
 type TreeViewItemModifiers =
 

@@ -5,42 +5,45 @@ open Avalonia.Media
 open Fabulous
 open Fabulous.StackAllocatedCollections.StackList
 
-type IFabSkewTransform =
-    inherit IFabTransform
+//type IFabSkewTransform =
+//    inherit IFabTransform
 
-module SkewTransform =
+//module SkewTransform =
 
-    let WidgetKey = Widgets.register<SkewTransform>()
+//    let WidgetKey = Widgets.register<SkewTransform>()
 
-    let AngleX =
-        Attributes.defineAvaloniaPropertyWithEquality SkewTransform.AngleXProperty
+//    let AngleX =
+//        Attributes.defineAvaloniaPropertyWithEquality SkewTransform.AngleXProperty
 
-    let AngleY =
-        Attributes.defineAvaloniaPropertyWithEquality SkewTransform.AngleYProperty
+//    let AngleY =
+//        Attributes.defineAvaloniaPropertyWithEquality SkewTransform.AngleYProperty
 
-[<AutoOpen>]
-module SkewTransformBuilders =
-    type Fabulous.Avalonia.View with
+//[<AutoOpen>]
+//module SkewTransformBuilders =
+//    type Fabulous.Avalonia.View with
 
-        /// <summary>Creates a SkewTransform widget.</summary>
-        /// <param name="angleX">The AngleX to apply.</param>
-        /// <param name="angleY">The AngleY to apply.</param>
-        static member SkewTransform(angleX: float, angleY: float) =
-            WidgetBuilder<'msg, IFabSkewTransform>(SkewTransform.WidgetKey, SkewTransform.AngleX.WithValue(angleX), SkewTransform.AngleY.WithValue(angleY))
+//        /// <summary>Creates a SkewTransform widget.</summary>
+//        /// <param name="angleX">The AngleX to apply.</param>
+//        /// <param name="angleY">The AngleY to apply.</param>
+//        static member SkewTransform(angleX: float, angleY: float) =
+//            let s1 = SkewTransform.AngleX.WithValue(angleX)
+//            let s2 = SkewTransform.AngleY.WithValue(angleY)
+//            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+//            WidgetBuilder<'msg, IFabSkewTransform>(SkewTransform.WidgetKey, &bundle)
 
-        /// <summary>Creates a SkewTransform widget.</summary>
-        /// <param name="angleX">The AngleX to apply.</param>
-        static member SkewTransform(angleX: float) =
-            WidgetBuilder<'msg, IFabSkewTransform>(SkewTransform.WidgetKey, SkewTransform.AngleX.WithValue(angleX))
+//        /// <summary>Creates a SkewTransform widget.</summary>
+//        /// <param name="angleX">The AngleX to apply.</param>
+//        static member SkewTransform(angleX: float) =
+//            WidgetBuilder<'msg, IFabSkewTransform>(SkewTransform.WidgetKey, SkewTransform.AngleX.WithValue(angleX))
 
-        /// <summary>Creates a SkewTransform widget.</summary>
-        static member SkewTransform() =
-            WidgetBuilder<'msg, IFabSkewTransform>(SkewTransform.WidgetKey)
+//        /// <summary>Creates a SkewTransform widget.</summary>
+//        static member SkewTransform() =
+//            WidgetBuilder<'msg, IFabSkewTransform>(SkewTransform.WidgetKey)
 
-type SkewTransformTransformModifiers =
-    /// <summary>Link a ViewRef to access the direct SkewTransform control instance.</summary>
-    /// <param name="this">Current widget.</param>
-    /// <param name="value">The ViewRef instance that will receive access to the underlying control.</param>
-    [<Extension>]
-    static member inline reference(this: WidgetBuilder<'msg, IFabSkewTransform>, value: ViewRef<SkewTransform>) =
-        this.AddScalar(ViewRefAttributes.ViewRef.WithValue(value.Unbox))
+//type SkewTransformTransformModifiers =
+//    /// <summary>Link a ViewRef to access the direct SkewTransform control instance.</summary>
+//    /// <param name="this">Current widget.</param>
+//    /// <param name="value">The ViewRef instance that will receive access to the underlying control.</param>
+//    [<Extension>]
+//    static member inline reference(this: WidgetBuilder<'msg, IFabSkewTransform>, value: ViewRef<SkewTransform>) =
+//        this.AddScalar(ViewRefAttributes.ViewRef.WithValue(value.Unbox))

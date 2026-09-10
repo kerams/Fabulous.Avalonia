@@ -22,7 +22,8 @@ module RefreshVisualizerBuilders =
         /// <summary>Creates a RefreshVisualizer widget.</summary>
         /// <param name="content">The content of the RefreshVisualizer.</param>
         static member RefreshVisualizer(content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabRefreshVisualizer>(RefreshVisualizer.WidgetKey, ContentControl.ContentWidget.WithValue(content.Compile()))
+            let widget = ContentControl.ContentWidget.WithValue(content.Compile())
+            WidgetBuilder<'msg, IFabRefreshVisualizer>(RefreshVisualizer.WidgetKey, &widget)
 
 type RefreshVisualizerModifiers =
     /// <summary>Link a ViewRef to access the direct RefreshContainer control instance.</summary>

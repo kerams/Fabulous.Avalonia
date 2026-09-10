@@ -31,12 +31,14 @@ module GridSplitterBuilders =
 
         /// <summary>Creates a GridSplitter widget.</summary>
         static member GridSplitter() =
-            WidgetBuilder<'msg, IFabGridSplitter>(GridSplitter.WidgetKey, GridSplitter.ResizeDirection.WithValue(GridResizeDirection.Auto))
+            let attr = GridSplitter.ResizeDirection.WithValue(GridResizeDirection.Auto)
+            WidgetBuilder<'msg, IFabGridSplitter>(GridSplitter.WidgetKey, &attr)
 
         /// <summary>Creates a GridSplitter widget.</summary>
         /// <param name="resizeDirection">The direction in which the GridSplitter can be resized.</param>
         static member GridSplitter(resizeDirection: GridResizeDirection) =
-            WidgetBuilder<'msg, IFabGridSplitter>(GridSplitter.WidgetKey, GridSplitter.ResizeDirection.WithValue(resizeDirection))
+            let attr = GridSplitter.ResizeDirection.WithValue(resizeDirection)
+            WidgetBuilder<'msg, IFabGridSplitter>(GridSplitter.WidgetKey, &attr)
 
 
 type GridSplitterModifiers =

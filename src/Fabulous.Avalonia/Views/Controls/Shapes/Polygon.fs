@@ -30,7 +30,8 @@ module PolygonBuilders =
         /// <summary>Creates a Polygon widget.</summary>
         /// <param name="points">The points of the polygon.</param>
         static member Polygon(points: Point list) =
-            WidgetBuilder<'msg, IFabPolygon>(Polygon.WidgetKey, Polygon.Points.WithValue(points))
+            let attr = Polygon.Points.WithValue(points)
+            WidgetBuilder<'msg, IFabPolygon>(Polygon.WidgetKey, &attr)
 
 type PolygonModifiers =
     /// <summary>Link a ViewRef to access the direct Polygon control instance.</summary>

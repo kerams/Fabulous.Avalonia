@@ -4,6 +4,7 @@ open System.Runtime.CompilerServices
 open Avalonia
 open Avalonia.Media
 open Fabulous
+open Fabulous.StackAllocatedCollections.StackList
 
 type IFabLineGeometry =
     inherit IFabGeometry
@@ -25,10 +26,12 @@ module ComponentLineGeometryBuilders =
         /// <param name="startPoint">The start point of the line.</param>
         /// <param name="endPoint">The end point of the line.</param>
         static member LineGeometry(startPoint: Point, endPoint: Point) =
+            let s1 = LineGeometry.StartPoint.WithValue(startPoint)
+            let s2 = LineGeometry.EndPoint.WithValue(endPoint)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
             WidgetBuilder<'msg, IFabLineGeometry>(
                 LineGeometry.WidgetKey,
-                LineGeometry.StartPoint.WithValue(startPoint),
-                LineGeometry.EndPoint.WithValue(endPoint)
+                &bundle
             )
 
 type LineGeometryModifiers =

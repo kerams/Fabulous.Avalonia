@@ -4,6 +4,7 @@ open System
 open System.Runtime.CompilerServices
 open Avalonia.Controls
 open Fabulous
+open Fabulous.StackAllocatedCollections.StackList
 open Fabulous.Avalonia
 
 module MvuCalendar =
@@ -24,10 +25,12 @@ module MvuCalendarBuilders =
         /// <param name="date">The date to display.</param>
         /// <param name="fn">Raised when the date changes.</param>
         static member Calendar(date: DateTime option, fn: DateTime option -> 'msg) =
+            let s1 = Calendar.SelectionMode.WithValue(CalendarSelectionMode.SingleDate)
+            let s2 = MvuCalendar.SelectedDateChanged.WithValue(ValueEventData.create date fn)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
             WidgetBuilder<'msg, IFabCalendar>(
                 Calendar.WidgetKey,
-                Calendar.SelectionMode.WithValue(CalendarSelectionMode.SingleDate),
-                MvuCalendar.SelectedDateChanged.WithValue(ValueEventData.create date fn)
+                &bundle
             )
 
         /// <summary>Creates a Calendar widget.</summary>
@@ -35,10 +38,12 @@ module MvuCalendarBuilders =
         /// <param name="fn">Raised when the date changes.</param>
         /// <param name="mode">The selection mode.</param>
         static member Calendar(date: DateTime option, fn: DateTime option -> 'msg, mode: CalendarSelectionMode) =
+            let s1 = Calendar.SelectionMode.WithValue(mode)
+            let s2 = MvuCalendar.SelectedDateChanged.WithValue(ValueEventData.create date fn)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
             WidgetBuilder<'msg, IFabCalendar>(
                 Calendar.WidgetKey,
-                Calendar.SelectionMode.WithValue(mode),
-                MvuCalendar.SelectedDateChanged.WithValue(ValueEventData.create date fn)
+                &bundle
             )
 
 type MvuCalendarModifiers =

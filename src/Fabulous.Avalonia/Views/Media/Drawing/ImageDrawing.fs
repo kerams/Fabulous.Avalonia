@@ -31,50 +31,44 @@ module ImageDrawingBuilders =
         /// <param name="source">The source of the image.</param>
         /// <param name="rect">The rectangle to draw the image in.</param>
         static member ImageDrawing(source: Bitmap, rect: Rect) =
-            WidgetBuilder<'msg, IFabImageDrawing>(
-                ImageDrawing.WidgetKey,
-                ImageDrawing.ImageSource.WithValue(ImageSourceValue.Bitmap(source)),
-                ImageDrawing.Rect.WithValue(rect)
-            )
+            let s1 = ImageDrawing.ImageSource.WithValue(ImageSourceValue.Bitmap(source))
+            let s2 = ImageDrawing.Rect.WithValue(rect)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabImageDrawing>(ImageDrawing.WidgetKey, &bundle)
 
         /// <summary>Creates a ImageDrawing widget.</summary>
         /// <param name="source">The source of the image.</param>
         /// <param name="rect">The rectangle to draw the image in.</param>
         static member ImageDrawing(source: string, rect: Rect) =
-            WidgetBuilder<'msg, IFabImageDrawing>(
-                ImageDrawing.WidgetKey,
-                ImageDrawing.ImageSource.WithValue(ImageSourceValue.File(source)),
-                ImageDrawing.Rect.WithValue(rect)
-            )
+            let s1 = ImageDrawing.ImageSource.WithValue(ImageSourceValue.File(source))
+            let s2 = ImageDrawing.Rect.WithValue(rect)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabImageDrawing>(ImageDrawing.WidgetKey, &bundle)
 
         /// <summary>Creates a ImageDrawing widget.</summary>
         /// <param name="source">The source of the image.</param>
         /// <param name="rect">The rectangle to draw the image in.</param>
         static member ImageDrawing(source: Uri, rect: Rect) =
-            WidgetBuilder<'msg, IFabImageDrawing>(
-                ImageDrawing.WidgetKey,
-                ImageDrawing.ImageSource.WithValue(ImageSourceValue.Uri(source)),
-                ImageDrawing.Rect.WithValue(rect)
-            )
+            let s1 = ImageDrawing.ImageSource.WithValue(ImageSourceValue.Uri(source))
+            let s2 = ImageDrawing.Rect.WithValue(rect)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabImageDrawing>(ImageDrawing.WidgetKey, &bundle)
 
         /// <summary>Creates a ImageDrawing widget.</summary>
         /// <param name="source">The source of the image.</param>
         /// <param name="rect">The rectangle to draw the image in.</param>
         static member ImageDrawing(source: Stream, rect: Rect) =
-            WidgetBuilder<'msg, IFabImageDrawing>(
-                ImageDrawing.WidgetKey,
-                ImageDrawing.ImageSource.WithValue(ImageSourceValue.Stream(source)),
-                ImageDrawing.Rect.WithValue(rect)
-            )
+            let s1 = ImageDrawing.ImageSource.WithValue(ImageSourceValue.Stream(source))
+            let s2 = ImageDrawing.Rect.WithValue(rect)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabImageDrawing>(ImageDrawing.WidgetKey, &bundle)
 
         /// <summary>Creates a ImageDrawing widget.</summary>
         /// <param name="source">The source of the image.</param>
         /// <param name="rect">The rectangle to draw the image in.</param>
         static member ImageDrawing(source: WidgetBuilder<'msg, #IFabDrawing>, rect: Rect) =
-            WidgetBuilder<'msg, IFabImageDrawing>(
-                ImageDrawing.WidgetKey,
-                AttributesBundle(StackList.one(ImageDrawing.Rect.WithValue(rect)), [| ImageDrawing.ImageSourceWidget.WithValue(source.Compile()) |], [||])
-            )
+            let bundle = AttributesBundle(StackList.one(ImageDrawing.Rect.WithValue(rect)), [| ImageDrawing.ImageSourceWidget.WithValue(source.Compile()) |], [||])
+            WidgetBuilder<'msg, IFabImageDrawing>(ImageDrawing.WidgetKey, &bundle)
 
 type ImageDrawingModifiers =
 

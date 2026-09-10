@@ -19,12 +19,14 @@ module ComboBoxItemBuilders =
         /// <summary>Creates a ComboBoxItem widget.</summary>
         /// <param name="content">The content of the ComboBoxItem.</param>
         static member ComboBoxItem(content: string) =
-            WidgetBuilder<'msg, IFabComboBoxItem>(ComboBoxItem.WidgetKey, ContentControl.ContentString.WithValue(content))
+            let attr = ContentControl.ContentString.WithValue(content)
+            WidgetBuilder<'msg, IFabComboBoxItem>(ComboBoxItem.WidgetKey, &attr)
 
         /// <summary>Creates a ComboBoxItem widget.</summary>
         /// <param name="content">The content of the ComboBoxItem.</param>
         static member ComboBoxItem(content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabComboBoxItem>(ComboBoxItem.WidgetKey, ContentControl.ContentWidget.WithValue(content.Compile()))
+            let widget = ContentControl.ContentWidget.WithValue(content.Compile())
+            WidgetBuilder<'msg, IFabComboBoxItem>(ComboBoxItem.WidgetKey, &widget)
 
 type ComboBoxItemModifiers =
     /// <summary>Link a ViewRef to access the direct MenuItem control instance.</summary>

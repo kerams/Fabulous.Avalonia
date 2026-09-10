@@ -31,7 +31,9 @@ module PathFigureBuilders =
         /// <summary>Creates a PathFigure widget.</summary>
         /// <param name="startPoint">The start point of the path.</param>
         static member PathFigure(startPoint: Point) =
-            CollectionBuilder<'msg, IFabPathFigure, IFabPathSegment>(PathFigure.WidgetKey, PathFigure.Segments, PathFigure.StartPoint.WithValue(startPoint))
+            let scalar = PathFigure.StartPoint.WithValue(startPoint)
+            let attr = PathFigure.Segments
+            CollectionBuilder<'msg, IFabPathFigure, IFabPathSegment>(PathFigure.WidgetKey, attr, scalar)
 
 type PathFigureModifiers =
 

@@ -20,7 +20,8 @@ module NativeMenuBuilders =
 
         /// <summary>Creates a NativeMenu widget</summary>
         static member NativeMenu() =
-            CollectionBuilder<'msg, IFabNativeMenu, IFabNativeMenuItem>(NativeMenu.WidgetKey, NativeMenu.Items)
+            let attr = NativeMenu.Items
+            CollectionBuilder<'msg, IFabNativeMenu, IFabNativeMenuItem>(NativeMenu.WidgetKey, attr)
 
 module NativeMenuAttached =
     let NativeMenu = Attributes.defineAvaloniaPropertyWidget NativeMenu.MenuProperty
@@ -50,7 +51,8 @@ type NativeMenuAttachedModifiers =
     /// <param name="value">The Menu value.</param>
     [<Extension>]
     static member inline menu(this: WidgetBuilder<'msg, #IFabNativeMenuItem>, value: WidgetBuilder<'msg, #IFabNativeMenu>) =
-        this.AddWidget(NativeMenuItem.Menu.WithValue(value.Compile()))
+        let widget = NativeMenuItem.Menu.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
 type WindowMenuAttachedModifiers =
     /// <summary>Sets the NativeMenu property.</summary>
@@ -58,7 +60,8 @@ type WindowMenuAttachedModifiers =
     /// <param name="value">The NativeMenu value.</param>
     [<Extension>]
     static member inline menu(this: WidgetBuilder<'msg, #IFabWindow>, value: WidgetBuilder<'msg, #IFabNativeMenu>) =
-        this.AddWidget(NativeMenuAttached.NativeMenu.WithValue(value.Compile()))
+        let widget = NativeMenuAttached.NativeMenu.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
 type NativeViewYieldExtensions =
     [<Extension>]

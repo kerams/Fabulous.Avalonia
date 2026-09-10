@@ -25,7 +25,10 @@ module RectangleBuilders =
         /// <param name="radiusX">The radius on the X-axis used to round the corners of the rectangle.</param>
         /// <param name="radiusY">The radius on the Y-axis used to round the corners of the rectangle.</param>
         static member Rectangle(radiusX: float, radiusY: float) =
-            WidgetBuilder<'msg, IFabRectangle>(Rectangle.WidgetKey, Rectangle.RadiusX.WithValue(radiusX), Rectangle.RadiusY.WithValue(radiusY))
+            let s1 = Rectangle.RadiusX.WithValue(radiusX)
+            let s2 = Rectangle.RadiusY.WithValue(radiusY)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabRectangle>(Rectangle.WidgetKey, &bundle)
 
         /// <summary>Creates a Rectangle widget.</summary>
         static member Rectangle() =

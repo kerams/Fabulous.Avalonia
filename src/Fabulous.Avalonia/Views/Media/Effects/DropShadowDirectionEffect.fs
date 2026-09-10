@@ -29,10 +29,12 @@ module DropShadowDirectionEffectBuilders =
         /// <param name="shadowDepth">The depth of the shadow.</param>
         /// <param name="direction">The direction of the shadow.</param>
         static member DropShadowDirectionEffect(shadowDepth: float, direction: float) =
+            let s1 = DropShadowDirectionEffect.ShadowDepth.WithValue(shadowDepth)
+            let s2 = DropShadowDirectionEffect.Direction.WithValue(direction)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
             WidgetBuilder<'msg, IFabDropShadowDirectionEffect>(
                 DropShadowDirectionEffect.WidgetKey,
-                DropShadowDirectionEffect.ShadowDepth.WithValue(shadowDepth),
-                DropShadowDirectionEffect.Direction.WithValue(direction)
+                &bundle
             )
 
 type DropShadowDirectionEffectModifiers =

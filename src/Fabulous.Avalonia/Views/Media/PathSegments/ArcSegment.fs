@@ -4,6 +4,7 @@ open System.Runtime.CompilerServices
 open Avalonia
 open Avalonia.Media
 open Fabulous
+open Fabulous.StackAllocatedCollections.StackList
 
 type IFabArcSegment =
     inherit IFabPathSegment
@@ -33,7 +34,10 @@ module ArcSegmentBuilders =
         /// <param name="point">The point at which the arc ends.</param>
         /// <param name="size">The size of the arc.</param>
         static member ArcSegment(point: Point, size: Size) =
-            WidgetBuilder<'msg, IFabArcSegment>(ArcSegment.WidgetKey, ArcSegment.Point.WithValue(point), ArcSegment.Size.WithValue(size))
+            let p = ArcSegment.Point.WithValue(point)
+            let s = ArcSegment.Size.WithValue(size)
+            let bundle = AttributesBundle(StackList.two(p, s), [||], [||])
+            WidgetBuilder<'msg, IFabArcSegment>(ArcSegment.WidgetKey, &bundle)
 
 type ArcSegmentModifiers =
 

@@ -77,10 +77,8 @@ module PopupBuilders =
         /// <param name="isOpen">Whether the popup is open or not.</param>
         /// <param name="content">The content of the popup.</param>
         static member Popup(isOpen: bool, content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabPopup>(
-                Popup.WidgetKey,
-                AttributesBundle(StackList.one(Popup.IsOpen.WithValue(isOpen)), [| Popup.Child.WithValue(content.Compile()) |], [||])
-            )
+            let bundle = AttributesBundle(StackList.one(Popup.IsOpen.WithValue(isOpen)), [| Popup.Child.WithValue(content.Compile()) |], [||])
+            WidgetBuilder<'msg, IFabPopup>(Popup.WidgetKey, &bundle)
 
 type PopupModifiers =
     /// <summary>Sets the WindowManagerAddShadowHint property.</summary>

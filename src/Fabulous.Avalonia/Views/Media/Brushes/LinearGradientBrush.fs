@@ -4,6 +4,7 @@ open System.Runtime.CompilerServices
 open Avalonia
 open Avalonia.Media
 open Fabulous
+open Fabulous.StackAllocatedCollections.StackList
 
 type IFabLinearGradientBrush =
     inherit IFabGradientBrush
@@ -25,21 +26,26 @@ module LinearGradientBrushBuilders =
         /// <param name="startPoint">The start point of the gradient.</param>
         /// <param name="endPoint">The end point of the gradient.</param>
         static member LinearGradientBrush(startPoint: RelativePoint, endPoint: RelativePoint) =
+            let s1 = LinearGradientBrush.StartPoint.WithValue(startPoint)
+            let s2 = LinearGradientBrush.EndPoint.WithValue(endPoint)
+            let scalars = StackList.two(s1, s2)
+            let attr = ComponentGradientBrush.GradientStops
             CollectionBuilder<'msg, IFabLinearGradientBrush, IFabGradientStop>(
                 LinearGradientBrush.WidgetKey,
-                ComponentGradientBrush.GradientStops,
-                LinearGradientBrush.StartPoint.WithValue(startPoint),
-                LinearGradientBrush.EndPoint.WithValue(endPoint)
+                scalars,
+                attr
             )
 
         /// <summary>Creates a LinearGradientBrush widget.</summary>
         /// <param name="startPoint">The start point of the gradient.</param>
         /// <param name="endPoint">The end point of the gradient.</param>
         static member LinearGradientBrush'(startPoint: RelativePoint, endPoint: RelativePoint) =
+            let s1 = LinearGradientBrush.StartPoint.WithValue(startPoint)
+            let s2 = LinearGradientBrush.EndPoint.WithValue(endPoint)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
             WidgetBuilder<'msg, IFabLinearGradientBrush>(
                 LinearGradientBrush.WidgetKey,
-                LinearGradientBrush.StartPoint.WithValue(startPoint),
-                LinearGradientBrush.EndPoint.WithValue(endPoint)
+                &bundle
             )
 
         /// <summary>Creates a LinearGradientBrush widget.</summary>
@@ -47,12 +53,11 @@ module LinearGradientBrushBuilders =
         /// <param name="endPoint">The end point of the gradient.</param>
         /// <param name="unit">The relative unit of the start and end points.</param>
         static member LinearGradientBrush(startPoint: Point, endPoint: Point, unit: RelativeUnit) =
-            CollectionBuilder<'msg, IFabLinearGradientBrush, IFabGradientStop>(
-                LinearGradientBrush.WidgetKey,
-                ComponentGradientBrush.GradientStops,
-                LinearGradientBrush.StartPoint.WithValue(RelativePoint(startPoint, unit)),
-                LinearGradientBrush.EndPoint.WithValue(RelativePoint(endPoint, unit))
-            )
+            let s1 = LinearGradientBrush.StartPoint.WithValue(RelativePoint(startPoint, unit))
+            let s2 = LinearGradientBrush.EndPoint.WithValue(RelativePoint(endPoint, unit))
+            let scalars = StackList.two(s1, s2)
+            let attr = ComponentGradientBrush.GradientStops
+            CollectionBuilder<'msg, IFabLinearGradientBrush, IFabGradientStop>(LinearGradientBrush.WidgetKey, scalars, attr)
 
         /// <summary>Creates a LinearGradientBrush widget.</summary>
         /// <param name="startPoint">The start point of the gradient.</param>
@@ -68,28 +73,32 @@ module LinearGradientBrushBuilders =
         /// <param name="startUnit">The relative unit of the start point.</param>
         /// <param name="endUnit">The relative unit of the end point.</param>
         static member LinearGradientBrush(startPoint: Point, endPoint: Point, startUnit: RelativeUnit, endUnit: RelativeUnit) =
-            CollectionBuilder<'msg, IFabLinearGradientBrush, IFabGradientStop>(
-                LinearGradientBrush.WidgetKey,
-                ComponentGradientBrush.GradientStops,
-                LinearGradientBrush.StartPoint.WithValue(RelativePoint(startPoint, startUnit)),
-                LinearGradientBrush.EndPoint.WithValue(RelativePoint(endPoint, endUnit))
-            )
+            let s1 = LinearGradientBrush.StartPoint.WithValue(RelativePoint(startPoint, startUnit))
+            let s2 = LinearGradientBrush.EndPoint.WithValue(RelativePoint(endPoint, endUnit))
+            let scalars = StackList.two(s1, s2)
+            let attr = ComponentGradientBrush.GradientStops
+            CollectionBuilder<'msg, IFabLinearGradientBrush, IFabGradientStop>(LinearGradientBrush.WidgetKey, scalars, attr)
 
         /// <summary>Creates a LinearGradientBrush widget.</summary>
         static member LinearGradientBrush() =
+            let s1 = LinearGradientBrush.StartPoint.WithValue(RelativePoint.TopLeft)
+            let s2 = LinearGradientBrush.EndPoint.WithValue(RelativePoint.BottomRight)
+            let scalars = StackList.two(s1, s2)
+            let attr = ComponentGradientBrush.GradientStops
             CollectionBuilder<'msg, IFabLinearGradientBrush, IFabGradientStop>(
                 LinearGradientBrush.WidgetKey,
-                ComponentGradientBrush.GradientStops,
-                LinearGradientBrush.StartPoint.WithValue(RelativePoint.TopLeft),
-                LinearGradientBrush.EndPoint.WithValue(RelativePoint.BottomRight)
+                scalars,
+                attr
             )
 
         /// <summary>Creates a LinearGradientBrush widget.</summary>
         static member LinearGradientBrush'() =
+            let s1 = LinearGradientBrush.StartPoint.WithValue(RelativePoint.TopLeft)
+            let s2 = LinearGradientBrush.EndPoint.WithValue(RelativePoint.BottomRight)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
             WidgetBuilder<'msg, IFabLinearGradientBrush>(
                 LinearGradientBrush.WidgetKey,
-                LinearGradientBrush.StartPoint.WithValue(RelativePoint.TopLeft),
-                LinearGradientBrush.EndPoint.WithValue(RelativePoint.BottomRight)
+                &bundle
             )
 
 type LinearGradientBrushModifiers =

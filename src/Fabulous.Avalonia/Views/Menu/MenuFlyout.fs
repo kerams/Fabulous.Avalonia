@@ -28,7 +28,8 @@ module MenuFlyoutBuilders =
 
         /// <summary>Creates a MenuFlyout widget.</summary>
         static member MenuFlyout() =
-            CollectionBuilder<'msg, IFabMenuFlyout, IFabMenuItem>(MenuFlyout.WidgetKey, MenuFlyout.Items)
+            let attr = MenuFlyout.Items
+            CollectionBuilder<'msg, IFabMenuFlyout, IFabMenuItem>(MenuFlyout.WidgetKey, attr)
 
 type MenuFlyoutModifiers =
     /// <summary>Link a ViewRef to access the direct MenuFlyout control instance.</summary>

@@ -18,22 +18,19 @@ module MvuToggleSplitButtonBuilders =
         /// <param name="isChecked">Whether the ToggleSplitButton is checked.</param>
         /// <param name="fn">Raised when the ToggleSplitButton is checked or unchecked.</param>
         static member ToggleSplitButton(text: string, isChecked: bool, fn: bool -> 'msg) =
-            WidgetBuilder<'msg, IFabToggleSplitButton>(
-                ToggleSplitButton.WidgetKey,
-                ContentControl.ContentString.WithValue(text),
-                MvuToggleSplitButton.CheckedChanged.WithValue(ValueEventData.create isChecked fn)
-            )
+            let s1 = ContentControl.ContentString.WithValue(text)
+            let s2 = MvuToggleSplitButton.CheckedChanged.WithValue(ValueEventData.create isChecked fn)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabToggleSplitButton>(ToggleSplitButton.WidgetKey, &bundle)
 
         /// <summary>Creates a ToggleSplitButton widget.</summary>
         /// <param name="isChecked">Whether the ToggleSplitButton is checked.</param>
         /// <param name="fn">Raised when the ToggleSplitButton is checked or unchecked.</param>
         /// <param name="content">The content of the ToggleSplitButton.</param>
         static member ToggleSplitButton(isChecked: bool, fn: bool -> 'msg, content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabToggleSplitButton>(
-                ToggleSplitButton.WidgetKey,
-                AttributesBundle(
-                    StackList.one(MvuToggleSplitButton.CheckedChanged.WithValue(ValueEventData.create isChecked fn)),
-                    [| ContentControl.ContentWidget.WithValue(content.Compile()) |],
-                    [||]
-                )
+            let bundle = AttributesBundle(
+                StackList.one(MvuToggleSplitButton.CheckedChanged.WithValue(ValueEventData.create isChecked fn)),
+                [| ContentControl.ContentWidget.WithValue(content.Compile()) |],
+                [||]
             )
+            WidgetBuilder<'msg, IFabToggleSplitButton>(ToggleSplitButton.WidgetKey, &bundle)

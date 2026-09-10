@@ -38,12 +38,16 @@ module DrawingGroupBuilders =
 
         /// <summary>Creates a DrawingGroup widget.</summary>
         static member DrawingGroup() =
-            CollectionBuilder<'msg, IFabDrawingGroup, IFabDrawing>(DrawingGroup.WidgetKey, DrawingGroup.Children, DrawingGroup.Opacity.WithValue(1.0))
+            let attr = DrawingGroup.Children
+            let scalar = DrawingGroup.Opacity.WithValue(1.0)
+            CollectionBuilder<'msg, IFabDrawingGroup, IFabDrawing>(DrawingGroup.WidgetKey, attr, scalar)
 
         /// <summary>Creates a DrawingGroup widget.</summary>
         /// <param name="opacity">The opacity of the drawing group.</param>
         static member DrawingGroup(opacity: float) =
-            CollectionBuilder<'msg, IFabDrawingGroup, IFabDrawing>(DrawingGroup.WidgetKey, DrawingGroup.Children, DrawingGroup.Opacity.WithValue(opacity))
+            let attr = DrawingGroup.Children
+            let scalar = DrawingGroup.Opacity.WithValue(opacity)
+            CollectionBuilder<'msg, IFabDrawingGroup, IFabDrawing>(DrawingGroup.WidgetKey, attr, scalar)
 
 type DrawingGroupModifiers =
 
@@ -52,7 +56,8 @@ type DrawingGroupModifiers =
     /// <param name="value">The OpacityMask value.</param>
     [<Extension>]
     static member inline opacityMask(this: WidgetBuilder<'msg, #IFabDrawingGroup>, value: WidgetBuilder<'msg, #IFabBrush>) =
-        this.AddWidget(DrawingGroup.OpacityMaskWidget.WithValue(value.Compile()))
+        let widget = DrawingGroup.OpacityMaskWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the OpacityMask property.</summary>
     /// <param name="this">Current widget.</param>
@@ -66,21 +71,24 @@ type DrawingGroupModifiers =
     /// <param name="value">The OpacityMask value.</param>
     [<Extension>]
     static member inline opacityMask(this: WidgetBuilder<'msg, #IFabDrawingGroup>, value: Color) =
-        DrawingGroupModifiers.opacityMask(this, View.SolidColorBrush(value))
+        let brush = View.SolidColorBrush(value)
+        DrawingGroupModifiers.opacityMask(this, brush)
 
     /// <summary>Sets the OpacityMask property.</summary>
     /// <param name="this">Current widget.</param>
     /// <param name="value">The OpacityMask value.</param>
     [<Extension>]
     static member inline opacityMask(this: WidgetBuilder<'msg, #IFabDrawingGroup>, value: string) =
-        DrawingGroupModifiers.opacityMask(this, View.SolidColorBrush(value))
+        let brush = View.SolidColorBrush(value)
+        DrawingGroupModifiers.opacityMask(this, brush)
 
     /// <summary>Sets the Transform property.</summary>
     /// <param name="this">Current widget.</param>
     /// <param name="value">The Transform value.</param>
     [<Extension>]
     static member inline transform(this: WidgetBuilder<'msg, #IFabDrawingGroup>, value: WidgetBuilder<'msg, #IFabTransform>) =
-        this.AddWidget(DrawingGroup.TransformWidget.WithValue(value.Compile()))
+        let widget = DrawingGroup.TransformWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the Transform property.</summary>
     /// <param name="this">Current widget.</param>
@@ -94,7 +102,8 @@ type DrawingGroupModifiers =
     /// <param name="value">The ClipGeometry value.</param>
     [<Extension>]
     static member inline clipGeometry(this: WidgetBuilder<'msg, #IFabDrawingGroup>, value: WidgetBuilder<'msg, #IFabGeometry>) =
-        this.AddWidget(DrawingGroup.ClipGeometry.WithValue(value.Compile()))
+        let widget = DrawingGroup.ClipGeometry.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Link a ViewRef to access the direct DrawingGroup control instance.</summary>
     /// <param name="this">Current widget.</param>

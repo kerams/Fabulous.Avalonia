@@ -2,6 +2,7 @@ namespace Fabulous.Avalonia
 
 open Fabulous
 open Fabulous.Avalonia
+open Fabulous.StackAllocatedCollections.StackList
 
 [<AutoOpen>]
 module ComponentProgressBarBuilders =
@@ -13,8 +14,7 @@ module ComponentProgressBarBuilders =
         /// <param name="value">Current value.</param>
         /// <param name="fn">Raised when the value changes.</param>
         static member ProgressBar(min: float, max: float, value: float, fn: float -> unit) =
-            WidgetBuilder<'msg, IFabProgressBar>(
-                ProgressBar.WidgetKey,
-                RangeBase.MinimumMaximum.WithValue(struct (min, max)),
-                ComponentRangeBase.ValueChanged.WithValue(ComponentValueEventData.create value fn)
-            )
+            let s1 = RangeBase.MinimumMaximum.WithValue(struct (min, max))
+            let s2 = ComponentRangeBase.ValueChanged.WithValue(ComponentValueEventData.create value fn)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabProgressBar>(ProgressBar.WidgetKey, &bundle)

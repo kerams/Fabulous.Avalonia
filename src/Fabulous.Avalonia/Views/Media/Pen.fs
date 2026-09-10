@@ -34,16 +34,21 @@ module PenBuilders =
         /// <param name="brush">The brush used to draw the stroke.</param>
         /// <param name="thickness">The thickness of the stroke.</param>
         static member Pen(brush: WidgetBuilder<'msg, #IFabBrush>, thickness: float) =
+            let bundle =
+                AttributesBundle(StackList.one(Pen.Thickness.WithValue(thickness)), [| Pen.BrushWidget.WithValue(brush.Compile()) |], [||])
             WidgetBuilder<'msg, IFabPen>(
                 Pen.WidgetKey,
-                AttributesBundle(StackList.one(Pen.Thickness.WithValue(thickness)), [| Pen.BrushWidget.WithValue(brush.Compile()) |], [||])
+                &bundle
             )
 
         /// <summary>Creates a Pen widget.</summary>
         /// <param name="brush">The brush used to draw the stroke.</param>
         /// <param name="thickness">The thickness of the stroke.</param>
         static member Pen(brush: IBrush, thickness: float) =
-            WidgetBuilder<'msg, IFabPen>(Pen.WidgetKey, Pen.Thickness.WithValue(thickness), Pen.Brush.WithValue(brush))
+            let t = Pen.Thickness.WithValue(thickness)
+            let b = Pen.Brush.WithValue(brush)
+            let bundle = AttributesBundle(StackList.two(t, b), [||], [||])
+            WidgetBuilder<'msg, IFabPen>(Pen.WidgetKey, &bundle)
 
         /// <summary>Creates a Pen widget.</summary>
         /// <param name="brush">The brush used to draw the stroke.</param>
@@ -63,7 +68,8 @@ type PenModifiers =
     /// <param name="value">The DashStyle value.</param>
     [<Extension>]
     static member inline dashStyle(this: WidgetBuilder<'msg, #IFabPen>, value: WidgetBuilder<'msg, IFaDashStyle>) =
-        this.AddWidget(Pen.DashStyle.WithValue(value.Compile()))
+        let widget = Pen.DashStyle.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the LineCap property.</summary>
     /// <param name="this">Current widget.</param>

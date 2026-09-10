@@ -59,7 +59,8 @@ type CalendarModifiers =
     /// <param name="value">The HeaderBackground value.</param>
     [<Extension>]
     static member inline headerBackground(this: WidgetBuilder<'msg, #IFabCalendar>, value: WidgetBuilder<'msg, #IFabBrush>) =
-        this.AddWidget(Calendar.HeaderBackgroundWidget.WithValue(value.Compile()))
+        let widget = Calendar.HeaderBackgroundWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the HeaderBackground property.</summary>
     /// <param name="this">Current widget.</param>

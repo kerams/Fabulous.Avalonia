@@ -8,12 +8,6 @@ open Fabulous
 
 module MvuInputElement =
 
-    let GotFocus =
-        Attributes.Mvu.defineEvent<GotFocusEventArgs> "InputElement_GotFocus" (fun target -> (target :?> InputElement).GotFocus)
-
-    let LostFocus =
-        Attributes.Mvu.defineEvent<RoutedEventArgs> "InputElement_LostFocus" (fun target -> (target :?> InputElement).LostFocus)
-
     let KeyDown =
         Attributes.Mvu.defineEvent<KeyEventArgs> "InputElement_KeyDown" (fun target -> (target :?> InputElement).KeyDown)
 
@@ -58,19 +52,6 @@ module MvuInputElement =
         Attributes.Mvu.defineEvent<TappedEventArgs> "InputElement_DoubleTapped" (fun target -> (target :?> InputElement).DoubleTapped)
 
 type MvuInputElementModifiers =
-    /// <summary>Listens to the InputElement GotFocus event.</summary>
-    /// <param name="this">Current widget.</param>
-    /// <param name="fn">Raised when control receives focus.</param>
-    [<Extension>]
-    static member inline onGotFocus(this: WidgetBuilder<'msg, #IFabInputElement>, fn: GotFocusEventArgs -> 'msg) =
-        this.AddScalar(MvuInputElement.GotFocus.WithValue(fn))
-
-    /// <summary>Listens to the InputElement LostFocus event.</summary>
-    /// <param name="this">Current widget.</param>
-    /// <param name="fn">Raised when control loses focus.</param>
-    [<Extension>]
-    static member inline onLostFocus(this: WidgetBuilder<'msg, #IFabInputElement>, fn: RoutedEventArgs -> 'msg) =
-        this.AddScalar(MvuInputElement.LostFocus.WithValue(fn))
 
     /// <summary>Listens to the InputElement KeyDown event.</summary>
     /// <param name="this">Current widget.</param>

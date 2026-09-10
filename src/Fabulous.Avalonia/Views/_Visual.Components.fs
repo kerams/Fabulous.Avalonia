@@ -34,11 +34,13 @@ type ComponentVisualExtraModifiers =
     /// <param name="value">The OpacityMask value.</param>
     [<Extension>]
     static member inline opacityMask(this: WidgetBuilder<'msg, #IFabVisual>, value: Color) =
-        VisualModifiers.opacityMask(this, View.SolidColorBrush(value))
+        let brush = View.SolidColorBrush(value)
+        VisualModifiers.opacityMask(this, brush)
 
     /// <summary>Sets the OpacityMask property.</summary>
     /// <param name="this">Current widget.</param>
     /// <param name="value">The OpacityMask value.</param>
     [<Extension>]
     static member inline opacityMask(this: WidgetBuilder<'msg, #IFabVisual>, value: string) =
-        VisualModifiers.opacityMask(this, View.SolidColorBrush(value))
+        let brush = View.SolidColorBrush(value)
+        VisualModifiers.opacityMask(this, brush)

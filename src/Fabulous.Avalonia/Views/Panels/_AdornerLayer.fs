@@ -22,14 +22,16 @@ type AdornerLayerAttachedModifiers =
     /// <param name="value">The Adorner value.</param>
     [<Extension>]
     static member inline adorner(this: WidgetBuilder<'msg, #IFabVisual>, value: WidgetBuilder<'msg, #IFabControl>) =
-        this.AddWidget(AdornerLayer.Adorner.WithValue(value.Compile()))
+        let widget = AdornerLayer.Adorner.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the AdornedElement property.</summary>
     /// <param name="this">Current widget.</param>
     /// <param name="value">The AdornedElement value.</param>
     [<Extension>]
     static member inline adornedElement(this: WidgetBuilder<'msg, #IFabVisual>, value: WidgetBuilder<'msg, #IFabVisual>) =
-        this.AddWidget(AdornerLayer.AdornedElement.WithValue(value.Compile()))
+        let widget = AdornerLayer.AdornedElement.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the IsClipEnabled property.</summary>
     /// <param name="this">Current widget.</param>

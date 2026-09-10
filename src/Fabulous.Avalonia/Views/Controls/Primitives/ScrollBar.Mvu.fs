@@ -4,6 +4,7 @@ open System.Runtime.CompilerServices
 open Avalonia.Controls.Primitives
 open Fabulous
 open Fabulous.Avalonia
+open Fabulous.StackAllocatedCollections.StackList
 
 module MvuScrollBar =
     let Scroll =
@@ -19,11 +20,10 @@ module MvuScrollBarBuilders =
         /// <param name="value">Current value.</param>
         /// <param name="fn">Raised when the value changes.</param>
         static member inline ScrollBar(min: float, max: float, value: float, fn: float -> 'msg) =
-            WidgetBuilder<'msg, IFabScrollBar>(
-                ScrollBar.WidgetKey,
-                RangeBase.MinimumMaximum.WithValue(struct (min, max)),
-                MvuRangeBase.ValueChanged.WithValue(ValueEventData.create value fn)
-            )
+            let s1 = RangeBase.MinimumMaximum.WithValue(struct (min, max))
+            let s2 = MvuRangeBase.ValueChanged.WithValue(ValueEventData.create value fn)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabScrollBar>(ScrollBar.WidgetKey, &bundle)
 
 type MvuScrollBarModifiers =
     /// <summary>Listens to the ScrollBar Scroll event.</summary>

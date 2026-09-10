@@ -28,7 +28,8 @@ module LayoutTransformControlBuilders =
         /// <summary>Creates a LayoutTransformControl widget.</summary>
         /// <param name="content">The content of the LayoutTransformControl.</param>
         static member LayoutTransformControl(content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabLayoutTransformControl>(LayoutTransformControl.WidgetKey, Decorator.ChildWidget.WithValue(content.Compile()))
+            let widget = Decorator.ChildWidget.WithValue(content.Compile())
+            WidgetBuilder<'msg, IFabLayoutTransformControl>(LayoutTransformControl.WidgetKey, &widget)
 
 type LayoutTransformControlModifiers =
     /// <summary>Sets the LayoutTransform property.</summary>
@@ -36,7 +37,8 @@ type LayoutTransformControlModifiers =
     /// <param name="value">The LayoutTransform value.</param>
     [<Extension>]
     static member inline layoutTransform(this: WidgetBuilder<'msg, #IFabLayoutTransformControl>, value: WidgetBuilder<'msg, #IFabTransform>) =
-        this.AddWidget(LayoutTransformControl.LayoutTransformWidget.WithValue(value.Compile()))
+        let widget = LayoutTransformControl.LayoutTransformWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the LayoutTransform property.</summary>
     /// <param name="this">Current widget.</param>

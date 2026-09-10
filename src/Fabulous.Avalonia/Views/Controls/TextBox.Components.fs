@@ -27,7 +27,8 @@ module ComponentTextBoxBuilders =
         /// <param name="text">The text to display.</param>
         /// <param name="fn">Raised when the text changes.</param>
         static member inline TextBox(text: string, fn: string -> unit) =
-            WidgetBuilder<'msg, IFabTextBox>(TextBox.WidgetKey, ComponentTextBox.TextChanged.WithValue(ComponentValueEventData.create text fn))
+            let attr = ComponentTextBox.TextChanged.WithValue(ComponentValueEventData.create text fn)
+            WidgetBuilder<'msg, IFabTextBox>(TextBox.WidgetKey, &attr)
 
 type ComponentTextBoxModifiers =
     /// /// <summary>Listens to the TexBox CopyingToClipboard event.</summary>

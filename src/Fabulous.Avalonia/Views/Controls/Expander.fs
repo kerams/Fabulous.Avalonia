@@ -29,51 +29,41 @@ module ExpanderBuilders =
         /// <param name="header">The header of the expander.</param>
         /// <param name="content">The content of the expander.</param>
         static member Expander(header: string, content: string) =
+            let s1 = HeaderedContentControl.HeaderString.WithValue(header)
+            let s2 = ContentControl.ContentString.WithValue(content)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
             WidgetBuilder<'msg, IFabExpander>(
                 Expander.WidgetKey,
-                HeaderedContentControl.HeaderString.WithValue(header),
-                ContentControl.ContentString.WithValue(content)
+                &bundle
             )
 
         /// <summary>Creates a Expander widget.</summary>
         /// <param name="header">The header of the expander.</param>
         /// <param name="content">The content of the expander.</param>
         static member Expander(header: WidgetBuilder<'msg, #IFabControl>, content: string) =
-            WidgetBuilder<'msg, IFabExpander>(
-                Expander.WidgetKey,
-                AttributesBundle(
-                    StackList.one(ContentControl.ContentString.WithValue(content)),
+            let bundle = AttributesBundle(StackList.one(ContentControl.ContentString.WithValue(content)),
                     [| HeaderedContentControl.HeaderWidget.WithValue(header.Compile()) |],
-                    [||]
-                )
-            )
+                    [||])
+            WidgetBuilder<'msg, IFabExpander>(Expander.WidgetKey, &bundle)
 
         /// <summary>Creates a Expander widget.</summary>
         /// <param name="header">The header of the expander.</param>
         /// <param name="content">The content of the expander.</param>
         static member Expander(header: string, content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabExpander>(
-                Expander.WidgetKey,
-                AttributesBundle(
-                    StackList.one(HeaderedContentControl.HeaderString.WithValue(header)),
+            let bundle = AttributesBundle(StackList.one(HeaderedContentControl.HeaderString.WithValue(header)),
                     [| ContentControl.ContentWidget.WithValue(content.Compile()) |],
-                    [||]
-                )
-            )
+                    [||])
+            WidgetBuilder<'msg, IFabExpander>(Expander.WidgetKey, &bundle)
 
         /// <summary>Creates a Expander widget.</summary>
         /// <param name="header">The header of the expander.</param>
         /// <param name="content">The content of the expander.</param>
         static member Expander(header: WidgetBuilder<'msg, #IFabControl>, content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabExpander>(
-                Expander.WidgetKey,
-                AttributesBundle(
-                    StackList.empty(),
+            let bundle = AttributesBundle(StackList.empty(),
                     [| HeaderedContentControl.HeaderWidget.WithValue(header.Compile())
                        ContentControl.ContentWidget.WithValue(content.Compile()) |],
-                    [||]
-                )
-            )
+                    [||])
+            WidgetBuilder<'msg, IFabExpander>(Expander.WidgetKey, &bundle)
 
 type ExpanderModifiers =
     /// <summary>Sets the ContentTransition property.</summary>

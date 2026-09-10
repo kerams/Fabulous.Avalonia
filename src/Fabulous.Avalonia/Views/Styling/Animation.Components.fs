@@ -17,11 +17,14 @@ module ComponentAnimationBuilders =
         /// <summary>Creates an Animation widget with the specified duration and keyframes.</summary>
         /// <param name="duration">The main Window of the Application.</param>
         static member Animation(duration: TimeSpan) =
-            CollectionBuilder<'msg, IFabAnimation, IFabKeyFrame>(Animation.WidgetKey, ComponentAnimation.Children, Animation.Duration.WithValue(duration))
+            let scalar = Animation.Duration.WithValue(duration)
+            let attr = ComponentAnimation.Children
+            CollectionBuilder<'msg, IFabAnimation, IFabKeyFrame>(Animation.WidgetKey, attr, scalar)
 
         /// <summary>Creates an Animation widget with keyframes.</summary>
         static member Animation() =
-            CollectionBuilder<'msg, IFabAnimation, IFabKeyFrame>(Animation.WidgetKey, ComponentAnimation.Children)
+            let attr = ComponentAnimation.Children
+            CollectionBuilder<'msg, IFabAnimation, IFabKeyFrame>(Animation.WidgetKey, attr)
 
 [<AutoOpen>]
 module ComponentAnimationAttachedBuilders =

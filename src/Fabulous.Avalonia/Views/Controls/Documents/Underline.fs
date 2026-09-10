@@ -16,7 +16,8 @@ module UnderlineBuilders =
 
         /// <summary>Creates a Underline widget.</summary>
         static member private Underline() =
-            CollectionBuilder<'msg, IFabUnderline, IFabInline>(Underline.WidgetKey, Span.Inlines)
+            let attr = Span.Inlines
+            CollectionBuilder<'msg, IFabUnderline, IFabInline>(Underline.WidgetKey, attr)
 
         /// <summary>Creates a Underline widget.</summary>
         /// <param name="text">The text to display.</param>

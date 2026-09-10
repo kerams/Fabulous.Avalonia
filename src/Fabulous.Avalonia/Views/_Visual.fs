@@ -107,7 +107,8 @@ type VisualModifiers =
     /// <param name="value">The OpacityMask value.</param>
     [<Extension>]
     static member inline opacityMask(this: WidgetBuilder<'msg, #IFabVisual>, value: WidgetBuilder<'msg, #IFabBrush>) =
-        this.AddWidget(Visual.OpacityMaskWidget.WithValue(value.Compile()))
+        let widget = Visual.OpacityMaskWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the OpacityMask property.</summary>
     /// <param name="this">Current widget.</param>
@@ -121,4 +122,5 @@ type VisualModifiers =
     /// <param name="value">The RenderTransform value.</param>
     [<Extension>]
     static member inline renderTransform(this: WidgetBuilder<'msg, #IFabVisual>, value: WidgetBuilder<'msg, #IFabTransform>) =
-        this.AddWidget(Visual.RenderTransformWidget.WithValue(value.Compile()))
+        let widget = Visual.RenderTransformWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)

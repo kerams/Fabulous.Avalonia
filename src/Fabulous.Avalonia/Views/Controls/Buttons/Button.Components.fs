@@ -18,17 +18,16 @@ module ComponentButtonBuilders =
         /// <param name="text">The text to display.</param>
         /// <param name="fn">Raised when the button is clicked.</param>
         static member Button(text: string, fn: RoutedEventArgs -> unit) =
-            WidgetBuilder<'msg, IFabButton>(Button.WidgetKey, ContentControl.ContentString.WithValue(text), ComponentButton.Clicked.WithValue(fn))
+            let s1 = ContentControl.ContentString.WithValue(text)
+            let s2 = ComponentButton.Clicked.WithValue(fn)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabButton>(Button.WidgetKey, &bundle)
 
         /// <summary>Creates a Button widget.</summary>
         /// <param name="fn">Raised when the button is clicked.</param>
         /// <param name="content">The content to display.</param>
         static member Button(fn: RoutedEventArgs -> unit, content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabButton>(
-                Button.WidgetKey,
-                AttributesBundle(
-                    StackList.one(ComponentButton.Clicked.WithValue(fn)),
+            let bundle = AttributesBundle(StackList.one(ComponentButton.Clicked.WithValue(fn)),
                     [| ContentControl.ContentWidget.WithValue(content.Compile()) |],
-                    [||]
-                )
-            )
+                    [||])
+            WidgetBuilder<'msg, IFabButton>(Button.WidgetKey, &bundle)

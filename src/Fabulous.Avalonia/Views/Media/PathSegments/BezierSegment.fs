@@ -4,6 +4,7 @@ open System.Runtime.CompilerServices
 open Avalonia
 open Avalonia.Media
 open Fabulous
+open Fabulous.StackAllocatedCollections.StackList
 
 type IFabBezierSegment =
     inherit IFabPathSegment
@@ -29,11 +30,13 @@ module BezierSegmentBuilders =
         /// <param name="point2">The second control point of the curve.</param>
         /// <param name="point3">The third control point of the curve.</param>
         static member BezierSegment(point1: Point, point2: Point, point3: Point) =
+            let p1 = BezierSegment.Point1.WithValue(point1)
+            let p2 = BezierSegment.Point2.WithValue(point2)
+            let p3 = BezierSegment.Point3.WithValue(point3)
+            let bundle = AttributesBundle(StackList.three(p1, p2, p3), [||], [||])
             WidgetBuilder<'msg, IFabBezierSegment>(
                 BezierSegment.WidgetKey,
-                BezierSegment.Point1.WithValue(point1),
-                BezierSegment.Point2.WithValue(point2),
-                BezierSegment.Point3.WithValue(point3)
+                &bundle
             )
 
 

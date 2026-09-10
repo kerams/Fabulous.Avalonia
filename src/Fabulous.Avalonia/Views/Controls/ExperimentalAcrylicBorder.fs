@@ -25,7 +25,8 @@ module ExperimentalAcrylicBorderBuilders =
         /// <summary>Creates a ExperimentalAcrylicBorder widget.</summary>
         /// <param name="content">The content of the ExperimentalAcrylicBorder.</param>
         static member ExperimentalAcrylicBorder(content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabExperimentalAcrylicBorder>(ExperimentalAcrylicBorder.WidgetKey, Decorator.ChildWidget.WithValue(content.Compile()))
+            let widget = Decorator.ChildWidget.WithValue(content.Compile())
+            WidgetBuilder<'msg, IFabExperimentalAcrylicBorder>(ExperimentalAcrylicBorder.WidgetKey, &widget)
 
         /// <summary>Creates a ExperimentalAcrylicBorder widget.</summary>
         static member ExperimentalAcrylicBorder() =
@@ -52,7 +53,8 @@ type ExperimentalAcrylicBorderModifiers =
     /// <param name="value">The Material value.</param>
     [<Extension>]
     static member inline material(this: WidgetBuilder<'msg, #IFabExperimentalAcrylicBorder>, value: WidgetBuilder<'msg, IFabExperimentalAcrylicMaterial>) =
-        this.AddWidget(ExperimentalAcrylicBorder.Material.WithValue(value.Compile()))
+        let widget = ExperimentalAcrylicBorder.Material.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Link a ViewRef to access the direct ExperimentalAcrylicBorder control instance.</summary>
     /// <param name="this">Current widget.</param>

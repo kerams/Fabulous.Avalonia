@@ -21,7 +21,8 @@ module TransformGroupBuilders =
 
         /// <summary>Creates a TransformGroup widget.</summary>
         static member TransformGroup() =
-            CollectionBuilder<'msg, IFabTransformGroup, IFabTransform>(TransformGroup.WidgetKey, TransformGroup.Children)
+            let attr = TransformGroup.Children
+            CollectionBuilder<'msg, IFabTransformGroup, IFabTransform>(TransformGroup.WidgetKey, attr)
 
 type TransformGroupCollectionBuilderExtensions =
     [<Extension>]

@@ -13,17 +13,16 @@ module ComponentRepeatButtonBuilders =
         /// <param name="text">The text to display.</param>
         /// <param name="msg">Raised when the button is clicked.</param>
         static member RepeatButton(text: string, msg: RoutedEventArgs -> unit) =
-            WidgetBuilder<'msg, IFabRepeatButton>(RepeatButton.WidgetKey, ContentControl.ContentString.WithValue(text), ComponentButton.Clicked.WithValue(msg))
+            let s1 = ContentControl.ContentString.WithValue(text)
+            let s2 = ComponentButton.Clicked.WithValue(msg)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabRepeatButton>(RepeatButton.WidgetKey, &bundle)
 
         /// <summary>Creates a RepeatButton widget.</summary>
         /// <param name="content">The content to display.</param>
         /// M<param name="fn">Raised when the button is clicked.</param>
         static member RepeatButton(fn: RoutedEventArgs -> unit, content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabRepeatButton>(
-                RepeatButton.WidgetKey,
-                AttributesBundle(
-                    StackList.one(ComponentButton.Clicked.WithValue(fn)),
+            let bundle = AttributesBundle(StackList.one(ComponentButton.Clicked.WithValue(fn)),
                     [| ContentControl.ContentWidget.WithValue(content.Compile()) |],
-                    [||]
-                )
-            )
+                    [||])
+            WidgetBuilder<'msg, IFabRepeatButton>(RepeatButton.WidgetKey, &bundle)

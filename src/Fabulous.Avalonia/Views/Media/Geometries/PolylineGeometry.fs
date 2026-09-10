@@ -4,6 +4,7 @@ open System.Runtime.CompilerServices
 open Avalonia
 open Avalonia.Media
 open Fabulous
+open Fabulous.StackAllocatedCollections.StackList
 
 type IFabPolylineGeometry =
     inherit IFabGeometry
@@ -25,10 +26,12 @@ module PolylineGeometryBuilders =
         /// <param name="points">The points of the polyline.</param>
         /// <param name="isFilled">Whether the polyline is filled.</param>
         static member PolylineGeometry(points: Point list, isFilled: bool) =
+            let s1 = PolylineGeometry.Points.WithValue(points |> Array.ofList)
+            let s2 = PolylineGeometry.IsFilled.WithValue(isFilled)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
             WidgetBuilder<'msg, IFabPolylineGeometry>(
                 PolylineGeometry.WidgetKey,
-                PolylineGeometry.Points.WithValue(points |> Array.ofList),
-                PolylineGeometry.IsFilled.WithValue(isFilled)
+                &bundle
             )
 
 type PolylineGeometryModifiers =

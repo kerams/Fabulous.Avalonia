@@ -4,6 +4,7 @@ open System.Runtime.CompilerServices
 open Avalonia
 open Avalonia.Media
 open Fabulous
+open Fabulous.StackAllocatedCollections.StackList
 
 type IFabEllipseGeometry =
     inherit IFabGeometry
@@ -31,10 +32,12 @@ module EllipseGeometryBuilders =
         /// <param name="radiusX">The X radius of the ellipse.</param>
         /// <param name="radiusY">The Y radius of the ellipse.</param>
         static member EllipseGeometry(radiusX: float, radiusY: float) =
+            let s1 = EllipseGeometry.RadiusX.WithValue(radiusX)
+            let s2 = EllipseGeometry.RadiusY.WithValue(radiusY)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
             WidgetBuilder<'msg, IFabEllipseGeometry>(
                 EllipseGeometry.WidgetKey,
-                EllipseGeometry.RadiusX.WithValue(radiusX),
-                EllipseGeometry.RadiusY.WithValue(radiusY)
+                &bundle
             )
 
 type EllipseGeometryModifiers =

@@ -24,7 +24,9 @@ module Widgets =
               TargetType = typeof<'T>
               CreateView =
                 fun (widget, treeContext, parentNode) ->
+#if DEBUG
                     treeContext.Logger.Debug("Creating view for {0}", typeof<'T>.Name)
+#endif
 
                     let view = factory()
                     let weakReference = WeakReference(view)
@@ -34,17 +36,21 @@ module Widgets =
                         | ValueNone -> None
                         | ValueSome node -> Some node
 
-                    let node = new ViewNode(parentNode, treeContext, weakReference)
+                    let node = new ViewNode(parentNode, &treeContext, weakReference)
 
                     ViewNode.set node view
 
                     // additionalSetup view node
 
-                    Reconciler.update treeContext.CanReuseView ValueNone widget node
+                    let mutable prev = ValueNone
+                    Reconciler.update treeContext.CanReuseView &prev &widget node
+
                     struct (node :> IViewNode, box view |> Unchecked.nonNull)
               AttachView =
                 fun (widget, treeContext, parentNode, view) ->
+#if DEBUG
                     treeContext.Logger.Debug("Attaching view for {0}", typeof<'T>.Name)
+#endif
 
                     let weakReference = WeakReference(view)
 
@@ -53,13 +59,14 @@ module Widgets =
                         | ValueNone -> None
                         | ValueSome node -> Some node
 
-                    let node = new ViewNode(parentNode, treeContext, weakReference)
+                    let node = new ViewNode(parentNode, &treeContext, weakReference)
 
                     ViewNode.set node view
 
                     // additionalSetup view node
 
-                    Reconciler.update treeContext.CanReuseView ValueNone widget node
+                    let prev = ValueOption<Widget>.ValueNone
+                    Reconciler.update treeContext.CanReuseView &prev &widget node
                     node :> IViewNode }
 
         WidgetDefinitionStore.set key definition
@@ -85,8 +92,10 @@ module WidgetHelpers =
             { OriginalItems = items
               Template = compileTemplate itemTemplate }
 
-        WidgetBuilder<'msg, 'marker>(key, attrDef.WithValue(data))
+        let attrDef = attrDef.WithValue(data)
+        WidgetBuilder<'msg, 'marker>(key, &attrDef)
 
     /// Creates a widget with the given key and attributes.
     let inline buildWidgets<'msg, 'marker when 'msg: equality> (key: WidgetKey) scalars (attrs: WidgetAttribute[]) =
-        WidgetBuilder<'msg, 'marker>(key, struct (scalars, attrs, [||]))
+        let mutable atts = struct (scalars, attrs, [||])
+        WidgetBuilder<'msg, 'marker>(key, &atts)

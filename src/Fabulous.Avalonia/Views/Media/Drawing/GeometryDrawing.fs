@@ -33,27 +33,31 @@ module GeometryDrawingBuilders =
         /// <param name="geometry">The Geometry that describes the shape of this GeometryDrawing.</param>
         /// <param name="brush">The Brush used to fill the interior with the shape described by this GeometryDrawing.</param>
         static member GeometryDrawing(geometry: WidgetBuilder<'msg, #IFabGeometry>, brush: WidgetBuilder<'msg, #IFabBrush>) =
-            WidgetBuilder<'msg, IFabGeometryDrawing>(
-                GeometryDrawing.WidgetKey,
+            let bundle =
                 AttributesBundle(
                     StackList.empty(),
                     [| GeometryDrawing.BrushWidget.WithValue(brush.Compile())
                        GeometryDrawing.GeometryWidget.WithValue(geometry.Compile()) |],
                     [||]
                 )
+            WidgetBuilder<'msg, IFabGeometryDrawing>(
+                GeometryDrawing.WidgetKey,
+                &bundle
             )
 
         /// <summary>Creates a GeometryDrawing widget.</summary>
         /// <param name="geometry">The Geometry that describes the shape of this GeometryDrawing.</param>
         /// <param name="brush">The Brush used to fill the interior with the shape described by this GeometryDrawing.</param>
         static member GeometryDrawing(geometry: string, brush: WidgetBuilder<'msg, #IFabBrush>) =
-            WidgetBuilder<'msg, IFabGeometryDrawing>(
-                GeometryDrawing.WidgetKey,
+            let bundle =
                 AttributesBundle(
                     StackList.one(GeometryDrawing.Geometry.WithValue(StreamGeometry.Parse(geometry))),
                     [| GeometryDrawing.BrushWidget.WithValue(brush.Compile()) |],
                     [||]
                 )
+            WidgetBuilder<'msg, IFabGeometryDrawing>(
+                GeometryDrawing.WidgetKey,
+                &bundle
             )
 
         /// <summary>Creates a GeometryDrawing widget.</summary>
@@ -84,26 +88,30 @@ module GeometryDrawingBuilders =
         /// <param name="geometry">The Geometry that describes the shape of this GeometryDrawing.</param>
         /// <param name="brush">The Brush used to fill the interior with the shape described by this GeometryDrawing.</param>
         static member GeometryDrawing(geometry: WidgetBuilder<'msg, #IFabGeometry>, brush: IBrush) =
-            WidgetBuilder<'msg, IFabGeometryDrawing>(
-                GeometryDrawing.WidgetKey,
+            let bundle =
                 AttributesBundle(
                     StackList.one(GeometryDrawing.Brush.WithValue(brush)),
                     [| GeometryDrawing.GeometryWidget.WithValue(geometry.Compile()) |],
                     [||]
                 )
+            WidgetBuilder<'msg, IFabGeometryDrawing>(
+                GeometryDrawing.WidgetKey,
+                &bundle
             )
 
         /// <summary>Creates a GeometryDrawing widget.</summary>
         /// <param name="geometry">The Geometry that describes the shape of this GeometryDrawing.</param>
         /// <param name="brush">The Brush used to fill the interior with the shape described by this GeometryDrawing.</param>
         static member GeometryDrawing(geometry: string, brush: IBrush) =
-            WidgetBuilder<'msg, IFabGeometryDrawing>(
-                GeometryDrawing.WidgetKey,
+            let bundle =
                 AttributesBundle(
                     StackList.two(GeometryDrawing.Brush.WithValue(brush), GeometryDrawing.Geometry.WithValue(StreamGeometry.Parse(geometry))),
                     [||],
                     [||]
                 )
+            WidgetBuilder<'msg, IFabGeometryDrawing>(
+                GeometryDrawing.WidgetKey,
+                &bundle
             )
 
 type GeometryDrawingModifiers =
@@ -113,7 +121,8 @@ type GeometryDrawingModifiers =
     /// <param name="value">The Pen value.</param>
     [<Extension>]
     static member inline pen(this: WidgetBuilder<'msg, #IFabGeometryDrawing>, value: WidgetBuilder<'msg, #IFabPen>) =
-        this.AddWidget(GeometryDrawing.Pen.WithValue(value.Compile()))
+        let widget = GeometryDrawing.Pen.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Link a ViewRef to access the direct GeometryDrawing control instance.</summary>
     /// <param name="this">Current widget.</param>

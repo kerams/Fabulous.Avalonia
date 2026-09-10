@@ -19,7 +19,8 @@ module SolidColorBrushBuilders =
         /// <summary>Creates a SolidColorBrush widget.</summary>
         /// <param name="color">The color of the brush.</param>
         static member SolidColorBrush(color: Color) =
-            WidgetBuilder<'msg, IFabSolidColorBrush>(SolidColorBrush.WidgetKey, SolidColorBrush.Color.WithValue(color))
+            let attr = SolidColorBrush.Color.WithValue(color)
+            WidgetBuilder<'msg, IFabSolidColorBrush>(SolidColorBrush.WidgetKey, &attr)
 
         /// <summary>Creates a SolidColorBrush widget.</summary>
         /// <param name="color">The color of the brush.</param>

@@ -26,47 +26,40 @@ module HyperlinkButtonBuilders =
         /// <param name="text">The text to display.</param>
         /// <param name="uri">The Uri to navigate to when the HyperlinkButton is clicked.</param>
         static member HyperlinkButton(text: string, uri: Uri) =
+            let s1 = ContentControl.ContentString.WithValue(text)
+            let s2 = HyperlinkButton.NavigateUri.WithValue(uri)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
             WidgetBuilder<'msg, IFabHyperlinkButton>(
                 HyperlinkButton.WidgetKey,
-                ContentControl.ContentString.WithValue(text),
-                HyperlinkButton.NavigateUri.WithValue(uri)
+                &bundle
             )
 
         /// <summary>Creates a HyperlinkButton widget.</summary>
         /// <param name="text">The text to display.</param>
         /// <param name="uri">The Uri to navigate to when the HyperlinkButton is clicked.</param>
         static member HyperlinkButton(text: string, uri: string) =
-            WidgetBuilder<'msg, IFabHyperlinkButton>(
-                HyperlinkButton.WidgetKey,
-                ContentControl.ContentString.WithValue(text),
-                HyperlinkButton.NavigateUri.WithValue(Uri(uri))
-            )
+            let s1 = ContentControl.ContentString.WithValue(text)
+            let s2 = HyperlinkButton.NavigateUri.WithValue(Uri(uri))
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabHyperlinkButton>(HyperlinkButton.WidgetKey, &bundle)
 
         /// <summary>Creates a HyperlinkButton widget.</summary>
         /// <param name="uri">The Uri to navigate to when the HyperlinkButton is clicked.</param>
         /// <param name="content">The content of the HyperlinkButton.</param>
         static member HyperlinkButton(uri: Uri, content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabHyperlinkButton>(
-                HyperlinkButton.WidgetKey,
-                AttributesBundle(
-                    StackList.one(HyperlinkButton.NavigateUri.WithValue(uri)),
+            let bundle = AttributesBundle(StackList.one(HyperlinkButton.NavigateUri.WithValue(uri)),
                     [| ContentControl.ContentWidget.WithValue(content.Compile()) |],
-                    [||]
-                )
-            )
+                    [||])
+            WidgetBuilder<'msg, IFabHyperlinkButton>(HyperlinkButton.WidgetKey, &bundle)
 
         /// <summary>Creates a HyperlinkButton widget.</summary>
         /// <param name="uri">The Uri to navigate to when the HyperlinkButton is clicked.</param>
         /// <param name="content">The content of the HyperlinkButton.</param>
         static member HyperlinkButton(uri: string, content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabHyperlinkButton>(
-                HyperlinkButton.WidgetKey,
-                AttributesBundle(
-                    StackList.one(HyperlinkButton.NavigateUri.WithValue(Uri(uri))),
+            let bundle = AttributesBundle(StackList.one(HyperlinkButton.NavigateUri.WithValue(Uri(uri))),
                     [| ContentControl.ContentWidget.WithValue(content.Compile()) |],
-                    [||]
-                )
-            )
+                    [||])
+            WidgetBuilder<'msg, IFabHyperlinkButton>(HyperlinkButton.WidgetKey, &bundle)
 
 type HyperlinkButtonModifiers =
 

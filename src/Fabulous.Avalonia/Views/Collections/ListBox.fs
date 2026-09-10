@@ -32,7 +32,8 @@ module ListBoxBuilders =
 
         /// <summary>Creates a ListBox widget.</summary>
         static member ListBox() =
-            CollectionBuilder<'msg, IFabListBox, IFabListBoxItem>(ListBox.WidgetKey, ItemsControl.Items)
+            let attr = ItemsControl.Items
+            CollectionBuilder<'msg, IFabListBox, IFabListBoxItem>(ListBox.WidgetKey, attr)
 
 
 

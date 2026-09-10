@@ -29,13 +29,18 @@ module ReversibleStackPanelBuilders =
 
             match spacing with
             | None -> ()
-            | Some v -> scalars <- StackList.add(&scalars, StackPanel.Spacing.WithValue(v))
+            | Some v ->
+                let s = StackPanel.Spacing.WithValue(v)
+                scalars <- StackList.add(&scalars, &s)
 
             match reverseOrder with
             | None -> ()
-            | Some v -> scalars <- StackList.add(&scalars, ReversibleStackPanel.ReverseOrder.WithValue(v))
+            | Some v ->
+                let s = ReversibleStackPanel.ReverseOrder.WithValue(v)
+                scalars <- StackList.add(&scalars, &s)
 
-            CollectionBuilder<'msg, IFabReversibleStackPanel, IFabControl>(ReversibleStackPanel.WidgetKey, scalars, Panel.Children)
+            let attr = Panel.Children
+            CollectionBuilder<'msg, IFabReversibleStackPanel, IFabControl>(ReversibleStackPanel.WidgetKey, scalars, attr)
 
         /// <summary>Creates a HStack widget.</summary>
         /// <param name="spacing">The spacing between each child.</param>
@@ -47,13 +52,18 @@ module ReversibleStackPanelBuilders =
 
             match spacing with
             | None -> ()
-            | Some v -> scalars <- StackList.add(&scalars, StackPanel.Spacing.WithValue(v))
+            | Some v ->
+                let s = StackPanel.Spacing.WithValue(v)
+                scalars <- StackList.add(&scalars, &s)
 
             match reverseOrder with
             | None -> ()
-            | Some v -> scalars <- StackList.add(&scalars, ReversibleStackPanel.ReverseOrder.WithValue(v))
+            | Some v ->
+                let s = ReversibleStackPanel.ReverseOrder.WithValue(v)
+                scalars <- StackList.add(&scalars, &s)
 
-            CollectionBuilder<'msg, IFabReversibleStackPanel, IFabControl>(ReversibleStackPanel.WidgetKey, scalars, Panel.Children)
+            let attr = Panel.Children
+            CollectionBuilder<'msg, IFabReversibleStackPanel, IFabControl>(ReversibleStackPanel.WidgetKey, scalars, attr)
 
 type ReversibleStackPanelModifiers =
     /// <summary>Link a ViewRef to access the direct ReversibleStackPanel control instance.</summary>

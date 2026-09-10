@@ -3,6 +3,7 @@ namespace Fabulous.Avalonia
 open System.Runtime.CompilerServices
 open Avalonia.Controls.Primitives
 open Fabulous
+open Fabulous.StackAllocatedCollections.StackList
 
 type IFabAccessText =
     inherit IFabTextBlock
@@ -21,7 +22,10 @@ module AccessTextBuilders =
         /// <param name="text">The text to display.</param>
         /// <param name="showAccessKey">Whether to underline the access key in the text.</param>
         static member inline AccessText(text: string, showAccessKey: bool) =
-            WidgetBuilder<'msg, IFabAccessText>(AccessText.WidgetKey, TextBlock.Text.WithValue(text), AccessText.ShowAccessKey.WithValue(showAccessKey))
+            let s1 = TextBlock.Text.WithValue(text)
+            let s2 = AccessText.ShowAccessKey.WithValue(showAccessKey)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabAccessText>(AccessText.WidgetKey, &bundle)
 
 type AccessTextModifiers =
     /// <summary>Link a ViewRef to access the direct AccessText control instance.</summary>

@@ -17,4 +17,5 @@ module MvuDatePickerBuilders =
         /// <param name="date">The initial date.</param>
         /// <param name="fn">Raised when the selected date changes.</param>
         static member DatePicker(date: DateTimeOffset, fn: DateTimeOffset -> 'msg) =
-            WidgetBuilder<'msg, IFabDatePicker>(DatePicker.WidgetKey, MvuDatePicker.SelectedDateChanged.WithValue(ValueEventData.create date fn))
+            let attr = MvuDatePicker.SelectedDateChanged.WithValue(ValueEventData.create date fn)
+            WidgetBuilder<'msg, IFabDatePicker>(DatePicker.WidgetKey, &attr)

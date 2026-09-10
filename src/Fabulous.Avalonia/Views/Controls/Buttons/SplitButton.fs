@@ -18,7 +18,8 @@ type SplitButtonModifiers =
     /// <param name="value">The Flyout value.</param>
     [<Extension>]
     static member inline flyout(this: WidgetBuilder<'msg, #IFabSplitButton>, value: WidgetBuilder<'msg, #IFabFlyoutBase>) =
-        this.AddWidget(SplitButton.Flyout.WithValue(value.Compile()))
+        let widget = SplitButton.Flyout.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Link a ViewRef to access the direct SplitButton control instance.</summary>
     /// <param name="this">Current widget.</param>

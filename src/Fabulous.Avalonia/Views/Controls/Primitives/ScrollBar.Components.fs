@@ -4,6 +4,7 @@ open System.Runtime.CompilerServices
 open Avalonia.Controls.Primitives
 open Fabulous
 open Fabulous.Avalonia
+open Fabulous.StackAllocatedCollections.StackList
 
 module ComponentScrollBar =
     let Scroll =
@@ -19,11 +20,10 @@ module ComponentScrollBarBuilders =
         /// <param name="value">Current value.</param>
         /// <param name="fn">Raised when the value changes.</param>
         static member inline ScrollBar(min: float, max: float, value: float, fn: float -> unit) =
-            WidgetBuilder<'msg, IFabScrollBar>(
-                ScrollBar.WidgetKey,
-                RangeBase.MinimumMaximum.WithValue(struct (min, max)),
-                ComponentRangeBase.ValueChanged.WithValue(ComponentValueEventData.create value fn)
-            )
+            let s1 = RangeBase.MinimumMaximum.WithValue(struct (min, max))
+            let s2 = ComponentRangeBase.ValueChanged.WithValue(ComponentValueEventData.create value fn)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabScrollBar>(ScrollBar.WidgetKey, &bundle)
 
 type ComponentScrollBarModifiers =
     /// <summary>Listens to the ScrollBar Scroll event.</summary>

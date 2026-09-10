@@ -4,6 +4,7 @@ open System.Runtime.CompilerServices
 open Avalonia
 open Avalonia.Controls.Shapes
 open Fabulous
+open Fabulous.StackAllocatedCollections.StackList
 
 type IFabLine =
     inherit IFabShape
@@ -24,7 +25,10 @@ module LineBuilders =
         /// <param name="starPoint">The start point of the line.</param>
         /// <param name="endPoint">The end point of the line.</param>
         static member Line(starPoint: Point, endPoint: Point) =
-            WidgetBuilder<'msg, IFabLine>(Line.WidgetKey, Line.StartPoint.WithValue(starPoint), Line.EndPoint.WithValue(endPoint))
+            let s1 = Line.StartPoint.WithValue(starPoint)
+            let s2 = Line.EndPoint.WithValue(endPoint)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabLine>(Line.WidgetKey, &bundle)
 
 
 type LineModifiers =

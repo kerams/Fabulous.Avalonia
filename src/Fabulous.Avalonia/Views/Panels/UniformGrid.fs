@@ -3,6 +3,7 @@ namespace Fabulous.Avalonia
 open System.Runtime.CompilerServices
 open Avalonia.Controls.Primitives
 open Fabulous
+open Fabulous.StackAllocatedCollections.StackList
 
 type IFabUniformGrid =
     inherit IFabPanel
@@ -34,34 +35,46 @@ module UniformGridBuilders =
         static member UniformGrid(?cols: int, ?rows: int) =
             match cols, rows with
             | Some cols, Some rows ->
+                let s1 = UniformGrid.Columns.WithValue(cols)
+                let s2 = UniformGrid.Rows.WithValue(rows)
+                let scalars = StackList.two(s1, s2)
+                let attr = Panel.Children
                 CollectionBuilder<'msg, IFabUniformGrid, IFabControl>(
                     UniformGrid.WidgetKey,
-                    Panel.Children,
-                    UniformGrid.Columns.WithValue(cols),
-                    UniformGrid.Rows.WithValue(rows)
+                    scalars,
+                    attr
                 )
             | Some cols, None ->
+                let s1 = UniformGrid.Columns.WithValue(cols)
+                let s2 = UniformGrid.Rows.WithValue(0)
+                let scalars = StackList.two(s1, s2)
+                let attr = Panel.Children
                 CollectionBuilder<'msg, IFabUniformGrid, IFabControl>(
                     UniformGrid.WidgetKey,
-                    Panel.Children,
-                    UniformGrid.Columns.WithValue(cols),
-                    UniformGrid.Rows.WithValue(0)
+                    scalars,
+                    attr
                 )
 
             | None, Some rows ->
+                let s1 = UniformGrid.Columns.WithValue(0)
+                let s2 = UniformGrid.Rows.WithValue(rows)
+                let scalars = StackList.two(s1, s2)
+                let attr = Panel.Children
                 CollectionBuilder<'msg, IFabUniformGrid, IFabControl>(
                     UniformGrid.WidgetKey,
-                    Panel.Children,
-                    UniformGrid.Columns.WithValue(0),
-                    UniformGrid.Rows.WithValue(rows)
+                    scalars,
+                    attr
                 )
 
             | None, None ->
+                let s1 = UniformGrid.Columns.WithValue(0)
+                let s2 = UniformGrid.Rows.WithValue(0)
+                let scalars = StackList.two(s1, s2)
+                let attr = Panel.Children
                 CollectionBuilder<'msg, IFabUniformGrid, IFabControl>(
                     UniformGrid.WidgetKey,
-                    Panel.Children,
-                    UniformGrid.Columns.WithValue(0),
-                    UniformGrid.Rows.WithValue(0)
+                    scalars,
+                    attr
                 )
 
 type UniformGridModifiers =

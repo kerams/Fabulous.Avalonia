@@ -4,6 +4,7 @@ open System.Runtime.CompilerServices
 open Avalonia
 open Avalonia.Media
 open Fabulous
+open Fabulous.StackAllocatedCollections.StackList
 
 type IFabConicGradientBrush =
     inherit IFabGradientBrush
@@ -25,21 +26,27 @@ module ConicGradientBrushBuilders =
         /// <param name="center">The center of the gradient.</param>
         /// <param name="angle">The angle of the gradient.</param>
         static member ConicGradientBrush(center: RelativePoint, angle: float) =
+            let s1 = ConicGradientBrush.Center.WithValue(center)
+            let s2 = ConicGradientBrush.Angle.WithValue(angle)
+            let scalars = StackList.two(s1, s2)
+            let attr = ComponentGradientBrush.GradientStops
             CollectionBuilder<'msg, IFabConicGradientBrush, IFabGradientStop>(
                 ConicGradientBrush.WidgetKey,
-                ComponentGradientBrush.GradientStops,
-                ConicGradientBrush.Center.WithValue(center),
-                ConicGradientBrush.Angle.WithValue(angle)
+                scalars,
+                attr
             )
 
         /// <summary>Creates a ConicGradientBrush widget.</summary>
         /// <param name="center">The center of the gradient.</param>
         static member ConicGradientBrush(center: RelativePoint) =
+            let s1 = ConicGradientBrush.Center.WithValue(center)
+            let s2 = ConicGradientBrush.Angle.WithValue(0.)
+            let scalars = StackList.two(s1, s2)
+            let attr = ComponentGradientBrush.GradientStops
             CollectionBuilder<'msg, IFabConicGradientBrush, IFabGradientStop>(
                 ConicGradientBrush.WidgetKey,
-                ComponentGradientBrush.GradientStops,
-                ConicGradientBrush.Center.WithValue(center),
-                ConicGradientBrush.Angle.WithValue(0.)
+                scalars,
+                attr
             )
 
         /// <summary>Creates a ConicGradientBrush widget.</summary>
@@ -47,41 +54,45 @@ module ConicGradientBrushBuilders =
         /// <param name="unit">The unit of the center.</param>
         /// <param name="angle">The angle of the gradient.</param>
         static member ConicGradientBrush(center: Point, unit: RelativeUnit, angle: float) =
-            CollectionBuilder<'msg, IFabConicGradientBrush, IFabGradientStop>(
-                ConicGradientBrush.WidgetKey,
-                ComponentGradientBrush.GradientStops,
-                ConicGradientBrush.Center.WithValue(RelativePoint(center, unit)),
-                ConicGradientBrush.Angle.WithValue(angle)
-            )
+            let s1 = ConicGradientBrush.Center.WithValue(RelativePoint(center, unit))
+            let s2 = ConicGradientBrush.Angle.WithValue(angle)
+            let scalars = StackList.two(s1, s2)
+            let attr = ComponentGradientBrush.GradientStops
+            CollectionBuilder<'msg, IFabConicGradientBrush, IFabGradientStop>(ConicGradientBrush.WidgetKey, scalars, attr)
 
         /// <summary>Creates a ConicGradientBrush widget.</summary>
         /// <param name="center">The center of the gradient.</param>
         /// <param name="unit">The unit of the center.</param>
         static member ConicGradientBrush(center: Point, unit: RelativeUnit) =
-            CollectionBuilder<'msg, IFabConicGradientBrush, IFabGradientStop>(
-                ConicGradientBrush.WidgetKey,
-                ComponentGradientBrush.GradientStops,
-                ConicGradientBrush.Center.WithValue(RelativePoint(center, unit)),
-                ConicGradientBrush.Angle.WithValue(0.)
-            )
+            let s1 = ConicGradientBrush.Center.WithValue(RelativePoint(center, unit))
+            let s2 = ConicGradientBrush.Angle.WithValue(0.)
+            let scalars = StackList.two(s1, s2)
+            let attr = ComponentGradientBrush.GradientStops
+            CollectionBuilder<'msg, IFabConicGradientBrush, IFabGradientStop>(ConicGradientBrush.WidgetKey, scalars, attr)
 
         /// <summary>Creates a ConicGradientBrush widget.</summary>
         /// <param name="angle">The angle of the gradient.</param>
         static member ConicGradientBrush(angle: float) =
+            let s1 = ConicGradientBrush.Center.WithValue(RelativePoint.Center)
+            let s2 = ConicGradientBrush.Angle.WithValue(angle)
+            let scalars = StackList.two(s1, s2)
+            let attr = ComponentGradientBrush.GradientStops
             CollectionBuilder<'msg, IFabConicGradientBrush, IFabGradientStop>(
                 ConicGradientBrush.WidgetKey,
-                ComponentGradientBrush.GradientStops,
-                ConicGradientBrush.Center.WithValue(RelativePoint.Center),
-                ConicGradientBrush.Angle.WithValue(angle)
+                scalars,
+                attr
             )
 
         /// <summary>Creates a ConicGradientBrush widget.</summary>
         static member ConicGradientBrush() =
+            let s1 = ConicGradientBrush.Center.WithValue(RelativePoint.Center)
+            let s2 = ConicGradientBrush.Angle.WithValue(0.)
+            let scalars = StackList.two(s1, s2)
+            let attr = ComponentGradientBrush.GradientStops
             CollectionBuilder<'msg, IFabConicGradientBrush, IFabGradientStop>(
                 ConicGradientBrush.WidgetKey,
-                ComponentGradientBrush.GradientStops,
-                ConicGradientBrush.Center.WithValue(RelativePoint.Center),
-                ConicGradientBrush.Angle.WithValue(0.)
+                scalars,
+                attr
             )
 
 

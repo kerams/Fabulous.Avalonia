@@ -29,14 +29,16 @@ module CombinedGeometryBuilders =
         /// <param name="geometry1">The first geometry.</param>
         /// <param name="geometry2">The second geometry.</param>
         static member CombinedGeometry(geometry1: WidgetBuilder<'msg, #IFabGeometry>, geometry2: WidgetBuilder<'msg, #IFabGeometry>) =
-            WidgetBuilder<'msg, IFabCombinedGeometry>(
-                CombinedGeometry.WidgetKey,
+            let bundle =
                 AttributesBundle(
                     StackList.empty(),
                     [| CombinedGeometry.Geometry1.WithValue(geometry1.Compile())
                        CombinedGeometry.Geometry2.WithValue(geometry2.Compile()) |],
                     [||]
                 )
+            WidgetBuilder<'msg, IFabCombinedGeometry>(
+                CombinedGeometry.WidgetKey,
+                &bundle
             )
 
 

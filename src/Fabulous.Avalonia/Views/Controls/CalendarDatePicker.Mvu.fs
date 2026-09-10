@@ -31,10 +31,8 @@ module MvuCalendarDatePickerBuilders =
         /// <param name="date">The selected date.</param>
         /// <param name="fn">Raised when the selected date changes.</param>
         static member CalendarDatePicker(date: DateTime option, fn: DateTime option -> 'msg) =
-            WidgetBuilder<'msg, IFabCalendarDatePicker>(
-                CalendarDatePicker.WidgetKey,
-                MvuCalendarDatePicker.SelectedDateChanged.WithValue(ValueEventData.create date fn)
-            )
+            let attr = MvuCalendarDatePicker.SelectedDateChanged.WithValue(ValueEventData.create date fn)
+            WidgetBuilder<'msg, IFabCalendarDatePicker>(CalendarDatePicker.WidgetKey, &attr)
 
 type MvuCalendarDatePickerModifiers =
     /// <summary>Listens to the CalendarDatePicker DateValidationError event.</summary>

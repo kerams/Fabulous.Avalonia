@@ -4,6 +4,7 @@ open System.Runtime.CompilerServices
 open Avalonia.Media
 open Fabulous
 open Fabulous.StackAllocatedCollections
+open Fabulous.StackAllocatedCollections.StackList
 
 type IFabPathGeometry =
     inherit IFabGeometry
@@ -28,21 +29,18 @@ module PathGeometryBuilders =
         /// <summary>Creates a PathGeometry widget.</summary>
         /// <param name="fillRule">The fill rule to apply to the geometry.</param>
         static member PathGeometry(fillRule: FillRule) =
-            CollectionBuilder<'msg, IFabPathGeometry, IFabPathFigure>(
-                PathGeometry.WidgetKey,
-                PathGeometry.FiguresWidget,
-                PathGeometry.FillRule.WithValue(fillRule)
-            )
+            let scalar = PathGeometry.FillRule.WithValue(fillRule)
+            let attr = PathGeometry.FiguresWidget
+            CollectionBuilder<'msg, IFabPathGeometry, IFabPathFigure>(PathGeometry.WidgetKey, attr, scalar)
 
         /// <summary>Creates a PathGeometry widget.</summary>
         /// <param name="pathData">The path data to parse.</param>
         /// <param name="fillRule">The fill rule to apply to the geometry.</param>
         static member PathGeometry(pathData: string, fillRule: FillRule) =
-            WidgetBuilder<'msg, IFabPathGeometry>(
-                PathGeometry.WidgetKey,
-                PathGeometry.Figures.WithValue(PathFigures.Parse(pathData)),
-                PathGeometry.FillRule.WithValue(fillRule)
-            )
+            let s1 = PathGeometry.Figures.WithValue(PathFigures.Parse(pathData))
+            let s2 = PathGeometry.FillRule.WithValue(fillRule)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabPathGeometry>(PathGeometry.WidgetKey, &bundle)
 
 type PathGeometryBuilderExtensions =
     [<Extension>]

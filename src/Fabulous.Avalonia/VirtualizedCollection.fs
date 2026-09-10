@@ -27,9 +27,10 @@ type WidgetControlTemplate(node: IViewNode, templateFn: Widget) as this =
 type WidgetDataTemplate(node: IViewNode, templateFn: obj -> Widget) as this =
     inherit FuncDataTemplate(typeof<obj>, System.Func<obj, INameScope, Control>(fun data n -> this.Build(data, n)), supportsRecycling = false)
 
-    member this.Recycle(newData: obj, prevWidget: Widget, rowNode: IViewNode) : Widget =
+    member this.Recycle(newData: obj, prevWidget: inref<Widget>, rowNode: IViewNode) : Widget =
         let currWidget = templateFn newData
-        Reconciler.update node.TreeContext.CanReuseView (ValueSome prevWidget) currWidget rowNode
+        let prev = ValueSome prevWidget
+        Reconciler.update node.TreeContext.CanReuseView &prev &currWidget rowNode
         currWidget
 
     member this.Build(data: obj, _: INameScope) =

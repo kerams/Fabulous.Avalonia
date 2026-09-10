@@ -4,6 +4,7 @@ open System.Runtime.CompilerServices
 open Avalonia
 open Avalonia.Media
 open Fabulous
+open Fabulous.StackAllocatedCollections.StackList
 
 type IFabQuadraticBezierSegment =
     inherit IFabPathSegment
@@ -26,10 +27,12 @@ module QuadraticBezierSegmentBuilders =
         /// <param name="point1">The first control point of the curve.</param>
         /// <param name="point2">The second control point of the curve.</param>
         static member QuadraticBezierSegment(point1: Point, point2: Point) =
+            let s1 = QuadraticBezierSegment.Point1.WithValue(point1)
+            let s2 = QuadraticBezierSegment.Point2.WithValue(point2)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
             WidgetBuilder<'msg, IFabQuadraticBezierSegment>(
                 QuadraticBezierSegment.WidgetKey,
-                QuadraticBezierSegment.Point1.WithValue(point1),
-                QuadraticBezierSegment.Point2.WithValue(point2)
+                &bundle
             )
 
 

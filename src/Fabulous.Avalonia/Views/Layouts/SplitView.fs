@@ -53,15 +53,11 @@ module SplitViewBuilders =
         /// <param name="pane">The content of the pane.</param>
         /// <param name="content">The content to display.</param>
         static member SplitView(pane: WidgetBuilder<'msg, #IFabControl>, content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabSplitView>(
-                SplitView.WidgetKey,
-                AttributesBundle(
-                    StackList.empty(),
+            let bundle = AttributesBundle(StackList.empty(),
                     [| SplitView.Pane.WithValue(pane.Compile())
                        ContentControl.ContentWidget.WithValue(content.Compile()) |],
-                    [||]
-                )
-            )
+                    [||])
+            WidgetBuilder<'msg, IFabSplitView>(SplitView.WidgetKey, &bundle)
 
 type SplitViewModifiers =
     /// <summary>Sets the CompactPaneLength property.</summary>
@@ -97,7 +93,8 @@ type SplitViewModifiers =
     /// <param name="value">The PaneBackground value.</param>
     [<Extension>]
     static member inline paneBackground(this: WidgetBuilder<'msg, #IFabSplitView>, value: WidgetBuilder<'msg, #IFabBrush>) =
-        this.AddWidget(SplitView.PaneBackgroundWidget.WithValue(value.Compile()))
+        let widget = SplitView.PaneBackgroundWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the PaneBackground property.</summary>
     /// <param name="this">Current widget.</param>

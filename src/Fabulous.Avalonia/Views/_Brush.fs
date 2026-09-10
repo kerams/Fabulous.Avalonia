@@ -31,7 +31,8 @@ type BrushModifiers =
     /// <param name="value">The Transform value.</param>
     [<Extension>]
     static member inline transform(this: WidgetBuilder<'msg, #IFabBrush>, value: WidgetBuilder<'msg, #IFabTransform>) =
-        this.AddWidget(Brush.Transform.WithValue(value.Compile()))
+        let widget = Brush.Transform.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the TransformOrigin property.</summary>
     /// <param name="this">Current widget.</param>

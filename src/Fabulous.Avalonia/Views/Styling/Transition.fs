@@ -61,11 +61,9 @@ module DoubleTransitionBuilders =
         /// <param name="property">The property to animate.</param>
         /// <param name="duration">The duration of the animation.</param>
         static member DoubleTransition(property: AvaloniaProperty, duration: TimeSpan) =
-            WidgetBuilder<'msg, IFabDoubleTransition>(
-                DoubleTransition.WidgetKey,
-                TransitionBase.Property.WithValue(property),
-                TransitionBase.Duration.WithValue(duration)
-            )
+            let propAttr = TransitionBase.Property.WithValue(property)
+            let durationAttr = TransitionBase.Duration.WithValue(duration)
+            WidgetBuilder<'msg, IFabDoubleTransition>(DoubleTransition.WidgetKey, &propAttr, &durationAttr)
 
 type IFabBoxShadowsTransition =
     inherit IFabTransition
@@ -83,11 +81,9 @@ module BoxShadowsTransitionBuilders =
         /// <param name="property">The property to animate.</param>
         /// <param name="duration">The duration of the animation.</param>
         static member BoxShadowsTransition(property: AvaloniaProperty, duration: TimeSpan) =
-            WidgetBuilder<'msg, IFabBoxShadowsTransition>(
-                BoxShadowsTransition.WidgetKey,
-                TransitionBase.Property.WithValue(property),
-                TransitionBase.Duration.WithValue(duration)
-            )
+            let propAttr = TransitionBase.Property.WithValue(property)
+            let durationAttr = TransitionBase.Duration.WithValue(duration)
+            WidgetBuilder<'msg, IFabBoxShadowsTransition>(BoxShadowsTransition.WidgetKey, &propAttr, &durationAttr)
 
 type IFabBrushTransition =
     inherit IFabTransition
@@ -105,11 +101,9 @@ module BrushTransitionBuilders =
         /// <param name="property">The property to animate.</param>
         /// <param name="duration">The duration of the animation.</param>
         static member BrushTransition(property: AvaloniaProperty, duration: TimeSpan) =
-            WidgetBuilder<'msg, IFabBrushTransition>(
-                BrushTransition.WidgetKey,
-                TransitionBase.Property.WithValue(property),
-                TransitionBase.Duration.WithValue(duration)
-            )
+            let propAttr = TransitionBase.Property.WithValue(property)
+            let durationAttr = TransitionBase.Duration.WithValue(duration)
+            WidgetBuilder<'msg, IFabBrushTransition>(BrushTransition.WidgetKey, &propAttr, &durationAttr)
 
 type IFabColorTransition =
     inherit IFabTransition
@@ -126,11 +120,9 @@ module ColorTransitionBuilders =
         /// <param name="property">The property to animate.</param>
         /// <param name="duration">The duration of the animation.</param>
         static member ColorTransition(property: AvaloniaProperty, duration: TimeSpan) =
-            WidgetBuilder<'msg, IFabColorTransition>(
-                ColorTransition.WidgetKey,
-                TransitionBase.Property.WithValue(property),
-                TransitionBase.Duration.WithValue(duration)
-            )
+            let propAttr = TransitionBase.Property.WithValue(property)
+            let durationAttr = TransitionBase.Duration.WithValue(duration)
+            WidgetBuilder<'msg, IFabColorTransition>(ColorTransition.WidgetKey, &propAttr, &durationAttr)
 
 type IFabCornerRadiusTransition =
     inherit IFabTransition
@@ -148,11 +140,9 @@ module CornerRadiusTransitionBuilders =
         /// <param name="property">The property to animate.</param>
         /// <param name="duration">The duration of the animation.</param>
         static member CornerRadiusTransition(property: AvaloniaProperty, duration: TimeSpan) =
-            WidgetBuilder<'msg, IFabCornerRadiusTransition>(
-                CornerRadiusTransition.WidgetKey,
-                TransitionBase.Property.WithValue(property),
-                TransitionBase.Duration.WithValue(duration)
-            )
+            let propAttr = TransitionBase.Property.WithValue(property)
+            let durationAttr = TransitionBase.Duration.WithValue(duration)
+            WidgetBuilder<'msg, IFabCornerRadiusTransition>(CornerRadiusTransition.WidgetKey, &propAttr, &durationAttr)
 
 type IFabFloatTransition =
     inherit IFabTransition
@@ -169,11 +159,9 @@ module FloatTransitionBuilders =
         /// <param name="property">The property to animate.</param>
         /// <param name="duration">The duration of the animation.</param>
         static member FloatTransition(property: AvaloniaProperty, duration: TimeSpan) =
-            WidgetBuilder<'msg, IFabFloatTransition>(
-                FloatTransition.WidgetKey,
-                TransitionBase.Property.WithValue(property),
-                TransitionBase.Duration.WithValue(duration)
-            )
+            let propAttr = TransitionBase.Property.WithValue(property)
+            let durationAttr = TransitionBase.Duration.WithValue(duration)
+            WidgetBuilder<'msg, IFabFloatTransition>(FloatTransition.WidgetKey, &propAttr, &durationAttr)
 
 type IFabIntegerTransition =
     inherit IFabTransition
@@ -190,11 +178,9 @@ module IntegerTransitionBuilders =
         /// <param name="property">The property to animate.</param>
         /// <param name="duration">The duration of the animation.</param>
         static member IntegerTransition(property: AvaloniaProperty, duration: TimeSpan) =
-            WidgetBuilder<'msg, IFabIntegerTransition>(
-                IntegerTransition.WidgetKey,
-                TransitionBase.Property.WithValue(property),
-                TransitionBase.Duration.WithValue(duration)
-            )
+            let propAttr = TransitionBase.Property.WithValue(property)
+            let durationAttr = TransitionBase.Duration.WithValue(duration)
+            WidgetBuilder<'msg, IFabIntegerTransition>(IntegerTransition.WidgetKey, &propAttr, &durationAttr)
 
 type IFabPointTransition =
     inherit IFabTransition
@@ -212,11 +198,9 @@ module PointTransitionBuilders =
         /// <param name="property">The property to animate.</param>
         /// <param name="duration">The duration of the animation.</param>
         static member PointTransition(property: AvaloniaProperty, duration: TimeSpan) =
-            WidgetBuilder<'msg, IFabPointTransition>(
-                PointTransition.WidgetKey,
-                TransitionBase.Property.WithValue(property),
-                TransitionBase.Duration.WithValue(duration)
-            )
+            let propAttr = TransitionBase.Property.WithValue(property)
+            let durationAttr = TransitionBase.Duration.WithValue(duration)
+            WidgetBuilder<'msg, IFabPointTransition>(PointTransition.WidgetKey, &propAttr, &durationAttr)
 
 type IFabSizeTransition =
     inherit IFabTransition
@@ -234,11 +218,9 @@ module SizeTransitionBuilders =
         /// <param name="property">The property to animate.</param>
         /// <param name="duration">The duration of the animation.</param>
         static member SizeTransition(property: AvaloniaProperty, duration: TimeSpan) =
-            WidgetBuilder<'msg, IFabSizeTransition>(
-                SizeTransition.WidgetKey,
-                TransitionBase.Property.WithValue(property),
-                TransitionBase.Duration.WithValue(duration)
-            )
+            let propAttr = TransitionBase.Property.WithValue(property)
+            let durationAttr = TransitionBase.Duration.WithValue(duration)
+            WidgetBuilder<'msg, IFabSizeTransition>(SizeTransition.WidgetKey, &propAttr, &durationAttr)
 
 type IFabThicknessTransition =
     inherit IFabTransition
@@ -256,11 +238,9 @@ module ThicknessTransitionBuilders =
         /// <param name="property">The property to animate.</param>
         /// <param name="duration">The duration of the animation.</param>
         static member ThicknessTransition(property: AvaloniaProperty, duration: TimeSpan) =
-            WidgetBuilder<'msg, IFabThicknessTransition>(
-                ThicknessTransition.WidgetKey,
-                TransitionBase.Property.WithValue(property),
-                TransitionBase.Duration.WithValue(duration)
-            )
+            let propAttr = TransitionBase.Property.WithValue(property)
+            let durationAttr = TransitionBase.Duration.WithValue(duration)
+            WidgetBuilder<'msg, IFabThicknessTransition>(ThicknessTransition.WidgetKey, &propAttr, &durationAttr)
 
 type IFabTransformOperationsTransition =
     inherit IFabTransition
@@ -278,11 +258,9 @@ module TransformOperationsTransitionBuilders =
         /// <param name="property">The property to animate.</param>
         /// <param name="duration">The duration of the animation.</param>
         static member TransformOperationsTransition(property: AvaloniaProperty, duration: TimeSpan) =
-            WidgetBuilder<'msg, IFabTransformOperationsTransition>(
-                TransformOperationsTransition.WidgetKey,
-                TransitionBase.Property.WithValue(property),
-                TransitionBase.Duration.WithValue(duration)
-            )
+            let propAttr = TransitionBase.Property.WithValue(property)
+            let durationAttr = TransitionBase.Duration.WithValue(duration)
+            WidgetBuilder<'msg, IFabTransformOperationsTransition>(TransformOperationsTransition.WidgetKey, &propAttr, &durationAttr)
 
 type IFabVectorTransition =
     inherit IFabTransition
@@ -300,11 +278,9 @@ module VectorTransitionBuilders =
         /// <param name="property">The property to animate.</param>
         /// <param name="duration">The duration of the animation.</param>
         static member VectorTransition(property: AvaloniaProperty, duration: TimeSpan) =
-            WidgetBuilder<'msg, IFabVectorTransition>(
-                VectorTransition.WidgetKey,
-                TransitionBase.Property.WithValue(property),
-                TransitionBase.Duration.WithValue(duration)
-            )
+            let propAttr = TransitionBase.Property.WithValue(property)
+            let durationAttr = TransitionBase.Duration.WithValue(duration)
+            WidgetBuilder<'msg, IFabVectorTransition>(VectorTransition.WidgetKey, &propAttr, &durationAttr)
 
 type IFabBoolTransition =
     inherit IFabTransition
@@ -321,11 +297,9 @@ module BoolTransitionBuilders =
         /// <param name="property">The property to animate.</param>
         /// <param name="duration">The duration of the animation.</param>
         static member BoolTransition(property: AvaloniaProperty, duration: TimeSpan) =
-            WidgetBuilder<'msg, IFabBoolTransition>(
-                BoolTransition.WidgetKey,
-                TransitionBase.Property.WithValue(property),
-                TransitionBase.Duration.WithValue(duration)
-            )
+            let propAttr = TransitionBase.Property.WithValue(property)
+            let durationAttr = TransitionBase.Duration.WithValue(duration)
+            WidgetBuilder<'msg, IFabBoolTransition>(BoolTransition.WidgetKey, &propAttr, &durationAttr)
 
 type IFabEffectTransition =
     inherit IFabTransition
@@ -342,11 +316,9 @@ module EffectTransitionBuilders =
         /// <param name="property">The property to animate.</param>
         /// <param name="duration">The duration of the animation.</param>
         static member EffectTransition(property: AvaloniaProperty, duration: TimeSpan) =
-            WidgetBuilder<'msg, IFabEffectTransition>(
-                EffectTransition.WidgetKey,
-                TransitionBase.Property.WithValue(property),
-                TransitionBase.Duration.WithValue(duration)
-            )
+            let propAttr = TransitionBase.Property.WithValue(property)
+            let durationAttr = TransitionBase.Duration.WithValue(duration)
+            WidgetBuilder<'msg, IFabEffectTransition>(EffectTransition.WidgetKey, &propAttr, &durationAttr)
 
 type TransitionBaseCollectionBuilderExtensions =
     [<Extension>]
@@ -366,7 +338,8 @@ type TransitionCollectionModifiers =
     /// <param name="this">Current widget.</param>
     [<Extension>]
     static member inline transition(this: WidgetBuilder<'msg, #IFabAnimatable>) =
-        AttributeCollectionBuilder<'msg, #IFabAnimatable, #IFabTransition>(this, Animatable.Transitions)
+        let attr = Animatable.Transitions
+        AttributeCollectionBuilder<'msg, #IFabAnimatable, #IFabTransition>(&this, &attr)
 
     /// <summary>Sets the Transition property.</summary>
     /// <param name="this">Current widget.</param>

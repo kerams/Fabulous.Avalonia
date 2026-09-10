@@ -20,7 +20,8 @@ module VisualBrushBuilders =
         /// <summary>Creates a VisualBrush widget.</summary>
         /// <param name="content">The content of the VisualBrush.</param>
         static member VisualBrush(content: WidgetBuilder<'msg, #IFabVisual>) =
-            WidgetBuilder<'msg, IFabVisualBrush>(VisualBrush.WidgetKey, VisualBrush.Visual.WithValue(content.Compile()))
+            let widget = VisualBrush.Visual.WithValue(content.Compile())
+            WidgetBuilder<'msg, IFabVisualBrush>(VisualBrush.WidgetKey, &widget)
 
 type VisualBrushModifiers =
     /// <summary>Link a ViewRef to access the direct VisualBrush control instance.</summary>

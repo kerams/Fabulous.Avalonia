@@ -252,7 +252,8 @@ type TextBoxModifiers =
     /// <param name="value">The CaretBrush value.</param>
     [<Extension>]
     static member inline caretBrush(this: WidgetBuilder<'msg, #IFabTextBox>, value: WidgetBuilder<'msg, #IFabBrush>) =
-        this.AddWidget(TextBox.CaretBrushWidget.WithValue(value.Compile()))
+        let widget = TextBox.CaretBrushWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the CaretBrush property.</summary>
     /// <param name="this">Current widget.</param>
@@ -266,21 +267,24 @@ type TextBoxModifiers =
     /// <param name="value">The InnerLeftContent value.</param>
     [<Extension>]
     static member inline innerLeftContent(this: WidgetBuilder<'msg, #IFabTextBox>, value: WidgetBuilder<'msg, #IFabControl>) =
-        this.AddWidget(TextBox.InnerLeftContentWidget.WithValue(value.Compile()))
+        let widget = TextBox.InnerLeftContentWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the InnerRightContent property.</summary>
     /// <param name="this">Current widget.</param>
     /// <param name="value">The InnerRightContent value.</param>
     [<Extension>]
     static member inline innerRightContent(this: WidgetBuilder<'msg, #IFabTextBox>, value: WidgetBuilder<'msg, #IFabControl>) =
-        this.AddWidget(TextBox.InnerRightContentWidget.WithValue(value.Compile()))
+        let widget = TextBox.InnerRightContentWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the SelectionBrush property.</summary>
     /// <param name="this">Current widget.</param>
     /// <param name="value">The SelectionBrush value.</param>
     [<Extension>]
     static member inline selectionBrush(this: WidgetBuilder<'msg, #IFabTextBox>, value: WidgetBuilder<'msg, #IFabBrush>) =
-        this.AddWidget(TextBox.SelectionBrushWidget.WithValue(value.Compile()))
+        let widget = TextBox.SelectionBrushWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the SelectionBrush property.</summary>
     /// <param name="this">Current widget.</param>
@@ -294,7 +298,8 @@ type TextBoxModifiers =
     /// <param name="value">The SelectionForegroundBrush value.</param>
     [<Extension>]
     static member inline selectionForegroundBrush(this: WidgetBuilder<'msg, #IFabTextBox>, value: WidgetBuilder<'msg, #IFabBrush>) =
-        this.AddWidget(TextBox.SelectionForegroundBrushWidget.WithValue(value.Compile()))
+        let widget = TextBox.SelectionForegroundBrushWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the SelectionForegroundBrush property.</summary>
     /// <param name="this">Current widget.</param>

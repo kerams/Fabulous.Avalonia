@@ -12,7 +12,8 @@ module PanelBuilders =
 
         /// <summary>Creates a Panel widget.</summary>
         static member Panel() =
-            CollectionBuilder<'msg, IFabPanel, IFabControl>(Panel.WidgetKey, Panel.Children)
+            let attr = Panel.Children
+            CollectionBuilder<'msg, IFabPanel, IFabControl>(Panel.WidgetKey, attr)
 
 type PanelModifiers =
     /// <summary>Sets the Background property.</summary>
@@ -20,7 +21,8 @@ type PanelModifiers =
     /// <param name="value">The Background value.</param>
     [<Extension>]
     static member inline background(this: WidgetBuilder<'msg, #IFabPanel>, value: WidgetBuilder<'msg, #IFabBrush>) =
-        this.AddWidget(Panel.BackgroundWidget.WithValue(value.Compile()))
+        let widget = Panel.BackgroundWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the Background property.</summary>
     /// <param name="this">Current widget.</param>
@@ -34,7 +36,8 @@ type PanelModifiers =
     /// <param name="value">The Foreground value.</param>
     [<Extension>]
     static member inline foreground(this: WidgetBuilder<'msg, #IFabPanel>, value: WidgetBuilder<'msg, #IFabBrush>) =
-        this.AddWidget(TextElement.ForegroundWidget.WithValue(value.Compile()))
+        let widget = TextElement.ForegroundWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the Foreground property.</summary>
     /// <param name="this">Current widget.</param>

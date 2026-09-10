@@ -25,12 +25,14 @@ module CanvasBuilders =
 
         /// <summary>Creates a Canvas widget.</summary>
         static member Canvas() =
-            CollectionBuilder<'msg, IFabCanvas, IFabControl>(Canvas.WidgetKey, Panel.Children)
+            let attr = Panel.Children
+            CollectionBuilder<'msg, IFabCanvas, IFabControl>(Canvas.WidgetKey, attr)
 
         /// <summary>Creates a Canvas widget.</summary>
         /// <param name="viewRef">The ViewRef instance that will receive access to the underlying control.</param>
         static member Canvas(viewRef: ViewRef<Canvas>) =
-            WidgetBuilder<'msg, IFabCanvas>(Canvas.WidgetKey, ViewRefAttributes.ViewRef.WithValue(viewRef.Unbox))
+            let attr = ViewRefAttributes.ViewRef.WithValue(viewRef.Unbox)
+            WidgetBuilder<'msg, IFabCanvas>(Canvas.WidgetKey, &attr)
 
 type CanvasModifiers =
     /// <summary>Sets the Left property.</summary>

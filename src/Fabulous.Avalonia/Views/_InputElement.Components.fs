@@ -8,11 +8,6 @@ open Fabulous
 
 module ComponentInputElement =
 
-    let GotFocus =
-        Attributes.Component.defineEvent<GotFocusEventArgs> "InputElement_GotFocus" (fun target -> (target :?> InputElement).GotFocus)
-
-    let LostFocus =
-        Attributes.Component.defineEvent<RoutedEventArgs> "InputElement_LostFocus" (fun target -> (target :?> InputElement).LostFocus)
 
     let KeyDown =
         Attributes.Component.defineEvent<KeyEventArgs> "InputElement_KeyDown" (fun target -> (target :?> InputElement).KeyDown)
@@ -59,19 +54,6 @@ module ComponentInputElement =
         Attributes.Component.defineEvent<TappedEventArgs> "InputElement_DoubleTapped" (fun target -> (target :?> InputElement).DoubleTapped)
 
 type ComponentInputElementModifiers =
-    /// <summary>Listens to the InputElement GotFocus event.</summary>
-    /// <param name="this">Current widget.</param>
-    /// <param name="fn">Raised when control receives focus.</param>
-    [<Extension>]
-    static member inline onGotFocus(this: WidgetBuilder<'msg, #IFabInputElement>, fn: GotFocusEventArgs -> unit) =
-        this.AddScalar(ComponentInputElement.GotFocus.WithValue(fn))
-
-    /// <summary>Listens to the InputElement LostFocus event.</summary>
-    /// <param name="this">Current widget.</param>
-    /// <param name="fn">Raised when control loses focus.</param>
-    [<Extension>]
-    static member inline onLostFocus(this: WidgetBuilder<'msg, #IFabInputElement>, fn: RoutedEventArgs -> unit) =
-        this.AddScalar(ComponentInputElement.LostFocus.WithValue(fn))
 
     /// <summary>Listens to the InputElement KeyDown event.</summary>
     /// <param name="this">Current widget.</param>

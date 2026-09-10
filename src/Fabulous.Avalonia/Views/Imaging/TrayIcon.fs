@@ -4,6 +4,7 @@ open System.IO
 open System.Runtime.CompilerServices
 open Avalonia.Media.Imaging
 open Fabulous
+open Fabulous.StackAllocatedCollections.StackList
 open Avalonia.Controls
 
 type IFabTrayIcon =
@@ -29,47 +30,47 @@ module TrayIconBuilders =
         /// <summary>Creates a TrayIcon widget.</summary>
         /// <param name="icon">The icon to display.</param>
         static member TrayIcon(icon: Bitmap) =
-            WidgetBuilder<'msg, IFabTrayIcon>(TrayIcon.WidgetKey, TrayIcon.IconSource.WithValue(ImageSourceValue.Bitmap(icon)))
+            let attr = TrayIcon.IconSource.WithValue(ImageSourceValue.Bitmap(icon))
+            WidgetBuilder<'msg, IFabTrayIcon>(TrayIcon.WidgetKey, &attr)
 
         /// <summary>Creates a TrayIcon widget.</summary>
         /// <param name="icon">The icon to display.</param>
         /// <param name="text">The tooltip text to display.</param>
         static member TrayIcon(icon: Bitmap, text: string) =
-            WidgetBuilder<'msg, IFabTrayIcon>(
-                TrayIcon.WidgetKey,
-                TrayIcon.IconSource.WithValue(ImageSourceValue.Bitmap(icon)),
-                TrayIcon.ToolTipText.WithValue(text)
-            )
+            let s1 = TrayIcon.IconSource.WithValue(ImageSourceValue.Bitmap(icon))
+            let s2 = TrayIcon.ToolTipText.WithValue(text)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabTrayIcon>(TrayIcon.WidgetKey, &bundle)
 
         /// <summary>Creates a TrayIcon widget.</summary>
         /// <param name="icon">The icon to display.</param>
         static member TrayIcon(icon: string) =
-            WidgetBuilder<'msg, IFabTrayIcon>(TrayIcon.WidgetKey, TrayIcon.IconSource.WithValue(ImageSourceValue.File(icon)))
+            let attr = TrayIcon.IconSource.WithValue(ImageSourceValue.File(icon))
+            WidgetBuilder<'msg, IFabTrayIcon>(TrayIcon.WidgetKey, &attr)
 
         /// <summary>Creates a TrayIcon widget.</summary>
         /// <param name="icon">The icon to display.</param>
         /// <param name="text">The tooltip text to display.</param>
         static member TrayIcon(icon: string, text: string) =
-            WidgetBuilder<'msg, IFabTrayIcon>(
-                TrayIcon.WidgetKey,
-                TrayIcon.IconSource.WithValue(ImageSourceValue.File(icon)),
-                TrayIcon.ToolTipText.WithValue(text)
-            )
+            let s1 = TrayIcon.IconSource.WithValue(ImageSourceValue.File(icon))
+            let s2 = TrayIcon.ToolTipText.WithValue(text)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabTrayIcon>(TrayIcon.WidgetKey, &bundle)
 
         /// <summary>Creates a TrayIcon widget.</summary>
         /// <param name="icon">The icon to display.</param>
         static member TrayIcon(icon: Stream) =
-            WidgetBuilder<'msg, IFabTrayIcon>(TrayIcon.WidgetKey, TrayIcon.IconSource.WithValue(ImageSourceValue.Stream(icon)))
+            let attr = TrayIcon.IconSource.WithValue(ImageSourceValue.Stream(icon))
+            WidgetBuilder<'msg, IFabTrayIcon>(TrayIcon.WidgetKey, &attr)
 
         /// <summary>Creates a TrayIcon widget.</summary>
         /// <param name="icon">The icon to display.</param>
         /// <param name="text">The tooltip text to display.</param>
         static member TrayIcon(icon: Stream, text: string) =
-            WidgetBuilder<'msg, IFabTrayIcon>(
-                TrayIcon.WidgetKey,
-                TrayIcon.IconSource.WithValue(ImageSourceValue.Stream(icon)),
-                TrayIcon.ToolTipText.WithValue(text)
-            )
+            let s1 = TrayIcon.IconSource.WithValue(ImageSourceValue.Stream(icon))
+            let s2 = TrayIcon.ToolTipText.WithValue(text)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabTrayIcon>(TrayIcon.WidgetKey, &bundle)
 
 type TrayIconModifiers =
     /// <summary>Sets the Menu property.</summary>
@@ -77,7 +78,8 @@ type TrayIconModifiers =
     /// <param name="value">The Menu value.</param>
     [<Extension>]
     static member inline menu(this: WidgetBuilder<'msg, #IFabTrayIcon>, value: WidgetBuilder<'msg, #IFabNativeMenu>) =
-        this.AddWidget(TrayIcon.Menu.WithValue(value.Compile()))
+        let widget = TrayIcon.Menu.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the IsVisible property.</summary>
     /// <param name="this">Current widget.</param>

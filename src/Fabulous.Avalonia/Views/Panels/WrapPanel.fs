@@ -39,42 +39,34 @@ module WrapPanelBuilders =
         /// rendering child elements from left to right while they fit the width and starting a new line when there is no space left
         /// (including any margins and borders). See <seealso href="https://docs.avaloniaui.net/docs/reference/controls/detailed-reference/wrappanel" />.</summary>
         static member VWrap() =
-            CollectionBuilder<'msg, IFabWrapPanel, IFabControl>(WrapPanel.WidgetKey, Panel.Children, WrapPanel.Orientation.WithValue(Orientation.Vertical))
+            let scalar = WrapPanel.Orientation.WithValue(Orientation.Vertical)
+            let attr = Panel.Children
+            CollectionBuilder<'msg, IFabWrapPanel, IFabControl>(WrapPanel.WidgetKey, attr, scalar)
 
         /// <summary>Creates a <see cref="WrapPanel" /> with <see cref="WrapPanel.Orientation" /> set to <see cref="Orientation.Vertical" />
         /// rendering child elements from left to right while they fit the width and starting a new line when there is no space left
         /// (including any margins and borders). See <seealso href="https://docs.avaloniaui.net/docs/reference/controls/detailed-reference/wrappanel" />.</summary>
         /// <param name="alignment">The ItemsAlignment value.</param>
         static member VWrap(alignment: WrapPanelItemsAlignment) =
-            CollectionBuilder<'msg, IFabWrapPanel, IFabControl>(
-                WrapPanel.WidgetKey,
-                Panel.Children,
-                AttributesBundle(
-                    StackList.two(WrapPanel.Orientation.WithValue(Orientation.Vertical), WrapPanel.ItemsAlignment.WithValue(alignment)),
-                    [||],
-                    [||]
-                )
-            )
+            let attr = Panel.Children
+            let bundle = AttributesBundle(StackList.two(WrapPanel.Orientation.WithValue(Orientation.Vertical), WrapPanel.ItemsAlignment.WithValue(alignment)), [||], [||])
+            CollectionBuilder<'msg, IFabWrapPanel, IFabControl>(WrapPanel.WidgetKey, attr, bundle)
 
         /// <summary>Creates a <see cref="WrapPanel" /> with <see cref="WrapPanel.Orientation" /> set to <see cref="Orientation.Horizontal" />
         /// rendering child elements from top to bottom while they fit the height and starting a new column when there is no space left
         /// (including any margins and borders). See <seealso href="https://docs.avaloniaui.net/docs/reference/controls/detailed-reference/wrappanel" />.</summary>
         static member HWrap() =
-            CollectionBuilder<'msg, IFabWrapPanel, IFabControl>(WrapPanel.WidgetKey, Panel.Children, WrapPanel.Orientation.WithValue(Orientation.Horizontal))
+            let scalar = WrapPanel.Orientation.WithValue(Orientation.Horizontal)
+            let attr = Panel.Children
+            CollectionBuilder<'msg, IFabWrapPanel, IFabControl>(WrapPanel.WidgetKey, attr, scalar)
 
         /// <summary>Creates a <see cref="WrapPanel" /> with <see cref="WrapPanel.Orientation" /> set to <see cref="Orientation.Horizontal" />
         /// </summary>
         /// <param name="alignment">The ItemsAlignment value.</param>
         static member HWrap(alignment: WrapPanelItemsAlignment) =
-            CollectionBuilder<'msg, IFabWrapPanel, IFabControl>(
-                WrapPanel.WidgetKey,
-                Panel.Children,
-                AttributesBundle(
-                    StackList.two(WrapPanel.Orientation.WithValue(Orientation.Horizontal), WrapPanel.ItemsAlignment.WithValue(alignment)),
-                    [||],
-                    [||]
-                )
-            )
+            let attr = Panel.Children
+            let bundle = AttributesBundle(StackList.two(WrapPanel.Orientation.WithValue(Orientation.Horizontal), WrapPanel.ItemsAlignment.WithValue(alignment)), [||], [||])
+            CollectionBuilder<'msg, IFabWrapPanel, IFabControl>(WrapPanel.WidgetKey, attr, bundle)
 
 type WrapPanelModifiers =
     /// <summary>Sets the <see cref="WrapPanel.ItemWidth" /> property, i.e. the width of all items in the <see cref="WrapPanel" />.

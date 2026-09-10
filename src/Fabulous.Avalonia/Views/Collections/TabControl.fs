@@ -29,11 +29,15 @@ module TabControlBuilders =
         /// <summary>Creates a TabControl widget.</summary>
         /// <param name="placement">The placement of the tab strip.</param>
         static member TabControl(placement: Dock) =
-            CollectionBuilder<'msg, IFabTabControl, IFabTabItem>(TabControl.WidgetKey, ItemsControl.Items, TabControl.TabStripPlacement.WithValue(placement))
+            let scalar = TabControl.TabStripPlacement.WithValue(placement)
+            let attr = ItemsControl.Items
+            CollectionBuilder<'msg, IFabTabControl, IFabTabItem>(TabControl.WidgetKey, attr, scalar)
 
         /// <summary>Creates a TabControl widget.</summary>
         static member TabControl() =
-            CollectionBuilder<'msg, IFabTabControl, IFabTabItem>(TabControl.WidgetKey, ItemsControl.Items, TabControl.TabStripPlacement.WithValue(Dock.Top))
+            let scalar = TabControl.TabStripPlacement.WithValue(Dock.Top)
+            let attr = ItemsControl.Items
+            CollectionBuilder<'msg, IFabTabControl, IFabTabItem>(TabControl.WidgetKey, attr, scalar)
 
 type TabControlModifiers =
     /// <summary>Sets the HorizontalContentAlignment property.</summary>

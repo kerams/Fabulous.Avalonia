@@ -17,17 +17,16 @@ module MvuButtonBuilders =
         /// <param name="text">The text to display.</param>
         /// <param name="fn">Raised when the button is clicked.</param>
         static member Button(text: string, fn: 'msg) =
-            WidgetBuilder<'msg, IFabButton>(Button.WidgetKey, ContentControl.ContentString.WithValue(text), MvuButton.Clicked.WithValue(fun _ -> fn))
+            let s1 = ContentControl.ContentString.WithValue(text)
+            let s2 = MvuButton.Clicked.WithValue(fun _ -> fn)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabButton>(Button.WidgetKey, &bundle)
 
         /// <summary>Creates a Button widget.</summary>
         /// <param name="fn">Raised when the button is clicked.</param>
         /// <param name="content">The content to display.</param>
         static member Button(fn: 'msg, content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabButton>(
-                Button.WidgetKey,
-                AttributesBundle(
-                    StackList.one(MvuButton.Clicked.WithValue(fun _ -> fn)),
+            let bundle = AttributesBundle(StackList.one(MvuButton.Clicked.WithValue(fun _ -> fn)),
                     [| ContentControl.ContentWidget.WithValue(content.Compile()) |],
-                    [||]
-                )
-            )
+                    [||])
+            WidgetBuilder<'msg, IFabButton>(Button.WidgetKey, &bundle)

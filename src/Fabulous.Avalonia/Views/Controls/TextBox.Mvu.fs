@@ -27,7 +27,8 @@ module MvuTextBoxBuilders =
         /// <param name="text">The text to display.</param>
         /// <param name="fn">Raised when the text changes.</param>
         static member inline TextBox(text: string, fn: string -> 'msg) =
-            WidgetBuilder<'msg, IFabTextBox>(TextBox.WidgetKey, MvuTextBox.TextChanged.WithValue(ValueEventData.create text fn))
+            let attr = MvuTextBox.TextChanged.WithValue(ValueEventData.create text fn)
+            WidgetBuilder<'msg, IFabTextBox>(TextBox.WidgetKey, &attr)
 
 type MvuTextBoxModifiers =
     /// /// <summary>Listens to the TexBox CopyingToClipboard event.</summary>

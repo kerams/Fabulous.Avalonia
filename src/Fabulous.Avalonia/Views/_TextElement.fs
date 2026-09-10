@@ -42,7 +42,8 @@ type TextElementModifiers =
     /// <param name="value">The BackgroundWidget value.</param>
     [<Extension>]
     static member inline background(this: WidgetBuilder<'msg, #IFabTextElement>, value: WidgetBuilder<'msg, #IFabBrush>) =
-        this.AddWidget(TextElement.BackgroundWidget.WithValue(value.Compile()))
+        let widget = TextElement.BackgroundWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the Background property.</summary>
     /// <param name="this">Current widget.</param>
@@ -91,7 +92,8 @@ type TextElementModifiers =
     /// <param name="value">The Foreground value.</param>
     [<Extension>]
     static member inline foreground(this: WidgetBuilder<'msg, #IFabTextElement>, value: WidgetBuilder<'msg, #IFabBrush>) =
-        this.AddWidget(TextElement.ForegroundWidget.WithValue(value.Compile()))
+        let widget = TextElement.ForegroundWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the Foreground property.</summary>
     /// <param name="this">Current widget.</param>

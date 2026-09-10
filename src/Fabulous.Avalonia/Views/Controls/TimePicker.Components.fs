@@ -21,4 +21,5 @@ module ComponentTimePickerBuilders =
         /// <param name="time">The initial time.</param>
         /// <param name="fn">Raised when the selected time changes.</param>
         static member TimePicker(time: TimeSpan, fn: TimeSpan -> unit) =
-            WidgetBuilder<'msg, IFabTimePicker>(TimePicker.WidgetKey, ComponentTimePicker.SelectedTimeChanged.WithValue(ComponentValueEventData.create time fn))
+            let attr = ComponentTimePicker.SelectedTimeChanged.WithValue(ComponentValueEventData.create time fn)
+            WidgetBuilder<'msg, IFabTimePicker>(TimePicker.WidgetKey, &attr)

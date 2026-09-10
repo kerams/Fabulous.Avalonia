@@ -18,10 +18,12 @@ module ComponentToggleSplitButtonBuilders =
         /// <param name="isChecked">Whether the ToggleSplitButton is checked.</param>
         /// <param name="fn">Raised when the ToggleSplitButton is checked or unchecked.</param>
         static member ToggleSplitButton(text: string, isChecked: bool, fn: bool -> unit) =
+            let s1 = ContentControl.ContentString.WithValue(text)
+            let s2 = ComponentToggleSplitButton.CheckedChanged.WithValue(ComponentValueEventData.create isChecked fn)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
             WidgetBuilder<'msg, IFabToggleSplitButton>(
                 ToggleSplitButton.WidgetKey,
-                ContentControl.ContentString.WithValue(text),
-                ComponentToggleSplitButton.CheckedChanged.WithValue(ComponentValueEventData.create isChecked fn)
+                &bundle
             )
 
         /// <summary>Creates a ToggleSplitButton widget.</summary>
@@ -29,11 +31,7 @@ module ComponentToggleSplitButtonBuilders =
         /// <param name="fn">Raised when the ToggleSplitButton is checked or unchecked.</param>
         /// <param name="content">The content of the ToggleSplitButton.</param>
         static member ToggleSplitButton(isChecked: bool, fn: bool -> unit, content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabToggleSplitButton>(
-                ToggleSplitButton.WidgetKey,
-                AttributesBundle(
-                    StackList.one(ComponentToggleSplitButton.CheckedChanged.WithValue(ComponentValueEventData.create isChecked fn)),
+            let bundle = AttributesBundle(StackList.one(ComponentToggleSplitButton.CheckedChanged.WithValue(ComponentValueEventData.create isChecked fn)),
                     [| ContentControl.ContentWidget.WithValue(content.Compile()) |],
-                    [||]
-                )
-            )
+                    [||])
+            WidgetBuilder<'msg, IFabToggleSplitButton>(ToggleSplitButton.WidgetKey, &bundle)

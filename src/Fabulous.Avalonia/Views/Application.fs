@@ -39,17 +39,17 @@ type FabApplication() =
     member this.ShowWindow(id: string) =
         match this.FindWindowById(id) with
         | Some window -> window.Show()
-        | None -> failwithf $"Window with id %s{id} not found"
+        | None -> failwith $"Window with id {id} not found"
 
     member this.HideWindow(id: string) =
         match this.FindWindowById(id) with
         | Some window -> window.Hide()
-        | None -> failwithf $"Window with id %s{id} not found"
+        | None -> failwith $"Window with id {id} not found"
 
     member this.CloseWindow(id: string) =
         match this.FindWindowById(id) with
         | Some window -> window.Close()
-        | None -> failwithf $"Window with id %s{id} not found"
+        | None -> failwith $"Window with id {id} not found"
 
     member this.OnFrameworkInitialized
         with get () = _onFrameworkInitialized
@@ -141,7 +141,7 @@ module ApplicationUpdaters =
         match currOpt with
         | ValueNone -> target.MainView <- Unchecked.defaultof<_>
         | ValueSome widget ->
-            let struct (_, view) = Helpers.createViewForWidget node widget
+            let struct (_, view) = Helpers.createViewForWidget node &widget
             target.MainView <- view :?> Control
 
 module Application =
@@ -227,16 +227,15 @@ module ApplicationBuilders =
 
         /// <summary>Creates a DesktopApplication widget with a content widget.</summary>
         static member DesktopApplication() =
-            CollectionBuilder<'msg, IFabApplication, IFabWindow>(
-                Application.WidgetKey,
-                Application.Windows,
-                AttributesBundle(StackList.empty(), [||], [||])
-            )
+            let attr = Application.Windows
+            let bundle = AttributesBundle(StackList.empty(), [||], [||])
+            CollectionBuilder<'msg, IFabApplication, IFabWindow>(Application.WidgetKey, attr, bundle)
 
         /// <summary>Creates a SingleViewApplication widget with a content widget.</summary>
         /// <param name="view">The main View of the Application.</param>
         static member SingleViewApplication(view: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabApplication>(Application.WidgetKey, Application.MainView.WithValue(view.Compile()))
+            let attr = Application.MainView.WithValue(view.Compile())
+            WidgetBuilder<'msg, IFabApplication>(Application.WidgetKey, &attr)
 
 type ApplicationModifiers =
     /// <summary>Sets the application name.</summary>
@@ -330,11 +329,13 @@ type TrayIconAttachedModifiers =
     /// <param name="this">Current widget.</param>
     [<Extension>]
     static member inline trayIcons<'msg, 'marker when 'msg: equality and 'marker :> IFabApplication>(this: WidgetBuilder<'msg, 'marker>) =
-        AttributeCollectionBuilder<'msg, 'marker, IFabTrayIcon>(this, Application.TrayIcons)
+        let attr = Application.TrayIcons
+        AttributeCollectionBuilder<'msg, 'marker, IFabTrayIcon>(&this, &attr)
 
     /// <summary>Sets the tray icon for the application.</summary>
     /// <param name="this">Current widget.</param>
     /// <param name="trayIcon">The TrayIcon value</param>
     [<Extension>]
     static member inline trayIcon(this: WidgetBuilder<'msg, #IFabApplication>, trayIcon: WidgetBuilder<'msg, IFabTrayIcon>) =
-        AttributeCollectionBuilder<'msg, #IFabApplication, IFabTrayIcon>(this, Application.TrayIcons) { trayIcon }
+        let attr = Application.TrayIcons
+        AttributeCollectionBuilder<'msg, #IFabApplication, IFabTrayIcon>(&this, &attr) { trayIcon }

@@ -16,7 +16,8 @@ module ItalicBuilders =
 
         /// <summary>Creates a Italic widget.</summary>
         static member private Italic() =
-            CollectionBuilder<'msg, IFabItalic, IFabInline>(Italic.WidgetKey, Span.Inlines)
+            let attr = Span.Inlines
+            CollectionBuilder<'msg, IFabItalic, IFabInline>(Italic.WidgetKey, attr)
 
         /// <summary>Creates a Italic widget.</summary>
         /// <param name="text">Text to display.</param>

@@ -49,7 +49,8 @@ module BorderBuilders =
         /// <summary>Creates a Border widget.</summary>
         /// <param name="content">The content of the Border.</param>
         static member Border(content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabBorder>(Border.WidgetKey, Decorator.ChildWidget.WithValue(content.Compile()))
+            let attr = Decorator.ChildWidget.WithValue(content.Compile())
+            WidgetBuilder<'msg, IFabBorder>(Border.WidgetKey, &attr)
 
 type BorderModifiers =
     /// <summary>Sets the Background property.</summary>
@@ -57,7 +58,8 @@ type BorderModifiers =
     /// <param name="value">The Background value.</param>
     [<Extension>]
     static member inline background(this: WidgetBuilder<'msg, #IFabBorder>, value: WidgetBuilder<'msg, #IFabBrush>) =
-        this.AddWidget(Border.BackgroundWidget.WithValue(value.Compile()))
+        let widget = Border.BackgroundWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the Background property.</summary>
     /// <param name="this">Current widget.</param>
@@ -92,7 +94,8 @@ type BorderModifiers =
     /// <param name="value">The BorderBrush value.</param>
     [<Extension>]
     static member inline borderBrush(this: WidgetBuilder<'msg, #IFabBorder>, value: WidgetBuilder<'msg, #IFabBrush>) =
-        this.AddWidget(Border.BorderBrushWidget.WithValue(value.Compile()))
+        let widget = Border.BorderBrushWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the BorderBrush property.</summary>
     /// <param name="this">Current widget.</param>

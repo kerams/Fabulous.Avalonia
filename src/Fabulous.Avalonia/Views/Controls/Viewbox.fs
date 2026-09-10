@@ -26,7 +26,8 @@ module ViewBoxBuilders =
         /// <summary>Creates a ViewBox widget.</summary>
         /// <param name="content">The content of the ViewBox.</param>
         static member ViewBox(content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabViewBox>(ViewBox.WidgetKey, ViewBox.Child.WithValue(content.Compile()))
+            let widget = ViewBox.Child.WithValue(content.Compile())
+            WidgetBuilder<'msg, IFabViewBox>(ViewBox.WidgetKey, &widget)
 
 type ViewBoxModifiers =
     /// <summary>Sets the Stretch property.</summary>

@@ -32,7 +32,8 @@ type ControlModifiers =
     /// <param name="value">The ContextFlyout value.</param>
     [<Extension>]
     static member inline contextFlyout(this: WidgetBuilder<'msg, #IFabControl>, value: WidgetBuilder<'msg, #IFabFlyoutBase>) =
-        this.AddWidget(Control.ContextFlyout.WithValue(value.Compile()))
+        let widget = Control.ContextFlyout.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the Tag property.</summary>
     /// <param name="this">Current widget.</param>

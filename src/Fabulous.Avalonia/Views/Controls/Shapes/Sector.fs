@@ -3,6 +3,7 @@ namespace Fabulous.Avalonia
 open System.Runtime.CompilerServices
 open Avalonia.Controls.Shapes
 open Fabulous
+open Fabulous.StackAllocatedCollections.StackList
 
 type IFabSector =
     inherit IFabShape
@@ -24,7 +25,10 @@ module SectorBuilders =
         /// <param name="startAngle">The starting angle.</param>
         /// <param name="sweepAngle">The sweep angle.</param>
         static member Sector(startAngle: float, sweepAngle: float) =
-            WidgetBuilder<'msg, IFabSector>(Sector.WidgetKey, Sector.StartAngle.WithValue(startAngle), Sector.SweepAngle.WithValue(sweepAngle))
+            let s1 = Sector.StartAngle.WithValue(startAngle)
+            let s2 = Sector.SweepAngle.WithValue(sweepAngle)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabSector>(Sector.WidgetKey, &bundle)
 
 type SectorModifiers =
     /// <summary>Link a ViewRef to access the direct Sector control instance.</summary>

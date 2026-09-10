@@ -57,7 +57,8 @@ module TextDecorationBuilders =
         /// <summary>Creates a TextDecoration widget.</summary>
         /// <param name="location">The location of the TextDecoration.</param>
         static member inline TextDecoration(location: TextDecorationLocation) =
-            WidgetBuilder<'msg, IFabTextDecoration>(TextDecoration.WidgetKey, TextDecoration.Location.WithValue(location))
+            let attr = TextDecoration.Location.WithValue(location)
+            WidgetBuilder<'msg, IFabTextDecoration>(TextDecoration.WidgetKey, &attr)
 
 type TextDecorationModifiers =
     /// <summary>Sets the Stroke property.</summary>
@@ -65,7 +66,8 @@ type TextDecorationModifiers =
     /// <param name="value">The StrokeWidget value.</param>
     [<Extension>]
     static member inline stroke(this: WidgetBuilder<'msg, #IFabTextDecoration>, value: WidgetBuilder<'msg, #IFabBrush>) =
-        this.AddWidget(TextDecoration.StrokeWidget.WithValue(value.Compile()))
+        let widget = TextDecoration.StrokeWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the Stroke property.</summary>
     /// <param name="this">Current widget.</param>

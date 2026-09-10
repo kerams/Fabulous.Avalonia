@@ -17,7 +17,8 @@ module MenuBuilders =
 
         /// <summary>Creates a Menu widget.</summary>
         static member Menu() =
-            CollectionBuilder<'msg, IFabMenu, IFabMenuItem>(Menu.WidgetKey, ItemsControl.Items)
+            let attr = ItemsControl.Items
+            CollectionBuilder<'msg, IFabMenu, IFabMenuItem>(Menu.WidgetKey, attr)
 
 
 type MenuModifiers =

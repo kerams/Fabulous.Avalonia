@@ -18,7 +18,8 @@ module UserControlBuilders =
         /// <summary>Creates a UserControl widget.</summary>
         /// <param name="content">The content of the UserControl.</param>
         static member UserControl(content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabUserControl>(UserControl.WidgetKey, ContentControl.ContentWidget.WithValue(content.Compile()))
+            let widget = ContentControl.ContentWidget.WithValue(content.Compile())
+            WidgetBuilder<'msg, IFabUserControl>(UserControl.WidgetKey, &widget)
 
 type UserControlModifiers =
     /// <summary>Link a ViewRef to access the direct UserControl control instance.</summary>

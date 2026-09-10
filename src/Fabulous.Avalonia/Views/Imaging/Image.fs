@@ -34,80 +34,96 @@ module ImageBuilders =
         /// <summary>Creates an Image widget.</summary>
         /// <param name="source">The source image.</param>
         static member Image(source: Bitmap) =
-            WidgetBuilder<'msg, IFabImage>(Image.WidgetKey, Image.Source.WithValue(ImageSourceValue.Bitmap(source)), Image.Stretch.WithValue(Stretch.Uniform))
+            let s1 = Image.Source.WithValue(ImageSourceValue.Bitmap(source))
+            let s2 = Image.Stretch.WithValue(Stretch.Uniform)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabImage>(Image.WidgetKey, &bundle)
 
         /// <summary>Creates an Image widget.</summary>
         /// <param name="source">The source image.</param>
         /// <param name="stretch">The stretch mode.</param>
         static member Image(source: Bitmap, stretch: Stretch) =
-            WidgetBuilder<'msg, IFabImage>(Image.WidgetKey, Image.Source.WithValue(ImageSourceValue.Bitmap(source)), Image.Stretch.WithValue(stretch))
+            let s1 = Image.Source.WithValue(ImageSourceValue.Bitmap(source))
+            let s2 = Image.Stretch.WithValue(stretch)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabImage>(Image.WidgetKey, &bundle)
 
         /// <summary>Creates an Image widget.</summary>
         /// <param name="source">The source image.</param>
         static member Image(source: string) =
-            WidgetBuilder<'msg, IFabImage>(Image.WidgetKey, Image.Source.WithValue(ImageSourceValue.File(source)), Image.Stretch.WithValue(Stretch.Uniform))
+            let s1 = Image.Source.WithValue(ImageSourceValue.File(source))
+            let s2 = Image.Stretch.WithValue(Stretch.Uniform)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabImage>(Image.WidgetKey, &bundle)
 
         /// <summary>Creates an Image widget.</summary>
         /// <param name="source">The source image.</param>
         /// <param name="stretch">The stretch mode.</param>
         static member Image(source: string, stretch: Stretch) =
-            WidgetBuilder<'msg, IFabImage>(Image.WidgetKey, Image.Source.WithValue(ImageSourceValue.File(source)), Image.Stretch.WithValue(stretch))
+            let s1 = Image.Source.WithValue(ImageSourceValue.File(source))
+            let s2 = Image.Stretch.WithValue(stretch)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabImage>(Image.WidgetKey, &bundle)
 
         /// <summary>Creates an Image widget.</summary>
         /// <param name="source">The source image.</param>
         static member Image(source: Uri) =
-            WidgetBuilder<'msg, IFabImage>(Image.WidgetKey, Image.Source.WithValue(ImageSourceValue.Uri(source)), Image.Stretch.WithValue(Stretch.Uniform))
+            let s1 = Image.Source.WithValue(ImageSourceValue.Uri(source))
+            let s2 = Image.Stretch.WithValue(Stretch.Uniform)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabImage>(Image.WidgetKey, &bundle)
 
         /// <summary>Creates an Image widget.</summary>
         /// <param name="source">The source image.</param>
         /// <param name="stretch">The stretch mode.</param>
         static member Image(source: Uri, stretch: Stretch) =
-            WidgetBuilder<'msg, IFabImage>(Image.WidgetKey, Image.Source.WithValue(ImageSourceValue.Uri(source)), Image.Stretch.WithValue(stretch))
+            let s1 = Image.Source.WithValue(ImageSourceValue.Uri(source))
+            let s2 = Image.Stretch.WithValue(stretch)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabImage>(Image.WidgetKey, &bundle)
 
         /// <summary>Creates an Image widget.</summary>
         /// <param name="source">The source image.</param>
         static member Image(source: Stream) =
-            WidgetBuilder<'msg, IFabImage>(Image.WidgetKey, Image.Source.WithValue(ImageSourceValue.Stream(source)), Image.Stretch.WithValue(Stretch.Uniform))
+            let s1 = Image.Source.WithValue(ImageSourceValue.Stream(source))
+            let s2 = Image.Stretch.WithValue(Stretch.Uniform)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabImage>(Image.WidgetKey, &bundle)
 
         /// <summary>Creates an Image widget.</summary>
         /// <param name="source">The source image.</param>
         /// <param name="stretch">The stretch mode.</param>
         static member Image(source: Stream, stretch: Stretch) =
-            WidgetBuilder<'msg, IFabImage>(Image.WidgetKey, Image.Source.WithValue(ImageSourceValue.Stream(source)), Image.Stretch.WithValue(stretch))
+            let s1 = Image.Source.WithValue(ImageSourceValue.Stream(source))
+            let s2 = Image.Stretch.WithValue(stretch)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabImage>(Image.WidgetKey, &bundle)
 
         /// <summary>Creates an Image widget.</summary>
         /// <param name="source">The source image.</param>
         static member Image(source: WidgetBuilder<'msg, #IFabDrawingImage>) =
-            WidgetBuilder<'msg, IFabImage>(
-                Image.WidgetKey,
-                AttributesBundle(StackList.one(Image.Stretch.WithValue(Stretch.Uniform)), [| Image.SourceWidget.WithValue(source.Compile()) |], [||])
-            )
+            let bundle = AttributesBundle(StackList.one(Image.Stretch.WithValue(Stretch.Uniform)), [| Image.SourceWidget.WithValue(source.Compile()) |], [||])
+            WidgetBuilder<'msg, IFabImage>(Image.WidgetKey, &bundle)
 
         /// <summary>Creates an Image widget.</summary>
         /// <param name="source">The source image.</param>
         /// <param name="stretch">The stretch mode.</param>
         static member Image(stretch: Stretch, source: WidgetBuilder<'msg, #IFabDrawingImage>) =
-            WidgetBuilder<'msg, IFabImage>(
-                Image.WidgetKey,
-                AttributesBundle(StackList.one(Image.Stretch.WithValue(stretch)), [| Image.SourceWidget.WithValue(source.Compile()) |], [||])
-            )
+            let bundle = AttributesBundle(StackList.one(Image.Stretch.WithValue(stretch)), [| Image.SourceWidget.WithValue(source.Compile()) |], [||])
+            WidgetBuilder<'msg, IFabImage>(Image.WidgetKey, &bundle)
 
         /// <summary>Creates an Image widget.</summary>
         /// <param name="source">The source image.</param>
         static member Image(source: WidgetBuilder<'msg, IFabCroppedBitmap>) =
-            WidgetBuilder<'msg, IFabImage>(
-                Image.WidgetKey,
-                AttributesBundle(StackList.one(Image.Stretch.WithValue(Stretch.Uniform)), [| Image.SourceWidget.WithValue(source.Compile()) |], [||])
-            )
+            let bundle = AttributesBundle(StackList.one(Image.Stretch.WithValue(Stretch.Uniform)), [| Image.SourceWidget.WithValue(source.Compile()) |], [||])
+            WidgetBuilder<'msg, IFabImage>(Image.WidgetKey, &bundle)
 
         /// <summary>Creates an Image widget.</summary>
         /// <param name="source">The source image.</param>
         /// <param name="stretch">The stretch mode.</param>
         static member Image(stretch: Stretch, source: WidgetBuilder<'msg, IFabCroppedBitmap>) =
-            WidgetBuilder<'msg, IFabImage>(
-                Image.WidgetKey,
-                AttributesBundle(StackList.one(Image.Stretch.WithValue(stretch)), [| Image.SourceWidget.WithValue(source.Compile()) |], [||])
-            )
+            let bundle = AttributesBundle(StackList.one(Image.Stretch.WithValue(stretch)), [| Image.SourceWidget.WithValue(source.Compile()) |], [||])
+            WidgetBuilder<'msg, IFabImage>(Image.WidgetKey, &bundle)
 
 type ImageModifiers =
     /// <summary>Sets the StretchDirection property.</summary>

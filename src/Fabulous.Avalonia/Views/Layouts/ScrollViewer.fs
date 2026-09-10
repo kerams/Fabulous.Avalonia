@@ -59,7 +59,8 @@ module ScrollViewerBuilders =
         /// <summary>Creates a ScrollViewer widget</summary>
         /// <param name="content">The content to display</param>
         static member ScrollViewer(content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabScrollViewer>(ScrollViewer.WidgetKey, ContentControl.ContentWidget.WithValue(content.Compile()))
+            let widget = ContentControl.ContentWidget.WithValue(content.Compile())
+            WidgetBuilder<'msg, IFabScrollViewer>(ScrollViewer.WidgetKey, &widget)
 
 type ScrollViewerModifiers =
     /// <summary>Sets the Extent property.</summary>

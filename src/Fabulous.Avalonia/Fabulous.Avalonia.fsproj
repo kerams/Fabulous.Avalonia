@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net10.0</TargetFrameworks>
-    <!-- net8.0-ios is not supported on Linux, so we do not add it there. -->
-    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('linux')) == false">$(TargetFrameworks);net10.0-ios</TargetFrameworks>
     <IsPackable>true</IsPackable>
     <!--<Nullable>enable</Nullable>-->
+    <!-- see Fabulous.fsproj: keeps the reflection-based ToString out of consuming apps' trim graph -->
+    <OtherFlags>$(OtherFlags) --reflectionfree</OtherFlags>
   </PropertyGroup>
   <!-- NuGet Package -->
   <PropertyGroup>
@@ -20,10 +20,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="$(GITHUB_ACTIONS) == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AvaloniaPlatform>$([MSBuild]::GetTargetPlatformIdentifier($(TargetFramework)))</AvaloniaPlatform>
-    <AvaloniaPlatform Condition="'$(AvaloniaPlatform)' == 'ios'">iOS</AvaloniaPlatform>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BindingExtensions.fs" />
@@ -350,7 +346,6 @@
     <Compile Include="Views\Application.fs" />
     <Compile Include="Views\Application.Mvu.fs" />
     <Compile Include="Views\Application.Components.fs" />
-    <Compile Include="Async.fs" />
     <None Include="..\Fabulous.Avalonia.props">
       <PackagePath>build/Fabulous.Avalonia.props</PackagePath>
       <Pack>true</Pack>
@@ -368,7 +363,6 @@
     <Compile Include="Component.fs" />
     <Compile Include="Any.fs" />
     <Compile Include="Style.fs" />
-    <Compile Include="ThemeAware.fs" />
     <Compile Include="Program.fs" />
     <Compile Include="AppBuilderExtensions.fs" />
   </ItemGroup>
@@ -378,9 +372,6 @@
       This version will be used as the lower bound in the NuGet package
     -->
     <PackageReference Include="Avalonia" VersionOverride="$(AvaloniaVersion)" />
-  </ItemGroup>
-  <ItemGroup Condition="$(AvaloniaPlatform) == 'iOS'">
-    <PackageReference Include="Avalonia.iOS" VersionOverride="$(AvaloniaVersion)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Fabulous\src\Fabulous\Fabulous.fsproj" />

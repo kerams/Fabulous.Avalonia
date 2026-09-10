@@ -28,12 +28,16 @@ module DockPanelBuilders =
 
         /// <summary>Creates a DockPanel widget.</summary>
         static member Dock() =
-            CollectionBuilder<'msg, IFabDockPanel, IFabControl>(DockPanel.WidgetKey, Panel.Children, DockPanel.LastChildFill.WithValue(true))
+            let scalar = DockPanel.LastChildFill.WithValue(true)
+            let attr = Panel.Children
+            CollectionBuilder<'msg, IFabDockPanel, IFabControl>(DockPanel.WidgetKey, attr, scalar)
 
         /// <summary>Creates a DockPanel widget.</summary>
         /// <param name="lastChildFill">Whether the last child element within a DockPanel stretches to fill the remaining available space.</param>
         static member Dock(lastChildFill: bool) =
-            CollectionBuilder<'msg, IFabDockPanel, IFabControl>(DockPanel.WidgetKey, Panel.Children, DockPanel.LastChildFill.WithValue(lastChildFill))
+            let scalar = DockPanel.LastChildFill.WithValue(lastChildFill)
+            let attr = Panel.Children
+            CollectionBuilder<'msg, IFabDockPanel, IFabControl>(DockPanel.WidgetKey, attr, scalar)
 
 type DockPanelModifiers =
     /// <summary>Sets the Dock property.</summary>

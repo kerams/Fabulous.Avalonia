@@ -54,7 +54,8 @@ type StyleModifiers =
     /// <param name="value">The Animation value.</param>
     [<Extension>]
     static member inline animation(this: WidgetBuilder<'msg, #IFabStyledElement>, value: WidgetBuilder<'msg, IFabAnimation>) =
-        AttributeCollectionBuilder<'msg, #IFabStyledElement, IFabStyle>(this, StyledElement.StylesWidget) {
+        let x = StyledElement.StylesWidget
+        AttributeCollectionBuilder<'msg, #IFabStyledElement, IFabStyle>(&this, &x) {
             CollectionBuilder<'msg, IFabStyle, IFabAnimation>(Style.WidgetKey, Style.Animations) { value }
         }
 
@@ -63,4 +64,5 @@ type StyleModifiers =
     /// <param name="value">The Animation value.</param>
     [<Extension>]
     static member inline animation(this: WidgetBuilder<'msg, #IFabStyledElement>, value: WidgetBuilder<'msg, IFabStyle>) =
-        AttributeCollectionBuilder<'msg, #IFabStyledElement, IFabStyle>(this, StyledElement.StylesWidget) { value }
+        let stylesAttr = StyledElement.StylesWidget
+        AttributeCollectionBuilder<'msg, #IFabStyledElement, IFabStyle>(&this, &stylesAttr) { value }

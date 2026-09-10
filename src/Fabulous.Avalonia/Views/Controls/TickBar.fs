@@ -7,6 +7,7 @@ open Avalonia.Controls
 open Avalonia.Layout
 open Avalonia.Media
 open Fabulous
+open Fabulous.StackAllocatedCollections.StackList
 
 type IFabTickBar =
     inherit IFabControl
@@ -56,7 +57,10 @@ module TickBarBuilders =
         /// <param name="min">The minimum value.</param>
         /// <param name="max">The maximum value.</param>
         static member TickBar(min: float, max: float) =
-            WidgetBuilder<'msg, IFabTickBar>(TickBar.WidgetKey, TickBar.Minimum.WithValue(min), TickBar.Maximum.WithValue(max))
+            let s1 = TickBar.Minimum.WithValue(min)
+            let s2 = TickBar.Maximum.WithValue(max)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabTickBar>(TickBar.WidgetKey, &bundle)
 
 type TickBarModifiers =
     /// <summary>Sets the Fill property.</summary>
@@ -64,7 +68,8 @@ type TickBarModifiers =
     /// <param name="value">The Fill value.</param>
     [<Extension>]
     static member inline fill(this: WidgetBuilder<'msg, #IFabTickBar>, value: WidgetBuilder<'msg, #IFabBrush>) =
-        this.AddWidget(TickBar.FillWidget.WithValue(value.Compile()))
+        let widget = TickBar.FillWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the Fill property.</summary>
     /// <param name="this">Current widget.</param>

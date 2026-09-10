@@ -23,12 +23,14 @@ module NotificationCardBuilders =
         /// <summary>Creates a NotificationCard widget.</summary>
         /// <param name="content">The content of the NotificationCard.</param>
         static member NotificationCard(content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabNotificationCard>(NotificationCard.WidgetKey, ContentControl.ContentWidget.WithValue(content.Compile()))
+            let widget = ContentControl.ContentWidget.WithValue(content.Compile())
+            WidgetBuilder<'msg, IFabNotificationCard>(NotificationCard.WidgetKey, &widget)
 
         /// <summary>Creates a NotificationCard widget.</summary>
         /// <param name="content">The content of the NotificationCard.</param>
         static member NotificationCard(content: string) =
-            WidgetBuilder<'msg, IFabNotificationCard>(NotificationCard.WidgetKey, ContentControl.ContentString.WithValue(content))
+            let attr = ContentControl.ContentString.WithValue(content)
+            WidgetBuilder<'msg, IFabNotificationCard>(NotificationCard.WidgetKey, &attr)
 
 type NotificationCardModifiers =
 

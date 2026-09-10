@@ -26,7 +26,8 @@ module RefreshContainerBuilders =
         /// <summary>Creates a RefreshContainer widget.</summary>
         /// <param name="content">The content of the RefreshContainer.</param>
         static member RefreshContainer(content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabRefreshContainer>(RefreshContainer.WidgetKey, ContentControl.ContentWidget.WithValue(content.Compile()))
+            let widget = ContentControl.ContentWidget.WithValue(content.Compile())
+            WidgetBuilder<'msg, IFabRefreshContainer>(RefreshContainer.WidgetKey, &widget)
 
 
 type RefreshContainerModifiers =
@@ -42,7 +43,8 @@ type RefreshContainerModifiers =
     /// <param name="value">The Visualizer value.</param>
     [<Extension>]
     static member inline visualizer(this: WidgetBuilder<'msg, #IFabRefreshContainer>, value: WidgetBuilder<'msg, IFabRefreshVisualizer>) =
-        this.AddWidget(RefreshContainer.Visualizer.WithValue(value.Compile()))
+        let widget = RefreshContainer.Visualizer.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Link a ViewRef to access the direct RefreshContainer control instance.</summary>
     /// <param name="this">Current widget.</param>

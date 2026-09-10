@@ -31,10 +31,8 @@ module ComponentCalendarDatePickerBuilders =
         /// <param name="date">The selected date.</param>
         /// <param name="fn">Raised when the selected date changes.</param>
         static member CalendarDatePicker(date: DateTime option, fn: DateTime option -> unit) =
-            WidgetBuilder<'msg, IFabCalendarDatePicker>(
-                CalendarDatePicker.WidgetKey,
-                ComponentCalendarDatePicker.SelectedDateChanged.WithValue(ComponentValueEventData.create date fn)
-            )
+            let attr = ComponentCalendarDatePicker.SelectedDateChanged.WithValue(ComponentValueEventData.create date fn)
+            WidgetBuilder<'msg, IFabCalendarDatePicker>(CalendarDatePicker.WidgetKey, &attr)
 
 type ComponentCalendarDatePickerModifiers =
     /// <summary>Listens to the CalendarDatePicker DateValidationError event.</summary>

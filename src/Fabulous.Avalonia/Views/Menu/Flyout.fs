@@ -21,7 +21,8 @@ module FlyoutBuilders =
         /// <summary>Creates a Flyout widget.</summary>
         /// <param name="content">The content of the Flyout.</param>
         static member Flyout(content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabFlyout>(Flyout.WidgetKey, Flyout.Content.WithValue(content.Compile()))
+            let widget = Flyout.Content.WithValue(content.Compile())
+            WidgetBuilder<'msg, IFabFlyout>(Flyout.WidgetKey, &widget)
 
 type FlyoutModifiers =
     /// <summary>Link a ViewRef to access the direct Flyout control instance.</summary>
@@ -37,4 +38,5 @@ type FlyoutAttachedModifiers =
     /// <param name="value">The AttachedFlyout value.</param>
     [<Extension>]
     static member inline attachedFlyout(this: WidgetBuilder<'msg, #IFabControl>, value: WidgetBuilder<'msg, #IFabFlyoutBase>) =
-        this.AddWidget(FlyoutBase.AttachedFlyout.WithValue(value.Compile()))
+        let widget = FlyoutBase.AttachedFlyout.WithValue(value.Compile())
+        this.AddWidget(&widget)

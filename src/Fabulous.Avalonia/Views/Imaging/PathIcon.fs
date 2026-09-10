@@ -23,12 +23,14 @@ module PathIconBuilders =
         /// <summary>Creates a PathIcon widget.</summary>
         /// <param name="content">The content of the PathIcon.</param>
         static member PathIcon(content: WidgetBuilder<'msg, #IFabGeometry>) =
-            WidgetBuilder<'msg, IFabPathIcon>(PathIcon.WidgetKey, PathIcon.DataWidget.WithValue(content.Compile()))
+            let widget = PathIcon.DataWidget.WithValue(content.Compile())
+            WidgetBuilder<'msg, IFabPathIcon>(PathIcon.WidgetKey, &widget)
 
         /// <summary>Creates a PathIcon widget.</summary>
         /// <param name="path">The path of the PathIcon.</param>
         static member PathIcon(path: string) =
-            WidgetBuilder<'msg, IFabPathIcon>(PathIcon.WidgetKey, PathIcon.DataString.WithValue(Geometry.Parse(path)))
+            let attr = PathIcon.DataString.WithValue(Geometry.Parse(path))
+            WidgetBuilder<'msg, IFabPathIcon>(PathIcon.WidgetKey, &attr)
 
 type PathIconModifiers =
     /// <summary>Link a ViewRef to access the direct PathIcon control instance.</summary>

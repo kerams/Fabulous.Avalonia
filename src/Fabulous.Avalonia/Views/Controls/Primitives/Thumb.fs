@@ -22,7 +22,8 @@ module ThumbBuilders =
         /// <summary>Creates a Thumb widget.</summary>
         /// <param name="template">The template to use for the Thumb.</param>
         static member Thumb(template: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabThumb>(Thumb.WidgetKey, TemplatedControl.Template.WithValue(template.Compile()))
+            let widget = TemplatedControl.Template.WithValue(template.Compile())
+            WidgetBuilder<'msg, IFabThumb>(Thumb.WidgetKey, &widget)
 
 type ThumbModifiers =
 

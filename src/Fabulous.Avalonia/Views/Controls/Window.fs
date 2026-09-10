@@ -65,7 +65,8 @@ module WindowBuilders =
         /// <summary>Creates a Window widget.</summary>
         /// <param name="content">The content of the window.</param>
         static member Window(content: WidgetBuilder<'msg, #IFabElement>) =
-            WidgetBuilder<'msg, IFabWindow>(Window.WidgetKey, ContentControl.ContentWidget.WithValue(content.Compile()))
+            let widget = ContentControl.ContentWidget.WithValue(content.Compile())
+            WidgetBuilder<'msg, IFabWindow>(Window.WidgetKey, &widget)
 
 type WindowModifiers =
     /// <summary>Sets the SizeToContent property.</summary>

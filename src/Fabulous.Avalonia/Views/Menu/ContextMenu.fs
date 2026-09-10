@@ -47,15 +47,15 @@ module ContextMenuBuilders =
         /// <summary>Creates a ContextMenu widget.</summary>
         /// <param name="placement">The placement mode of the ContextMenu.</param>
         static member ContextMenu(placement: PlacementMode) =
-            CollectionBuilder<'msg, IFabContextMenu, IFabControl>(ContextMenu.WidgetKey, ItemsControl.Items, ContextMenu.Placement.WithValue(placement))
+            let scalar = ContextMenu.Placement.WithValue(placement)
+            let attr = ItemsControl.Items
+            CollectionBuilder<'msg, IFabContextMenu, IFabControl>(ContextMenu.WidgetKey, attr, scalar)
 
         /// <summary>Creates a ContextMenu widget.</summary>
         static member ContextMenu() =
-            CollectionBuilder<'msg, IFabContextMenu, IFabControl>(
-                ContextMenu.WidgetKey,
-                ItemsControl.Items,
-                ContextMenu.Placement.WithValue(PlacementMode.Bottom)
-            )
+            let scalar = ContextMenu.Placement.WithValue(PlacementMode.Bottom)
+            let attr = ItemsControl.Items
+            CollectionBuilder<'msg, IFabContextMenu, IFabControl>(ContextMenu.WidgetKey, attr, scalar)
 
 type ContextMenuModifiers =
     /// <summary>Sets the HorizontalOffset property.</summary>
@@ -129,7 +129,8 @@ type ContextMenuAttachedModifiers =
     /// <param name="value">The ContextMenu value.</param>
     [<Extension>]
     static member inline contextMenu(this: WidgetBuilder<'msg, #IFabControl>, value: WidgetBuilder<'msg, IFabContextMenu>) =
-        this.AddWidget(Control.ContextMenu.WithValue(value.Compile()))
+        let widget = Control.ContextMenu.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
 type ContextMenuCollectionBuilderExtensions =
     [<Extension>]

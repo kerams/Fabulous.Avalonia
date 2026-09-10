@@ -22,7 +22,8 @@ module PolyBezierSegmentBuilders =
         /// <summary>Creates a PolyLineSegment widget.</summary>
         /// <param name="points">The points of the polyline.</param>
         static member PolyBezierSegment(points: Point list) =
-            WidgetBuilder<'msg, IFabPolyBezierSegment>(PolyBezierSegment.WidgetKey, PolyBezierSegment.Points.WithValue(Points(points)))
+            let attr = PolyBezierSegment.Points.WithValue(Points(points))
+            WidgetBuilder<'msg, IFabPolyBezierSegment>(PolyBezierSegment.WidgetKey, &attr)
 
 type PolyBezierSegmentModifiers =
 

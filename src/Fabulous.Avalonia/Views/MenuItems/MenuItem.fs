@@ -34,12 +34,14 @@ module MenuItemBuilders =
         /// <summary>Creates a MenuItem widget.</summary>
         /// <param name="header">The header of the menu item.</param>
         static member MenuItem(header: string) =
-            WidgetBuilder<'msg, IFabMenuItem>(MenuItem.WidgetKey, HeaderedContentControl.HeaderString.WithValue(header))
+            let attr = HeaderedContentControl.HeaderString.WithValue(header)
+            WidgetBuilder<'msg, IFabMenuItem>(MenuItem.WidgetKey, &attr)
 
         /// <summary>Creates a MenuItem widget.</summary>
         /// <param name="header">The header of the menu item.</param>
         static member MenuItem(header: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabMenuItem>(MenuItem.WidgetKey, HeaderedContentControl.HeaderWidget.WithValue(header.Compile()))
+            let widget = HeaderedContentControl.HeaderWidget.WithValue(header.Compile())
+            WidgetBuilder<'msg, IFabMenuItem>(MenuItem.WidgetKey, &widget)
 
 [<AutoOpen>]
 module MenuItemsBuilders =
@@ -47,20 +49,21 @@ module MenuItemsBuilders =
 
         /// <summary>Creates a MenuItems widget.</summary>
         static member MenuItems() =
-            CollectionBuilder<'msg, IFabMenuItem, IFabMenuItem>(MenuItem.WidgetKey, ItemsControl.Items)
+            let attr = ItemsControl.Items
+            CollectionBuilder<'msg, IFabMenuItem, IFabMenuItem>(MenuItem.WidgetKey, attr)
 
         /// <summary>Creates a MenuItems widget.</summary>
         static member MenuItems(header: WidgetBuilder<'msg, #IFabControl>) =
-            CollectionBuilder<'msg, IFabMenuItem, IFabMenuItem>(
-                MenuItem.WidgetKey,
-                ItemsControl.Items,
-                AttributesBundle(StackList.empty(), [| HeaderedContentControl.HeaderWidget.WithValue(header.Compile()) |], [||])
-            )
+            let bundle = AttributesBundle(StackList.empty(), [| HeaderedContentControl.HeaderWidget.WithValue(header.Compile()) |], [||])
+            let attr = ItemsControl.Items
+            CollectionBuilder<'msg, IFabMenuItem, IFabMenuItem>(MenuItem.WidgetKey, attr, bundle)
 
         /// <summary>Creates a MenuItems widget.</summary>
         /// <param name="header">The header of the menu item.</param>
         static member MenuItems(header: string) =
-            CollectionBuilder<'msg, IFabMenuItem, IFabMenuItem>(MenuItem.WidgetKey, ItemsControl.Items, HeaderedContentControl.HeaderString.WithValue(header))
+            let scalar = HeaderedContentControl.HeaderString.WithValue(header)
+            let attr = ItemsControl.Items
+            CollectionBuilder<'msg, IFabMenuItem, IFabMenuItem>(MenuItem.WidgetKey, attr, scalar)
 
 type MenuItemModifiers =
     /// <summary>Sets the HotKey property.</summary>
@@ -75,7 +78,8 @@ type MenuItemModifiers =
     /// <param name="value">The Icon value.</param>
     [<Extension>]
     static member inline icon(this: WidgetBuilder<'msg, #IFabMenuItem>, value: WidgetBuilder<'msg, #IFabControl>) =
-        this.AddWidget(MenuItem.Icon.WithValue(value.Compile()))
+        let widget = MenuItem.Icon.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the InputGesture property.</summary>
     /// <param name="this">Current widget.</param>

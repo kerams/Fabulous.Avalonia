@@ -52,10 +52,10 @@ module ValueEventData =
 
 module Attributes =
     /// Define an attribute for an AvaloniaProperty
-    let inline defineAvaloniaProperty<'modelType, 'valueType>
+    let defineAvaloniaProperty<'modelType, 'valueType>
         (property: AvaloniaProperty<'valueType>)
-        ([<InlineIfLambda>] convertValue: 'modelType -> 'valueType)
-        ([<InlineIfLambda>] compare: 'modelType -> 'modelType -> ScalarAttributeComparison)
+        (convertValue: 'modelType -> 'valueType)
+        (compare: 'modelType -> 'modelType -> ScalarAttributeComparison)
         =
         Attributes.defineScalar<'modelType, 'valueType> property.Name convertValue compare (fun _ newValueOpt node ->
             let target = node.Target :?> AvaloniaObject
@@ -65,7 +65,7 @@ module Attributes =
             | ValueSome v -> target.SetValue(property, v) |> ignore)
 
     /// Define an attribute for an AvaloniaProperty supporting equality comparison
-    let inline defineAvaloniaPropertyWithEquality<'T when 'T: equality> (directProperty: AvaloniaProperty<'T>) =
+    let defineAvaloniaPropertyWithEquality<'T when 'T: equality> (directProperty: AvaloniaProperty<'T>) =
         Attributes.defineSimpleScalarWithEquality<'T> directProperty.Name (fun _ newValueOpt node ->
             let target = node.Target :?> AvaloniaObject
 
@@ -74,7 +74,7 @@ module Attributes =
             | ValueSome v -> target.SetValue(directProperty, v) |> ignore)
 
     /// Define an attribute for an AvaloniaProperty supporting equality comparison with a default value and setter
-    let inline defineProperty<'T when 'T: equality> name (defaultValue: 'T) (setter: obj -> 'T -> unit) =
+    let defineProperty<'T when 'T: equality> name (defaultValue: 'T) (setter: obj -> 'T -> unit) =
         Attributes.defineSimpleScalarWithEquality<'T> name (fun _ newValueOpt node ->
             let target = node.Target :?> AvaloniaObject
 
@@ -83,7 +83,7 @@ module Attributes =
             | ValueSome v -> setter target v)
 
     /// Define an attribute for an AvaloniaProperty supporting equality comparison with getter and setter
-    let inline definePropertyWithGetSet<'T when 'T: equality> name (getter: obj -> 'T) (setter: obj -> 'T -> unit) =
+    let definePropertyWithGetSet<'T when 'T: equality> name (getter: obj -> 'T) (setter: obj -> 'T -> unit) =
         Attributes.defineSimpleScalarWithEquality<'T> name (fun _ newValueOpt node ->
             let target = node.Target :?> AvaloniaObject
 
@@ -92,7 +92,7 @@ module Attributes =
             | ValueSome v -> setter target v)
 
     /// Define an attribute for an AvaloniaProperty supporting equality comparison and converter
-    let inline defineAvaloniaPropertyWithEqualityConverter<'T, 'modelType, 'valueType when 'T: equality>
+    let defineAvaloniaPropertyWithEqualityConverter<'T, 'modelType, 'valueType when 'T: equality>
         (directProperty: AvaloniaProperty<'T>)
         (convert: 'modelType -> 'valueType)
         =
@@ -104,7 +104,7 @@ module Attributes =
             | ValueSome v -> target.SetValue(directProperty, v) |> ignore)
 
     /// Define an attribute storing a Widget for an AvaloniaProperty
-    let inline defineAvaloniaPropertyWidget (property: AvaloniaProperty<'T | null>) =
+    let defineAvaloniaPropertyWidget (property: AvaloniaProperty<'T | null>) =
         Attributes.definePropertyWidget property.Name (fun target -> (target :?> AvaloniaObject).GetValue(property)) (fun target value ->
             let avaloniaObject = target :?> AvaloniaObject
 
@@ -116,7 +116,7 @@ module Attributes =
 
     /// Performance optimization: avoid allocating a new ImageSource instance on each update
     /// we store the user value (e.g. Bitmap, string, Uri, Stream) and convert it to an ImageSource only when needed
-    let inline defineBindableImageSource (property: AvaloniaProperty) =
+    let defineBindableImageSource (property: AvaloniaProperty) =
         Attributes.defineScalar<ImageSourceValue, ImageSourceValue> property.Name id ScalarAttributeComparers.equalityCompare (fun _ newValueOpt node ->
             let target = node.Target :?> AvaloniaObject
 
@@ -134,7 +134,7 @@ module Attributes =
 
     /// Performance optimization: avoid allocating a new WindowIcon instance on each update
     /// we store the user value (e.g. Bitmap, string, Uri, Stream) and convert it to an ImageSource only when needed
-    let inline defineBindableWindowIconSource (property: AvaloniaProperty) =
+    let defineBindableWindowIconSource (property: AvaloniaProperty) =
         Attributes.defineScalar<ImageSourceValue, ImageSourceValue> property.Name id ScalarAttributeComparers.equalityCompare (fun _ newValueOpt node ->
             let target = node.Target :?> AvaloniaObject
 
@@ -150,7 +150,7 @@ module Attributes =
 
                 target.SetValue(property, value) |> ignore)
 
-    let inline defineAvaloniaNonGenericListWidgetCollection name ([<InlineIfLambda>] getCollection: obj -> System.Collections.IList) =
+    let defineAvaloniaNonGenericListWidgetCollection name (getCollection: obj -> System.Collections.IList) =
         let applyDiff _ (diffs: WidgetCollectionItemChanges) (node: IViewNode) =
             let targetColl = getCollection node.Target
 
@@ -160,7 +160,7 @@ module Attributes =
                     let itemNode = node.TreeContext.GetViewNode(targetColl[index])
 
                     // Trigger the unmounted event
-                    Dispatcher.dispatchEventForAllChildren itemNode widget Lifecycle.Unmounted
+                    Dispatcher.dispatchEventForAllChildren itemNode &widget Lifecycle.Unmounted
                     itemNode.Dispose()
 
                     // Remove the child from the UI tree
@@ -171,13 +171,13 @@ module Attributes =
             for diff in diffs do
                 match diff with
                 | WidgetCollectionItemChange.Insert(index, widget) ->
-                    let struct (itemNode, view) = Helpers.createViewForWidget node widget
+                    let struct (itemNode, view) = Helpers.createViewForWidget node &widget
 
                     // Insert the new child into the UI tree
                     targetColl.Insert(index, unbox view)
 
                     // Trigger the mounted event
-                    Dispatcher.dispatchEventForAllChildren itemNode widget Lifecycle.Mounted
+                    Dispatcher.dispatchEventForAllChildren itemNode &widget Lifecycle.Mounted
 
                 | WidgetCollectionItemChange.Update(index, widgetDiff) ->
                     let childNode = node.TreeContext.GetViewNode(targetColl[index])
@@ -187,17 +187,17 @@ module Attributes =
                 | WidgetCollectionItemChange.Replace(index, oldWidget, newWidget) ->
                     let prevItemNode = node.TreeContext.GetViewNode(targetColl[index])
 
-                    let struct (nextItemNode, view) = Helpers.createViewForWidget node newWidget
+                    let struct (nextItemNode, view) = Helpers.createViewForWidget node &newWidget
 
                     // Trigger the unmounted event for the old child
-                    Dispatcher.dispatchEventForAllChildren prevItemNode oldWidget Lifecycle.Unmounted
+                    Dispatcher.dispatchEventForAllChildren prevItemNode &oldWidget Lifecycle.Unmounted
                     prevItemNode.Dispose()
 
                     // Replace the existing child in the UI tree at the index with the new one
                     targetColl[index] <- view
 
                     // Trigger the mounted event for the new child
-                    Dispatcher.dispatchEventForAllChildren nextItemNode newWidget Lifecycle.Mounted
+                    Dispatcher.dispatchEventForAllChildren nextItemNode &newWidget Lifecycle.Mounted
 
                 | _ -> ()
 
@@ -209,7 +209,7 @@ module Attributes =
             | ValueNone -> ()
             | ValueSome widgets ->
                 for widget in ArraySlice.toSpan widgets do
-                    let struct (_, view) = Helpers.createViewForWidget node widget
+                    let struct (_, view) = Helpers.createViewForWidget node &widget
 
                     targetColl.Add(view) |> ignore
 
@@ -226,7 +226,7 @@ module Attributes =
                     let itemNode = node.TreeContext.GetViewNode(box targetColl[index])
 
                     // Trigger the unmounted event
-                    Dispatcher.dispatchEventForAllChildren itemNode widget Lifecycle.Unmounted
+                    Dispatcher.dispatchEventForAllChildren itemNode &widget Lifecycle.Unmounted
                     itemNode.Dispose()
 
                     // Remove the child from the UI tree
@@ -237,13 +237,13 @@ module Attributes =
             for diff in diffs do
                 match diff with
                 | WidgetCollectionItemChange.Insert(index, widget) ->
-                    let struct (itemNode, view) = Helpers.createViewForWidget node widget
+                    let struct (itemNode, view) = Helpers.createViewForWidget node &widget
 
                     // Insert the new child into the UI tree
                     targetColl.Insert(index, unbox view)
 
                     // Trigger the mounted event
-                    Dispatcher.dispatchEventForAllChildren itemNode widget Lifecycle.Mounted
+                    Dispatcher.dispatchEventForAllChildren itemNode &widget Lifecycle.Mounted
 
                 | WidgetCollectionItemChange.Update(index, widgetDiff) ->
                     let childNode = node.TreeContext.GetViewNode(box targetColl[index])
@@ -253,17 +253,17 @@ module Attributes =
                 | WidgetCollectionItemChange.Replace(index, oldWidget, newWidget) ->
                     let prevItemNode = node.TreeContext.GetViewNode(box targetColl[index])
 
-                    let struct (nextItemNode, view) = Helpers.createViewForWidget node newWidget
+                    let struct (nextItemNode, view) = Helpers.createViewForWidget node &newWidget
 
                     // Trigger the unmounted event for the old child
-                    Dispatcher.dispatchEventForAllChildren prevItemNode oldWidget Lifecycle.Unmounted
+                    Dispatcher.dispatchEventForAllChildren prevItemNode &oldWidget Lifecycle.Unmounted
                     prevItemNode.Dispose()
 
                     // Replace the existing child in the UI tree at the index with the new one
                     targetColl[index] <- unbox view
 
                     // Trigger the mounted event for the new child
-                    Dispatcher.dispatchEventForAllChildren nextItemNode newWidget Lifecycle.Mounted
+                    Dispatcher.dispatchEventForAllChildren nextItemNode &newWidget Lifecycle.Mounted
 
                 | _ -> ()
 
@@ -275,7 +275,7 @@ module Attributes =
             | ValueNone -> ()
             | ValueSome widgets ->
                 for widget in ArraySlice.toSpan widgets do
-                    let struct (_, view) = Helpers.createViewForWidget node widget
+                    let struct (_, view) = Helpers.createViewForWidget node &widget
 
                     targetColl.Add(unbox view)
 
@@ -299,7 +299,7 @@ module Attributes =
                     let itemNode = node.TreeContext.GetViewNode(box item)
 
                     // Trigger the unmounted event
-                    Dispatcher.dispatchEventForAllChildren itemNode widget Lifecycle.Unmounted
+                    Dispatcher.dispatchEventForAllChildren itemNode &widget Lifecycle.Unmounted
                     itemNode.Dispose()
 
                     // Call custom remove handler
@@ -313,7 +313,7 @@ module Attributes =
             for diff in diffs do
                 match diff with
                 | WidgetCollectionItemChange.Insert(index, widget) ->
-                    let struct (itemNode, view) = Helpers.createViewForWidget node widget
+                    let struct (itemNode, view) = Helpers.createViewForWidget node &widget
 
                     // Call custom insert handler
                     onInsert target index view
@@ -322,7 +322,7 @@ module Attributes =
                     targetColl.Insert(index, unbox view)
 
                     // Trigger the mounted event
-                    Dispatcher.dispatchEventForAllChildren itemNode widget Lifecycle.Mounted
+                    Dispatcher.dispatchEventForAllChildren itemNode &widget Lifecycle.Mounted
 
                 | WidgetCollectionItemChange.Update(index, widgetDiff) ->
                     let childNode = node.TreeContext.GetViewNode(box targetColl[index])
@@ -331,10 +331,10 @@ module Attributes =
                 | WidgetCollectionItemChange.Replace(index, oldWidget, newWidget) ->
                     let oldItem = targetColl[index]
                     let prevItemNode = node.TreeContext.GetViewNode(box oldItem)
-                    let struct (nextItemNode, view) = Helpers.createViewForWidget node newWidget
+                    let struct (nextItemNode, view) = Helpers.createViewForWidget node &newWidget
 
                     // Trigger unmounted event
-                    Dispatcher.dispatchEventForAllChildren prevItemNode oldWidget Lifecycle.Unmounted
+                    Dispatcher.dispatchEventForAllChildren prevItemNode &oldWidget Lifecycle.Unmounted
                     prevItemNode.Dispose()
 
                     // Call custom replace handler
@@ -344,7 +344,7 @@ module Attributes =
                     targetColl[index] <- unbox view
 
                     // Trigger mounted event
-                    Dispatcher.dispatchEventForAllChildren nextItemNode newWidget Lifecycle.Mounted
+                    Dispatcher.dispatchEventForAllChildren nextItemNode &newWidget Lifecycle.Mounted
 
                 | _ -> ()
 
@@ -364,7 +364,7 @@ module Attributes =
             | ValueNone -> ()
             | ValueSome widgets ->
                 for widget in ArraySlice.toSpan widgets do
-                    let struct (_, view) = Helpers.createViewForWidget node widget
+                    let struct (_, view) = Helpers.createViewForWidget node &widget
                     onInsert target widget.Key view
                     targetColl.Add(unbox view)
 
@@ -372,11 +372,11 @@ module Attributes =
 
 
     module Mvu =
-        let inline defineAvaloniaPropertyWithChangedEvent<'modelType, 'valueType>
+        let defineAvaloniaPropertyWithChangedEvent<'modelType, 'valueType>
             name
             (property: AvaloniaProperty<'valueType>)
-            ([<InlineIfLambda>] convertToValue: 'modelType -> 'valueType)
-            ([<InlineIfLambda>] convertToModel: 'valueType -> 'modelType)
+            (convertToValue: 'modelType -> 'valueType)
+            (convertToModel: 'valueType -> 'modelType)
             : SimpleScalarAttributeDefinition<ValueEventData<'modelType, 'modelType>> =
 
             let key =
@@ -453,7 +453,7 @@ module Attributes =
 
             { Key = key; Name = name }
 
-        let inline defineEventHandler name ([<InlineIfLambda>] getEvent: obj -> IEvent<'handler, 'args>) : SimpleScalarAttributeDefinition<'args -> MsgValue> =
+        let defineEventHandler name (getEvent: obj -> IEvent<'handler, 'args>) : SimpleScalarAttributeDefinition<'args -> MsgValue> =
             let key =
                 SimpleScalarAttributeDefinition.CreateAttributeData(
                     ScalarAttributeComparers.noCompare,
@@ -560,7 +560,7 @@ module Attributes =
 
             { Key = key; Name = name }
 
-        let inline defineEventHandler name ([<InlineIfLambda>] getEvent: obj -> IEvent<'handler, 'args>) : SimpleScalarAttributeDefinition<'args -> unit> =
+        let defineEventHandler name (getEvent: obj -> IEvent<'handler, 'args>) : SimpleScalarAttributeDefinition<'args -> unit> =
             let key =
                 SimpleScalarAttributeDefinition.CreateAttributeData(
                     ScalarAttributeComparers.noCompare,

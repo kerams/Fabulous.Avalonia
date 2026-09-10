@@ -3,6 +3,7 @@ namespace Fabulous.Avalonia
 open System.Runtime.CompilerServices
 open Avalonia.Controls
 open Fabulous
+open Fabulous.StackAllocatedCollections.StackList
 
 type IFabGrid =
     inherit IFabPanel
@@ -95,16 +96,16 @@ module GridBuilders =
         /// <summary>Creates a Grid widget.</summary>
         /// <param name="coldefs">Column definitions.</param>
         /// <param name="rowdefs">Row definitions.</param>
-        static member Grid(coldefs: seq<Dimension>, rowdefs: seq<Dimension>) =
+        static member Grid(coldefs: Dimension[], rowdefs: Dimension[]) =
+            let s1 = Grid.ColumnDefinitions.WithValue(coldefs)
+            let s2 = Grid.RowDefinitions.WithValue(rowdefs)
+            let scalars = StackList.two(s1, s2)
+            let attr = Panel.Children
             CollectionBuilder<'msg, IFabGrid, IFabControl>(
                 Grid.WidgetKey,
-                Panel.Children,
-                Grid.ColumnDefinitions.WithValue(Array.ofSeq coldefs),
-                Grid.RowDefinitions.WithValue(Array.ofSeq rowdefs)
+                scalars,
+                attr
             )
-
-        /// <summary>Creates a Grid widget with a single column and row.</summary>
-        static member Grid() = View.Grid([ Star ], [ Star ])
 
 type GridModifiers =
     /// <summary>Sets the ShowGridLines property.</summary>

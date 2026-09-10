@@ -3,6 +3,7 @@ namespace Fabulous.Avalonia
 open System.Runtime.CompilerServices
 open Avalonia.Controls.Shapes
 open Fabulous
+open Fabulous.StackAllocatedCollections.StackList
 
 type IFabArc =
     inherit IFabShape
@@ -24,7 +25,10 @@ module ArcBuilders =
         /// <param name="startAngle">The starting angle/</param>
         /// <param name="sweepAngle">The sweep angle.</param>
         static member Arc(startAngle: float, sweepAngle: float) =
-            WidgetBuilder<'msg, IFabArc>(Arc.WidgetKey, Arc.StartAngle.WithValue(startAngle), Arc.SweepAngle.WithValue(sweepAngle))
+            let s1 = Arc.StartAngle.WithValue(startAngle)
+            let s2 = Arc.SweepAngle.WithValue(sweepAngle)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabArc>(Arc.WidgetKey, &bundle)
 
 type ArcModifiers =
     /// <summary>Link a ViewRef to access the direct Arc control instance.</summary>

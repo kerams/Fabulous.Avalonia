@@ -16,7 +16,8 @@ module BoldBuilders =
 
         /// <summary>Creates a Bold widget.</summary>
         static member private Bold() =
-            CollectionBuilder<'msg, IFabBold, IFabInline>(Bold.WidgetKey, Span.Inlines)
+            let attr = Span.Inlines
+            CollectionBuilder<'msg, IFabBold, IFabInline>(Bold.WidgetKey, attr)
 
         /// <summary>Creates a Bold widget.</summary>
         /// <param name="text">The text to display.</param>

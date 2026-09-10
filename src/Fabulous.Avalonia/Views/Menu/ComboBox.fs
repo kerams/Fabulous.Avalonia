@@ -52,7 +52,8 @@ module ComboBoxBuilders =
         /// <summary>Creates a ComboBox widget.</summary>
         /// <param name="items">The items to display in the ComboBox.</param>
         static member ComboBox(items: seq<_>) =
-            WidgetBuilder<'msg, IFabComboBox>(ComboBox.WidgetKey, ItemsControl.ItemsSource.WithValue(items))
+            let attr = ItemsControl.ItemsSource.WithValue(items)
+            WidgetBuilder<'msg, IFabComboBox>(ComboBox.WidgetKey, &attr)
 
         /// <summary>Creates a ComboBox widget.</summary>
         /// <param name="items">The items to display in the ComboBox.</param>
@@ -61,7 +62,8 @@ module ComboBoxBuilders =
             WidgetHelpers.buildItems<'msg, IFabComboBox, 'itemData, 'itemMarker> ComboBox.WidgetKey ItemsControl.ItemsSourceTemplate items template
 
         static member ComboBox() =
-            CollectionBuilder<'msg, IFabComboBox, IFabComboBoxItem>(ComboBox.WidgetKey, ItemsControl.Items)
+            let attr = ItemsControl.Items
+            CollectionBuilder<'msg, IFabComboBox, IFabComboBoxItem>(ComboBox.WidgetKey, attr)
 
 type ComboBoxModifiers =
     /// <summary>Sets the IsDropDownOpen property.</summary>
@@ -90,7 +92,8 @@ type ComboBoxModifiers =
     /// <param name="value">The PlaceholderForeground value.</param>
     [<Extension>]
     static member inline placeholderForeground(this: WidgetBuilder<'msg, #IFabComboBox>, value: WidgetBuilder<'msg, #IFabBrush>) =
-        this.AddWidget(ComboBox.PlaceholderForegroundWidget.WithValue(value.Compile()))
+        let widget = ComboBox.PlaceholderForegroundWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the PlaceholderForeground property.</summary>
     /// <param name="this">Current widget.</param>

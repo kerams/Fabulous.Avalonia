@@ -49,11 +49,13 @@ module ToolTipBuilders =
 
         /// <summary>Creates a ToolTip widget.</summary>
         static member ToolTip(content: string) =
-            WidgetBuilder<'msg, IFabToolTip>(ToolTip.WidgetKey, ContentControl.ContentString.WithValue(content))
+            let attr = ContentControl.ContentString.WithValue(content)
+            WidgetBuilder<'msg, IFabToolTip>(ToolTip.WidgetKey, &attr)
 
         /// <summary>Creates a ToolTip widget.</summary>
         static member ToolTip(content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabToolTip>(ToolTip.WidgetKey, ContentControl.ContentWidget.WithValue(content.Compile()))
+            let widget = ContentControl.ContentWidget.WithValue(content.Compile())
+            WidgetBuilder<'msg, IFabToolTip>(ToolTip.WidgetKey, &widget)
 
 type ToolTipModifiers =
     /// <summary>Sets the Tip property.</summary>
@@ -61,7 +63,8 @@ type ToolTipModifiers =
     /// <param name="value">The Tip value.</param>
     [<Extension>]
     static member inline tip(this: WidgetBuilder<'msg, #IFabControl>, value: WidgetBuilder<'msg, #IFabToolTip>) =
-        this.AddWidget(ToolTip.TipWidget.WithValue(value.Compile()))
+        let widget = ToolTip.TipWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the Tip property.</summary>
     /// <param name="this">Current widget.</param>

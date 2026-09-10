@@ -5,6 +5,7 @@ open Avalonia
 open Avalonia.Collections
 open Avalonia.Media
 open Fabulous
+open Fabulous.StackAllocatedCollections.StackList
 
 type IFaDashStyle =
     inherit IFabAnimatable
@@ -33,7 +34,10 @@ module DashStyleBuilders =
         /// <param name="dashes">The length of alternating dashes and gaps.</param>
         /// <param name="offset">How far in the dash sequence the stroke will start.</param>
         static member DashStyle(dashes: float list, offset: float) =
-            WidgetBuilder<'msg, IFaDashStyle>(DashStyle.WidgetKey, DashStyle.Dashes.WithValue(dashes), DashStyle.Offset.WithValue(offset))
+            let d = DashStyle.Dashes.WithValue(dashes)
+            let o = DashStyle.Offset.WithValue(offset)
+            let bundle = AttributesBundle(StackList.two(d, o), [||], [||])
+            WidgetBuilder<'msg, IFaDashStyle>(DashStyle.WidgetKey, &bundle)
 
 type DashStyleModifiers =
 

@@ -50,20 +50,20 @@ module AutoCompleteBox =
         Attributes.defineAvaloniaPropertyWithEquality AutoCompleteBox.AsyncPopulatorProperty
 
     /// Allows multi-binding the ValueMemberBinding on an AutoCompleteBox
-    let MultiValueBinding =
-        Attributes.defineSimpleScalar<string * string array>
-            "AutoCompleteBox_MultiValueBinding"
-            ScalarAttributeComparers.equalityCompare
-            (fun _ newValueOpt node ->
-                if newValueOpt.IsSome then
-                    let format, propertyNames = newValueOpt.Value
-                    let target = node.Target :?> AutoCompleteBox
+    //let MultiValueBinding =
+    //    Attributes.defineSimpleScalar<string * string array>
+    //        "AutoCompleteBox_MultiValueBinding"
+    //        ScalarAttributeComparers.equalityCompare
+    //        (fun _ newValueOpt node ->
+    //            if newValueOpt.IsSome then
+    //                let format, propertyNames = newValueOpt.Value
+    //                let target = node.Target :?> AutoCompleteBox
 
-                    let rec bindAndCleanUp _ _ =
-                        target.multiBind<AutoCompleteBox>((fun (box: AutoCompleteBox) -> box.ValueMemberBinding), format, propertyNames)
-                        target.Loaded.RemoveHandler(bindAndCleanUp) // to clean up
+    //                let rec bindAndCleanUp _ _ =
+    //                    target.multiBind<AutoCompleteBox>((fun (box: AutoCompleteBox) -> box.ValueMemberBinding), format, propertyNames)
+    //                    target.Loaded.RemoveHandler(bindAndCleanUp) // to clean up
 
-                    target.Loaded.AddHandler(bindAndCleanUp))
+    //                target.Loaded.AddHandler(bindAndCleanUp))
 
     /// Allows setting the ItemTemplate on an AutoCompleteBox
     let ItemTemplate =
@@ -83,12 +83,14 @@ module AutoCompleteBoxBuilders =
         /// <summary>Creates an AutoCompleteBox widget.</summary>
         /// <param name="items">The items to display.</param>
         static member AutoCompleteBox(items: seq<_>) =
-            WidgetBuilder<'msg, IFabAutoCompleteBox>(AutoCompleteBox.WidgetKey, AutoCompleteBox.ItemsSource.WithValue(items))
+            let attr = AutoCompleteBox.ItemsSource.WithValue(items)
+            WidgetBuilder<'msg, IFabAutoCompleteBox>(AutoCompleteBox.WidgetKey, &attr)
 
         /// <summary>Creates an AutoCompleteBox widget.</summary>
         /// <param name="populator">The function to populate the items.</param>
         static member AutoCompleteBox(populator: string -> CancellationToken -> Task<seq<_>>) =
-            WidgetBuilder<'msg, IFabAutoCompleteBox>(AutoCompleteBox.WidgetKey, AutoCompleteBox.AsyncPopulator.WithValue(populator))
+            let attr = AutoCompleteBox.AsyncPopulator.WithValue(populator)
+            WidgetBuilder<'msg, IFabAutoCompleteBox>(AutoCompleteBox.WidgetKey, &attr)
 
 type AutoCompleteBoxModifiers =
     /// <summary>Sets the MinimumPrefixLength property.</summary>
@@ -175,6 +177,6 @@ type AutoCompleteBoxModifiers =
     /// <param name="this">Current widget.</param>
     /// <param name="format">The format string to use.</param>
     /// <param name="propertyNames">The property names to bind.</param>
-    [<Extension>]
-    static member inline multiBindValue(this: WidgetBuilder<'msg, #IFabAutoCompleteBox>, format: string, [<ParamArray>] propertyNames: string array) =
-        this.AddScalar(AutoCompleteBox.MultiValueBinding.WithValue((format, propertyNames)))
+    //[<Extension>]
+    //static member inline multiBindValue(this: WidgetBuilder<'msg, #IFabAutoCompleteBox>, format: string, [<ParamArray>] propertyNames: string array) =
+    //    this.AddScalar(AutoCompleteBox.MultiValueBinding.WithValue((format, propertyNames)))

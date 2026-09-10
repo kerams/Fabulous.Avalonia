@@ -21,4 +21,5 @@ module ComponentDatePickerBuilders =
         /// <param name="date">The initial date.</param>
         /// <param name="fn">Raised when the selected date changes.</param>
         static member DatePicker(date: DateTimeOffset, fn: DateTimeOffset -> unit) =
-            WidgetBuilder<'msg, IFabDatePicker>(DatePicker.WidgetKey, ComponentDatePicker.SelectedDateChanged.WithValue(ComponentValueEventData.create date fn))
+            let attr = ComponentDatePicker.SelectedDateChanged.WithValue(ComponentValueEventData.create date fn)
+            WidgetBuilder<'msg, IFabDatePicker>(DatePicker.WidgetKey, &attr)

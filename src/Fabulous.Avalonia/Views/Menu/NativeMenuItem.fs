@@ -43,7 +43,8 @@ module NativeMenuItemBuilders =
         /// <summary>Creates a NativeMenuItem widget.</summary>
         /// <param name="header">The header of the Flyout.</param>
         static member NativeMenuItem(header: string) =
-            WidgetBuilder<'msg, IFabNativeMenuItem>(NativeMenuItem.WidgetKey, NativeMenuItem.Header.WithValue(header))
+            let attr = NativeMenuItem.Header.WithValue(header)
+            WidgetBuilder<'msg, IFabNativeMenuItem>(NativeMenuItem.WidgetKey, &attr)
 
 type NativeMenuItemModifiers =
     /// <summary>Sets the Gesture property.</summary>

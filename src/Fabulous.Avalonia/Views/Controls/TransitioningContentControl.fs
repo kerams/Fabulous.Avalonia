@@ -25,10 +25,8 @@ module TransitioningContentControlBuilders =
 
         /// <summary>Creates a TransitioningContentControl widget.</summary>
         static member TransitioningContentControl(content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabTransitioningContentControl>(
-                TransitioningContentControl.WidgetKey,
-                ContentControl.ContentWidget.WithValue(content.Compile())
-            )
+            let widget = ContentControl.ContentWidget.WithValue(content.Compile())
+            WidgetBuilder<'msg, IFabTransitioningContentControl>(TransitioningContentControl.WidgetKey, &widget)
 
 type TransitioningContentControlModifiers =
     /// <summary>Link a ViewRef to access the direct TransitioningContentControl control instance.</summary>

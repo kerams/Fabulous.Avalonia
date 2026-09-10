@@ -21,7 +21,8 @@ module SpanBuilders =
 
         /// <summary>Creates a Span widget.</summary>
         static member Span() =
-            CollectionBuilder<'msg, IFabSpan, IFabInline>(Span.WidgetKey, Span.Inlines)
+            let attr = Span.Inlines
+            CollectionBuilder<'msg, IFabSpan, IFabInline>(Span.WidgetKey, attr)
 
 type SpanModifiers =
     /// <summary>Link a ViewRef to access the direct Span control instance.</summary>

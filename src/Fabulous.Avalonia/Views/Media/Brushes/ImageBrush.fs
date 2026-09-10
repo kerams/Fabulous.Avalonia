@@ -22,22 +22,26 @@ module ImageBrushBuilders =
         /// <summary>Creates a ImageBrush widget.</summary>
         /// <param name="source">The image source.</param>
         static member ImageBrush(source: Bitmap) =
-            WidgetBuilder<'msg, IFabImageBrush>(ImageBrush.WidgetKey, ImageBrush.Source.WithValue(ImageSourceValue.Bitmap(source)))
+            let attr = ImageBrush.Source.WithValue(ImageSourceValue.Bitmap(source))
+            WidgetBuilder<'msg, IFabImageBrush>(ImageBrush.WidgetKey, &attr)
 
         /// <summary>Creates a ImageBrush widget.</summary>
         /// <param name="source">The image source.</param>
         static member ImageBrush(source: string) =
-            WidgetBuilder<'msg, IFabImageBrush>(ImageBrush.WidgetKey, ImageBrush.Source.WithValue(ImageSourceValue.File(source)))
+            let attr = ImageBrush.Source.WithValue(ImageSourceValue.File(source))
+            WidgetBuilder<'msg, IFabImageBrush>(ImageBrush.WidgetKey, &attr)
 
         /// <summary>Creates a ImageBrush widget.</summary>
         /// <param name="source">The image source.</param>
         static member ImageBrush(source: Uri) =
-            WidgetBuilder<'msg, IFabImageBrush>(ImageBrush.WidgetKey, ImageBrush.Source.WithValue(ImageSourceValue.Uri(source)))
+            let attr = ImageBrush.Source.WithValue(ImageSourceValue.Uri(source))
+            WidgetBuilder<'msg, IFabImageBrush>(ImageBrush.WidgetKey, &attr)
 
         /// <summary>Creates a ImageBrush widget.</summary>
         /// <param name="source">The image source.</param>
         static member ImageBrush(source: Stream) =
-            WidgetBuilder<'msg, IFabImageBrush>(ImageBrush.WidgetKey, ImageBrush.Source.WithValue(ImageSourceValue.Stream(source)))
+            let attr = ImageBrush.Source.WithValue(ImageSourceValue.Stream(source))
+            WidgetBuilder<'msg, IFabImageBrush>(ImageBrush.WidgetKey, &attr)
 
 type ImageBrushModifiers =
     /// <summary>Link a ViewRef to access the direct ImageBrush control instance.</summary>

@@ -28,24 +28,25 @@ module GlyphRunDrawingBuilders =
         /// <param name="brush">The content of the drawing.</param>
         /// <param name="glyphRun">The glyph run to draw.</param>
         static member GlyphRunDrawing(brush: WidgetBuilder<'msg, #IFabBrush>, glyphRun: GlyphRun) =
-            WidgetBuilder<'msg, IFabGlyphRunDrawing>(
-                GlyphRunDrawing.WidgetKey,
+            let bundle =
                 AttributesBundle(
                     StackList.one(GlyphRunDrawing.GlyphRun.WithValue(glyphRun)),
                     [| GlyphRunDrawing.ForegroundWidget.WithValue(brush.Compile()) |],
                     [||]
                 )
+            WidgetBuilder<'msg, IFabGlyphRunDrawing>(
+                GlyphRunDrawing.WidgetKey,
+                &bundle
             )
 
         /// <summary>Creates a GlyphRunDrawing widget.</summary>
         /// <param name="brush">The content of the drawing.</param>
         /// <param name="glyphRun">The glyph run to draw.</param>
         static member GlyphRunDrawing(brush: IBrush, glyphRun: GlyphRun) =
-            WidgetBuilder<'msg, IFabGlyphRunDrawing>(
-                GlyphRunDrawing.WidgetKey,
-                GlyphRunDrawing.GlyphRun.WithValue(glyphRun),
-                GlyphRunDrawing.Foreground.WithValue(brush)
-            )
+            let gr = GlyphRunDrawing.GlyphRun.WithValue(glyphRun)
+            let fg = GlyphRunDrawing.Foreground.WithValue(brush)
+            let bundle = AttributesBundle(StackList.two(gr, fg), [||], [||])
+            WidgetBuilder<'msg, IFabGlyphRunDrawing>(GlyphRunDrawing.WidgetKey, &bundle)
 
         /// <summary>Creates a GlyphRunDrawing widget.</summary>
         /// <param name="brush">The content of the drawing.</param>

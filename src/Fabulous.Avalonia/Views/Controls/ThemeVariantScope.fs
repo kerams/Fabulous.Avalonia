@@ -30,14 +30,10 @@ module ThemeVariantScopeBuilders =
         /// <param name="theme">The theme variant to use.</param>
         /// <param name="content">The content of the ThemeVariantScope.</param>
         static member ThemeVariantScope(theme: ThemeVariant, content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabThemeVariantScope>(
-                ThemeVariantScope.WidgetKey,
-                AttributesBundle(
-                    StackList.one(ThemeVariantScope.RequestedThemeVariant.WithValue(theme)),
+            let bundle = AttributesBundle(StackList.one(ThemeVariantScope.RequestedThemeVariant.WithValue(theme)),
                     [| Decorator.ChildWidget.WithValue(content.Compile()) |],
-                    [||]
-                )
-            )
+                    [||])
+            WidgetBuilder<'msg, IFabThemeVariantScope>(ThemeVariantScope.WidgetKey, &bundle)
 
 type ThemeVariantScopeModifiers =
 

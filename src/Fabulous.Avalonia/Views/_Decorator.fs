@@ -29,7 +29,8 @@ type DecoratorModifiers =
     /// <param name="value">The Child value.</param>
     [<Extension>]
     static member inline child(this: WidgetBuilder<'msg, #IFabDecorator>, value: WidgetBuilder<'msg, #IFabControl>) =
-        this.AddWidget(Decorator.ChildWidget.WithValue(value.Compile()))
+        let widget = Decorator.ChildWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
 type DecoratorExtraModifiers =
     /// <summary>Sets the Padding property.</summary>

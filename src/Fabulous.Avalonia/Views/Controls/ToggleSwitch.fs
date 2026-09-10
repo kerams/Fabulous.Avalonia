@@ -49,7 +49,8 @@ type ToggleSwitchModifiers =
     /// <param name="value">The OffContent value.</param>
     [<Extension>]
     static member inline offContent(this: WidgetBuilder<'msg, #IFabToggleSwitch>, value: WidgetBuilder<'msg, #IFabControl>) =
-        this.AddWidget(ToggleSwitch.OffContentWidget.WithValue(value.Compile()))
+        let widget = ToggleSwitch.OffContentWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the OnContent property.</summary>
     /// <param name="this">Current widget.</param>
@@ -63,7 +64,8 @@ type ToggleSwitchModifiers =
     /// <param name="value">The OnContent value.</param>
     [<Extension>]
     static member inline onContent(this: WidgetBuilder<'msg, #IFabToggleSwitch>, value: WidgetBuilder<'msg, #IFabControl>) =
-        this.AddWidget(ToggleSwitch.OnContentWidget.WithValue(value.Compile()))
+        let widget = ToggleSwitch.OnContentWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the Content property.</summary>
     /// <param name="this">Current widget.</param>
@@ -77,20 +79,23 @@ type ToggleSwitchModifiers =
     /// <param name="value">The Content value.</param>
     [<Extension>]
     static member inline content(this: WidgetBuilder<'msg, #IFabToggleSwitch>, value: WidgetBuilder<'msg, #IFabControl>) =
-        this.AddWidget(ContentControl.ContentWidget.WithValue(value.Compile()))
+        let widget = ContentControl.ContentWidget.WithValue(value.Compile())
+        this.AddWidget(&widget)
 
     /// <summary>Sets the KnobTransitions property.</summary>
     /// <param name="this">Current widget.</param>
     [<Extension>]
     static member inline knobTransitions(this: WidgetBuilder<'msg, #IFabToggleSwitch>) =
-        AttributeCollectionBuilder<'msg, #IFabToggleSwitch, IFabTransition>(this, ToggleSwitch.KnobTransitions)
+        let attr = ToggleSwitch.KnobTransitions
+        AttributeCollectionBuilder<'msg, #IFabToggleSwitch, IFabTransition>(&this, &attr)
 
     /// <summary>Sets the KnobTransitions property.</summary>
     /// <param name="this">Current widget.</param>
     /// <param name="value">The KnobTransitions value.</param>
     [<Extension>]
     static member inline knobTransition(this: WidgetBuilder<'msg, #IFabToggleSwitch>, value: WidgetBuilder<'msg, #IFabTransition>) =
-        AttributeCollectionBuilder<'msg, #IFabToggleSwitch, IFabTransition>(this, ToggleSwitch.KnobTransitions) { value }
+        let attr = ToggleSwitch.KnobTransitions
+        AttributeCollectionBuilder<'msg, #IFabToggleSwitch, IFabTransition>(&this, &attr) { value }
 
     /// <summary>Link a ViewRef to access the direct ToggleSwitch control instance.</summary>
     /// <param name="this">Current widget.</param>

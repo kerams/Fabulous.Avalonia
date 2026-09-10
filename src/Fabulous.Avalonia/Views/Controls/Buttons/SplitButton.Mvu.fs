@@ -18,17 +18,16 @@ module MvuSplitButtonBuilders =
         /// <param name="text">The text to display.</param>
         /// <param name="fn">Raised when the SplitButton is clicked.</param>
         static member SplitButton(text: string, fn: RoutedEventArgs -> 'msg) =
-            WidgetBuilder<'msg, IFabSplitButton>(SplitButton.WidgetKey, ContentControl.ContentString.WithValue(text), MvuSplitButton.Clicked.WithValue(fn))
+            let s1 = ContentControl.ContentString.WithValue(text)
+            let s2 = MvuSplitButton.Clicked.WithValue(fn)
+            let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
+            WidgetBuilder<'msg, IFabSplitButton>(SplitButton.WidgetKey, &bundle)
 
         /// <summary>Creates a SplitButton widget.</summary>
         /// <param name="fn">Raised when the SplitButton is clicked.</param>
         /// <param name="content">The content to display in the flyout.</param>
         static member SplitButton(fn: RoutedEventArgs -> 'msg, content: WidgetBuilder<'msg, #IFabControl>) =
-            WidgetBuilder<'msg, IFabSplitButton>(
-                SplitButton.WidgetKey,
-                AttributesBundle(
-                    StackList.one(MvuSplitButton.Clicked.WithValue(fn)),
+            let bundle = AttributesBundle(StackList.one(MvuSplitButton.Clicked.WithValue(fn)),
                     [| ContentControl.ContentWidget.WithValue(content.Compile()) |],
-                    [||]
-                )
-            )
+                    [||])
+            WidgetBuilder<'msg, IFabSplitButton>(SplitButton.WidgetKey, &bundle)
