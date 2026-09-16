@@ -14,13 +14,13 @@ module TimePicker =
         Attributes.defineAvaloniaPropertyWithEquality TimePicker.ClockIdentifierProperty
 
     let MinuteIncrement =
-        Attributes.defineAvaloniaPropertyWithEquality TimePicker.MinuteIncrementProperty
+        Attributes.defineAvaloniaPropertyInt TimePicker.MinuteIncrementProperty
 
     let SecondIncrement =
-        Attributes.defineAvaloniaPropertyWithEquality TimePicker.SecondIncrementProperty
+        Attributes.defineAvaloniaPropertyInt TimePicker.SecondIncrementProperty
 
     let UseSeconds =
-        Attributes.defineAvaloniaPropertyWithEquality TimePicker.UseSecondsProperty
+        Attributes.defineAvaloniaPropertyBool TimePicker.UseSecondsProperty
 
 type TimePickerModifiers =
 

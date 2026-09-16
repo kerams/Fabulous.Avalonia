@@ -12,13 +12,13 @@ module VirtualizingStackPanel =
     let WidgetKey = Widgets.register<VirtualizingStackPanel>()
 
     let Orientation =
-        Attributes.defineAvaloniaPropertyWithEquality VirtualizingStackPanel.OrientationProperty
+        Attributes.defineAvaloniaPropertyEnum VirtualizingStackPanel.OrientationProperty
 
     let AreHorizontalSnapPointsRegular =
-        Attributes.defineAvaloniaPropertyWithEquality VirtualizingStackPanel.AreHorizontalSnapPointsRegularProperty
+        Attributes.defineAvaloniaPropertyBool VirtualizingStackPanel.AreHorizontalSnapPointsRegularProperty
 
     let AreVerticalSnapPointsRegular =
-        Attributes.defineAvaloniaPropertyWithEquality VirtualizingStackPanel.AreVerticalSnapPointsRegularProperty
+        Attributes.defineAvaloniaPropertyBool VirtualizingStackPanel.AreVerticalSnapPointsRegularProperty
 
 [<AutoOpen>]
 module VirtualizingStackPanelBuilders =

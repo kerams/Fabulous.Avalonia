@@ -12,13 +12,13 @@ module DatePicker =
     let WidgetKey = Widgets.register<DatePicker>()
 
     let DayVisible =
-        Attributes.defineAvaloniaPropertyWithEquality DatePicker.DayVisibleProperty
+        Attributes.defineAvaloniaPropertyBool DatePicker.DayVisibleProperty
 
     let MonthVisible =
-        Attributes.defineAvaloniaPropertyWithEquality DatePicker.MonthVisibleProperty
+        Attributes.defineAvaloniaPropertyBool DatePicker.MonthVisibleProperty
 
     let YearVisible =
-        Attributes.defineAvaloniaPropertyWithEquality DatePicker.YearVisibleProperty
+        Attributes.defineAvaloniaPropertyBool DatePicker.YearVisibleProperty
 
     let DayFormat =
         Attributes.defineAvaloniaPropertyWithEquality DatePicker.DayFormatProperty

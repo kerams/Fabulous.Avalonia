@@ -10,7 +10,7 @@ type IFabInline =
 
 module Inline =
     let BaselineAlignment =
-        Attributes.defineAvaloniaPropertyWithEquality Inline.BaselineAlignmentProperty
+        Attributes.defineAvaloniaPropertyEnum Inline.BaselineAlignmentProperty
 
     let TextDecorations =
         Attributes.defineAvaloniaListWidgetCollection "Inline_TextDecorations" (fun target ->

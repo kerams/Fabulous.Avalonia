@@ -27,6 +27,6 @@ module MvuToggleSwitchBuilders =
         /// <param name="fn">Raised when the ToggleSwitch value changes.</param>
         static member ThreeStateToggleSwitch(isChecked: bool option, fn: bool option -> 'msg) =
             let s1 = ToggleButton.IsThreeState.WithValue(true)
-            let s2 = MvuToggleButton.ThreeStateCheckedChanged.WithValue(ValueEventData.createVOption (ThreeState.fromOption(isChecked)) (ThreeState.toOption >> fn))
+            let s2 = MvuToggleButton.ThreeStateCheckedChanged.WithValue(ValueEventData.createOptional (ThreeState.fromOption(isChecked)) (ThreeState.toOption >> fn))
             let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
             WidgetBuilder<'msg, IFabToggleSwitch>(ToggleSwitch.WidgetKey, &bundle)

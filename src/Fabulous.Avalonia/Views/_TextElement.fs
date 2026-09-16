@@ -19,16 +19,16 @@ module TextElement =
         Attributes.defineAvaloniaPropertyWithEquality TextElement.FontFamilyProperty
 
     let FontSize =
-        Attributes.defineAvaloniaPropertyWithEquality TextElement.FontSizeProperty
+        Attributes.defineAvaloniaPropertyFloat TextElement.FontSizeProperty
 
     let FontStyle =
-        Attributes.defineAvaloniaPropertyWithEquality TextElement.FontStyleProperty
+        Attributes.defineAvaloniaPropertyEnum TextElement.FontStyleProperty
 
     let FontWeight =
-        Attributes.defineAvaloniaPropertyWithEquality TextElement.FontWeightProperty
+        Attributes.defineAvaloniaPropertyEnum TextElement.FontWeightProperty
 
     let FontStretch =
-        Attributes.defineAvaloniaPropertyWithEquality TextElement.FontStretchProperty
+        Attributes.defineAvaloniaPropertyEnum TextElement.FontStretchProperty
 
     let ForegroundWidget =
         Attributes.defineAvaloniaPropertyWidget TextElement.ForegroundProperty

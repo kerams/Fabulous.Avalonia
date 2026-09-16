@@ -16,7 +16,7 @@ module TransitioningContentControl =
         Attributes.defineAvaloniaPropertyWithEquality TransitioningContentControl.PageTransitionProperty
 
     let IsTransitionReversed =
-        Attributes.defineAvaloniaPropertyWithEquality TransitioningContentControl.IsTransitionReversedProperty
+        Attributes.defineAvaloniaPropertyBool TransitioningContentControl.IsTransitionReversedProperty
 
 
 [<AutoOpen>]

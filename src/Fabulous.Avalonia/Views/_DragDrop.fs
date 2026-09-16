@@ -6,7 +6,7 @@ open Fabulous
 
 module DragDrop =
     let AllowDrop =
-        Attributes.defineAvaloniaPropertyWithEquality DragDrop.AllowDropProperty
+        Attributes.defineAvaloniaPropertyBool DragDrop.AllowDropProperty
 
 type DragDropModifiers =
     /// <summary>Sets the AllowDrop property.</summary>

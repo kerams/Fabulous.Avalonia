@@ -21,7 +21,7 @@ module TrayIcon =
         Attributes.defineAvaloniaPropertyWithEquality TrayIcon.ToolTipTextProperty
 
     let IsVisible =
-        Attributes.defineAvaloniaPropertyWithEquality TrayIcon.IsVisibleProperty
+        Attributes.defineAvaloniaPropertyBool TrayIcon.IsVisibleProperty
 
 [<AutoOpen>]
 module TrayIconBuilders =

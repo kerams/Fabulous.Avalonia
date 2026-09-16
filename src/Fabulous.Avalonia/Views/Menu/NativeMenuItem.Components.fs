@@ -5,10 +5,31 @@ open Fabulous
 open Fabulous.StackAllocatedCollections.StackList
 open Fabulous.Avalonia
 
-module ComponentNativeMenuItem =
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type ComponentNativeMenuItem =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _Click: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Microsoft.FSharp.Core.Unit -> Microsoft.FSharp.Core.Unit)>
 
-    let Click =
-        Attributes.Component.defineEventNoArg "NativeMenuItem_Click" (fun target -> (target :?> NativeMenuItem).Click)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ClickInit: bool
+
+    static member Click =
+        if not ComponentNativeMenuItem._ClickInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentNativeMenuItem._ClickInit then
+                    ComponentNativeMenuItem._Click <-
+                        Attributes.Component.defineEventNoArg "NativeMenuItem_Click" (fun target -> (target :?> NativeMenuItem).Click)
+
+                    ComponentNativeMenuItem._ClickInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentNativeMenuItem._Click
 
 [<AutoOpen>]
 module ComponentNativeMenuItemBuilders =

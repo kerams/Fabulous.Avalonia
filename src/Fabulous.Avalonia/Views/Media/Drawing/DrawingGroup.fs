@@ -15,7 +15,7 @@ module DrawingGroup =
         Attributes.defineAvaloniaListWidgetCollection "DrawingGroup_Children" (fun target -> (target :?> DrawingGroup).Children)
 
     let Opacity =
-        Attributes.defineAvaloniaPropertyWithEquality DrawingGroup.OpacityProperty
+        Attributes.defineAvaloniaPropertyFloat DrawingGroup.OpacityProperty
 
     let Transform =
         Attributes.defineAvaloniaPropertyWithEquality DrawingGroup.TransformProperty

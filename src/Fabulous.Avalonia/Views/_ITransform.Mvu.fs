@@ -4,10 +4,31 @@ open System.Runtime.CompilerServices
 open Avalonia.Media
 open Fabulous
 
-module MvuTransform =
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type MvuTransform =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _Changed: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<Fabulous.MsgValue>
 
-    let Changed =
-        Attributes.Mvu.defineEventNoArg "Transform_Changed" (fun target -> (target :?> Transform).Changed)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ChangedInit: bool
+
+    static member Changed =
+        if not MvuTransform._ChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuTransform._ChangedInit then
+                    MvuTransform._Changed <-
+                        Attributes.Mvu.defineEventNoArg "Transform_Changed" (fun target -> (target :?> Transform).Changed)
+
+                    MvuTransform._ChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuTransform._Changed
 
 type MvuTransformModifiers =
     /// <summary>Listens to the Transform changed event.</summary>

@@ -12,7 +12,7 @@ module TreeViewItem =
     let WidgetKey = Widgets.register<TreeViewItem>()
 
     let IsExpanded =
-        Attributes.defineAvaloniaPropertyWithEquality TreeViewItem.IsExpandedProperty
+        Attributes.defineAvaloniaPropertyBool TreeViewItem.IsExpandedProperty
 
 [<AutoOpen>]
 module TreeViewItemBuilders =

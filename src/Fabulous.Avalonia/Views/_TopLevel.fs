@@ -27,7 +27,7 @@ module TopLevel =
         Attributes.defineAvaloniaPropertyWithEquality TopLevel.TransparencyBackgroundFallbackProperty
 
     let AutoSafeAreaPadding =
-        Attributes.defineAvaloniaPropertyWithEquality TopLevel.AutoSafeAreaPaddingProperty
+        Attributes.defineAvaloniaPropertyBool TopLevel.AutoSafeAreaPaddingProperty
 
     let RequestedThemeVariant =
         Attributes.definePropertyWithGetSet

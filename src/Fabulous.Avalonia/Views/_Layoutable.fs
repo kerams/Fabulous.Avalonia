@@ -9,32 +9,32 @@ type IFabLayoutable =
     inherit IFabVisual
 
 module Layoutable =
-    let Width = Attributes.defineAvaloniaPropertyWithEquality Layoutable.WidthProperty
+    let Width = Attributes.defineAvaloniaPropertyFloat Layoutable.WidthProperty
 
-    let Height = Attributes.defineAvaloniaPropertyWithEquality Layoutable.HeightProperty
+    let Height = Attributes.defineAvaloniaPropertyFloat Layoutable.HeightProperty
 
     let MinWidth =
-        Attributes.defineAvaloniaPropertyWithEquality Layoutable.MinWidthProperty
+        Attributes.defineAvaloniaPropertyFloat Layoutable.MinWidthProperty
 
     let MinHeight =
-        Attributes.defineAvaloniaPropertyWithEquality Layoutable.MinHeightProperty
+        Attributes.defineAvaloniaPropertyFloat Layoutable.MinHeightProperty
 
     let MaxWidth =
-        Attributes.defineAvaloniaPropertyWithEquality Layoutable.MaxWidthProperty
+        Attributes.defineAvaloniaPropertyFloat Layoutable.MaxWidthProperty
 
     let MaxHeight =
-        Attributes.defineAvaloniaPropertyWithEquality Layoutable.MaxHeightProperty
+        Attributes.defineAvaloniaPropertyFloat Layoutable.MaxHeightProperty
 
     let Margin = Attributes.defineAvaloniaPropertyWithEquality Layoutable.MarginProperty
 
     let HorizontalAlignment =
-        Attributes.defineAvaloniaPropertyWithEquality Layoutable.HorizontalAlignmentProperty
+        Attributes.defineAvaloniaPropertyEnum Layoutable.HorizontalAlignmentProperty
 
     let VerticalAlignment =
-        Attributes.defineAvaloniaPropertyWithEquality Layoutable.VerticalAlignmentProperty
+        Attributes.defineAvaloniaPropertyEnum Layoutable.VerticalAlignmentProperty
 
     let UseLayoutRounding =
-        Attributes.defineAvaloniaPropertyWithEquality Layoutable.UseLayoutRoundingProperty
+        Attributes.defineAvaloniaPropertyBool Layoutable.UseLayoutRoundingProperty
 
 type LayoutableModifiers =
     /// <summary>Sets the Width property.</summary>

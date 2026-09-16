@@ -7,15 +7,73 @@ open Fabulous
 open Fabulous.StackAllocatedCollections.StackList
 open Fabulous.Avalonia
 
-module MvuCalendar =
-    let SelectedDateChanged =
-        Attributes.Mvu.defineAvaloniaPropertyWithChangedEvent "Calendar_SelectedDateChanged" Calendar.SelectedDateProperty Option.toNullable Option.ofNullable
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type MvuCalendar =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _SelectedDateChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<Fabulous.Avalonia.ValueEventData<(System.DateTime option), (System.DateTime option)>>
 
-    let DisplayDateChanged =
-        Attributes.Mvu.defineEvent "Calendar_DisplayDateChanged" (fun target -> (target :?> Calendar).DisplayDateChanged)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _SelectedDateChangedInit: bool
 
-    let DisplayModeChanged =
-        Attributes.Mvu.defineEvent "Calendar_DisplayModeChanged" (fun target -> (target :?> Calendar).DisplayModeChanged)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DisplayDateChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Controls.CalendarDateChangedEventArgs -> Fabulous.MsgValue)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DisplayDateChangedInit: bool
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DisplayModeChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Controls.CalendarModeChangedEventArgs -> Fabulous.MsgValue)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DisplayModeChangedInit: bool
+
+    static member SelectedDateChanged =
+        if not MvuCalendar._SelectedDateChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuCalendar._SelectedDateChangedInit then
+                    MvuCalendar._SelectedDateChanged <-
+                        Attributes.Mvu.defineAvaloniaPropertyWithChangedEvent "Calendar_SelectedDateChanged" Calendar.SelectedDateProperty Option.toNullable Option.ofNullable
+
+                    MvuCalendar._SelectedDateChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuCalendar._SelectedDateChanged
+
+    static member DisplayDateChanged =
+        if not MvuCalendar._DisplayDateChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuCalendar._DisplayDateChangedInit then
+                    MvuCalendar._DisplayDateChanged <-
+                        Attributes.Mvu.defineEvent "Calendar_DisplayDateChanged" (fun target -> (target :?> Calendar).DisplayDateChanged)
+
+                    MvuCalendar._DisplayDateChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuCalendar._DisplayDateChanged
+
+    static member DisplayModeChanged =
+        if not MvuCalendar._DisplayModeChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuCalendar._DisplayModeChangedInit then
+                    MvuCalendar._DisplayModeChanged <-
+                        Attributes.Mvu.defineEvent "Calendar_DisplayModeChanged" (fun target -> (target :?> Calendar).DisplayModeChanged)
+
+                    MvuCalendar._DisplayModeChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuCalendar._DisplayModeChanged
 
 [<AutoOpen>]
 module MvuCalendarBuilders =

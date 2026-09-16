@@ -10,22 +10,22 @@ type IFabInputElement =
 module InputElement =
 
     let Focusable =
-        Attributes.defineAvaloniaPropertyWithEquality InputElement.FocusableProperty
+        Attributes.defineAvaloniaPropertyBool InputElement.FocusableProperty
 
     let IsEnabled =
-        Attributes.defineAvaloniaPropertyWithEquality InputElement.IsEnabledProperty
+        Attributes.defineAvaloniaPropertyBool InputElement.IsEnabledProperty
 
     let Cursor =
         Attributes.defineAvaloniaPropertyWithEquality InputElement.CursorProperty
 
     let IsHitTestVisible =
-        Attributes.defineAvaloniaPropertyWithEquality InputElement.IsHitTestVisibleProperty
+        Attributes.defineAvaloniaPropertyBool InputElement.IsHitTestVisibleProperty
 
     let IsTabStop =
-        Attributes.defineAvaloniaPropertyWithEquality InputElement.IsTabStopProperty
+        Attributes.defineAvaloniaPropertyBool InputElement.IsTabStopProperty
 
     let TabIndex =
-        Attributes.defineAvaloniaPropertyWithEquality InputElement.TabIndexProperty
+        Attributes.defineAvaloniaPropertyInt InputElement.TabIndexProperty
 
 type InputElementModifiers =
     /// <summary>Sets the Focusable property.</summary>

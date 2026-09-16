@@ -27,14 +27,14 @@ module ItemsControl =
         Attributes.defineSimpleScalar<WidgetItems>
             "ItemsControl_ItemsSource"
             (fun a b -> ScalarAttributeComparers.equalityCompare a.OriginalItems b.OriginalItems)
-            (fun _ newValueOpt node ->
+            (fun _ newValue node ->
                 let itemsControl = node.Target :?> ItemsControl
 
-                match newValueOpt with
-                | ValueNone ->
+                if not newValue.HasValue then
                     itemsControl.ClearValue(ItemsControl.ItemTemplateProperty)
                     itemsControl.ClearValue(ItemsControl.ItemsSourceProperty)
-                | ValueSome value ->
+                else
+                    let value = newValue.Value
                     itemsControl.SetValue(ItemsControl.ItemTemplateProperty, WidgetDataTemplate(node, unbox >> value.Template))
                     |> ignore
 
@@ -45,12 +45,13 @@ module ItemsControl =
         Attributes.defineAvaloniaPropertyWithEquality ItemsControl.ItemsSourceProperty
 
     let ItemsPanel =
-        Attributes.defineSimpleScalar<Widget> "ItemsControl_ItemsPanel" ScalarAttributeComparers.equalityCompare (fun _ newValueOpt node ->
+        Attributes.defineSimpleScalar<Widget> "ItemsControl_ItemsPanel" ScalarAttributeComparers.equalityCompare (fun _ newValue node ->
             let itemsControl = node.Target :?> ItemsControl
 
-            match newValueOpt with
-            | ValueNone -> itemsControl.ClearValue(ItemsControl.ItemsPanelProperty)
-            | ValueSome value ->
+            if not newValue.HasValue then
+                itemsControl.ClearValue(ItemsControl.ItemsPanelProperty)
+            else
+                let value = newValue.Value
                 itemsControl.SetValue(ItemsControl.ItemsPanelProperty, WidgetItemsPanel(node, value))
                 |> ignore)
 

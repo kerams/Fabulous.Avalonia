@@ -17,19 +17,19 @@ module AutoCompleteBox =
         Attributes.defineAvaloniaPropertyWithEquality AutoCompleteBox.PlaceholderTextProperty
 
     let MinimumPrefixLength =
-        Attributes.defineAvaloniaPropertyWithEquality AutoCompleteBox.MinimumPrefixLengthProperty
+        Attributes.defineAvaloniaPropertyInt AutoCompleteBox.MinimumPrefixLengthProperty
 
     let MinimumPopulateDelay =
         Attributes.defineAvaloniaPropertyWithEquality AutoCompleteBox.MinimumPopulateDelayProperty
 
     let MaxDropDownHeight =
-        Attributes.defineAvaloniaPropertyWithEquality AutoCompleteBox.MaxDropDownHeightProperty
+        Attributes.defineAvaloniaPropertyFloat AutoCompleteBox.MaxDropDownHeightProperty
 
     let IsTextCompletionEnabled =
-        Attributes.defineAvaloniaPropertyWithEquality AutoCompleteBox.IsTextCompletionEnabledProperty
+        Attributes.defineAvaloniaPropertyBool AutoCompleteBox.IsTextCompletionEnabledProperty
 
     let FilterMode =
-        Attributes.defineAvaloniaPropertyWithEquality AutoCompleteBox.FilterModeProperty
+        Attributes.defineAvaloniaPropertyEnum AutoCompleteBox.FilterModeProperty
 
     let ItemFilter =
         Attributes.defineAvaloniaPropertyWithEquality AutoCompleteBox.ItemFilterProperty
@@ -54,7 +54,7 @@ module AutoCompleteBox =
     //    Attributes.defineSimpleScalar<string * string array>
     //        "AutoCompleteBox_MultiValueBinding"
     //        ScalarAttributeComparers.equalityCompare
-    //        (fun _ newValueOpt node ->
+    //        (fun _ newValue node ->
     //            if newValueOpt.IsSome then
     //                let format, propertyNames = newValueOpt.Value
     //                let target = node.Target :?> AutoCompleteBox
@@ -67,12 +67,13 @@ module AutoCompleteBox =
 
     /// Allows setting the ItemTemplate on an AutoCompleteBox
     let ItemTemplate =
-        Attributes.defineSimpleScalar<obj -> Widget> "AutoCompleteBox_ItemTemplate" ScalarAttributeComparers.physicalEqualityCompare (fun _ newValueOpt node ->
+        Attributes.defineSimpleScalar<obj -> Widget> "AutoCompleteBox_ItemTemplate" ScalarAttributeComparers.physicalEqualityCompare (fun _ newValue node ->
             let autoComplete = node.Target :?> AutoCompleteBox
 
-            match newValueOpt with
-            | ValueNone -> autoComplete.ClearValue(AutoCompleteBox.ItemTemplateProperty)
-            | ValueSome template ->
+            if not newValue.HasValue then
+                autoComplete.ClearValue(AutoCompleteBox.ItemTemplateProperty)
+            else
+                let template = newValue.Value
                 autoComplete.SetValue(AutoCompleteBox.ItemTemplateProperty, WidgetDataTemplate(node, template))
                 |> ignore)
 

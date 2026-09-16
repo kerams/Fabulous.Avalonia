@@ -6,9 +6,31 @@ open Avalonia.Media
 open Fabulous
 open Fabulous.Avalonia
 
-module MvuTemplatedControl =
-    let TemplateApplied =
-        Attributes.Mvu.defineEvent "TemplatedControl_TemplateApplied" (fun target -> (target :?> TemplatedControl).TemplateApplied)
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type MvuTemplatedControl =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _TemplateApplied: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Controls.Primitives.TemplateAppliedEventArgs -> Fabulous.MsgValue)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _TemplateAppliedInit: bool
+
+    static member TemplateApplied =
+        if not MvuTemplatedControl._TemplateAppliedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuTemplatedControl._TemplateAppliedInit then
+                    MvuTemplatedControl._TemplateApplied <-
+                        Attributes.Mvu.defineEvent "TemplatedControl_TemplateApplied" (fun target -> (target :?> TemplatedControl).TemplateApplied)
+
+                    MvuTemplatedControl._TemplateAppliedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuTemplatedControl._TemplateApplied
 
 type MvuTemplatedControlModifiers =
     /// <summary>Listens to the TemplateApplied event.</summary>

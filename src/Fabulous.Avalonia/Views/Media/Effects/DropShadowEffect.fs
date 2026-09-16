@@ -12,10 +12,10 @@ module DropShadowEffect =
     let WidgetKey = Widgets.register<DropShadowEffect>()
 
     let OffsetX =
-        Attributes.defineAvaloniaPropertyWithEquality DropShadowEffect.OffsetXProperty
+        Attributes.defineAvaloniaPropertyFloat DropShadowEffect.OffsetXProperty
 
     let OffsetY =
-        Attributes.defineAvaloniaPropertyWithEquality DropShadowEffect.OffsetYProperty
+        Attributes.defineAvaloniaPropertyFloat DropShadowEffect.OffsetYProperty
 
 [<AutoOpen>]
 module DropShadowEffectBuilders =

@@ -16,10 +16,10 @@ module PathFigure =
         Attributes.defineAvaloniaListWidgetCollection "PathFigure_Segments" (fun target -> (target :?> PathFigure).Segments)
 
     let IsClosed =
-        Attributes.defineAvaloniaPropertyWithEquality PathFigure.IsClosedProperty
+        Attributes.defineAvaloniaPropertyBool PathFigure.IsClosedProperty
 
     let IsFilled =
-        Attributes.defineAvaloniaPropertyWithEquality PathFigure.IsFilledProperty
+        Attributes.defineAvaloniaPropertyBool PathFigure.IsFilledProperty
 
     let StartPoint =
         Attributes.defineAvaloniaPropertyWithEquality PathFigure.StartPointProperty

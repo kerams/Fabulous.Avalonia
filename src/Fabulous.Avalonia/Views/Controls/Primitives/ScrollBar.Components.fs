@@ -6,9 +6,31 @@ open Fabulous
 open Fabulous.Avalonia
 open Fabulous.StackAllocatedCollections.StackList
 
-module ComponentScrollBar =
-    let Scroll =
-        Attributes.Component.defineEvent "ScrollBar_Scroll" (fun target -> (target :?> ScrollBar).Scroll)
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type ComponentScrollBar =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _Scroll: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Controls.Primitives.ScrollEventArgs -> Microsoft.FSharp.Core.Unit)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ScrollInit: bool
+
+    static member Scroll =
+        if not ComponentScrollBar._ScrollInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentScrollBar._ScrollInit then
+                    ComponentScrollBar._Scroll <-
+                        Attributes.Component.defineEvent "ScrollBar_Scroll" (fun target -> (target :?> ScrollBar).Scroll)
+
+                    ComponentScrollBar._ScrollInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentScrollBar._Scroll
 
 [<AutoOpen>]
 module ComponentScrollBarBuilders =

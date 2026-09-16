@@ -11,19 +11,19 @@ type IFabUniformGrid =
 module UniformGrid =
     let WidgetKey = Widgets.register<UniformGrid>()
 
-    let Rows = Attributes.defineAvaloniaPropertyWithEquality UniformGrid.RowsProperty
+    let Rows = Attributes.defineAvaloniaPropertyInt UniformGrid.RowsProperty
 
     let Columns =
-        Attributes.defineAvaloniaPropertyWithEquality UniformGrid.ColumnsProperty
+        Attributes.defineAvaloniaPropertyInt UniformGrid.ColumnsProperty
 
     let FirstColumn =
-        Attributes.defineAvaloniaPropertyWithEquality UniformGrid.FirstColumnProperty
+        Attributes.defineAvaloniaPropertyInt UniformGrid.FirstColumnProperty
 
     let RowSpacing =
-        Attributes.defineAvaloniaPropertyWithEquality UniformGrid.RowSpacingProperty
+        Attributes.defineAvaloniaPropertyFloat UniformGrid.RowSpacingProperty
 
     let ColumnSpacing =
-        Attributes.defineAvaloniaPropertyWithEquality UniformGrid.ColumnSpacingProperty
+        Attributes.defineAvaloniaPropertyFloat UniformGrid.ColumnSpacingProperty
 
 [<AutoOpen>]
 module UniformGridBuilders =

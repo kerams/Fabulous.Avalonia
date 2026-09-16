@@ -10,10 +10,10 @@ type IFabTileBrush =
 
 module TileBrush =
     let AlignmentX =
-        Attributes.defineAvaloniaPropertyWithEquality TileBrush.AlignmentXProperty
+        Attributes.defineAvaloniaPropertyEnum TileBrush.AlignmentXProperty
 
     let AlignmentY =
-        Attributes.defineAvaloniaPropertyWithEquality TileBrush.AlignmentYProperty
+        Attributes.defineAvaloniaPropertyEnum TileBrush.AlignmentYProperty
 
     let DestinationRect =
         Attributes.defineAvaloniaPropertyWithEquality TileBrush.DestinationRectProperty
@@ -22,10 +22,10 @@ module TileBrush =
         Attributes.defineAvaloniaPropertyWithEquality TileBrush.SourceRectProperty
 
     let Stretch =
-        Attributes.defineAvaloniaPropertyWithEquality TileBrush.StretchProperty
+        Attributes.defineAvaloniaPropertyEnum TileBrush.StretchProperty
 
     let TileMode =
-        Attributes.defineAvaloniaPropertyWithEquality TileBrush.TileModeProperty
+        Attributes.defineAvaloniaPropertyEnum TileBrush.TileModeProperty
 
 type TileBrushModifiers =
 

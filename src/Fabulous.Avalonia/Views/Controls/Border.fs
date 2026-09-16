@@ -21,7 +21,7 @@ module Border =
         Attributes.defineAvaloniaPropertyWithEquality Border.BackgroundProperty
 
     let BackgroundSizing =
-        Attributes.defineAvaloniaPropertyWithEquality Border.BackgroundSizingProperty
+        Attributes.defineAvaloniaPropertyEnum Border.BackgroundSizingProperty
 
     let BorderBrushWidget =
         Attributes.defineAvaloniaPropertyWidget Border.BorderBrushProperty

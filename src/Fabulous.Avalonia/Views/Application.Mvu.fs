@@ -8,33 +8,163 @@ open Avalonia.Styling
 open Fabulous
 open Fabulous.Avalonia
 
-module MvuApplication =
-    let ActualThemeVariantChanged =
-        Attributes.Mvu.defineAvaloniaPropertyWithChangedEvent' "Application_ActualThemeVariantChanged" FabApplication.ActualThemeVariantProperty
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type MvuApplication =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ActualThemeVariantChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<Fabulous.Avalonia.ValueEventData<Avalonia.Styling.ThemeVariant, Avalonia.Styling.ThemeVariant>>
 
-    let RequestedThemeChanged =
-        Attributes.Mvu.defineAvaloniaPropertyWithChangedEvent' "Application_RequestedThemeChanged" FabApplication.RequestedThemeVariantProperty
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ActualThemeVariantChangedInit: bool
 
-    let ResourcesChanged =
-        Attributes.Mvu.defineEvent "Application_ResourcesChangedEvent" (fun target -> (target :?> FabApplication).ResourcesChanged)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _RequestedThemeChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<Fabulous.Avalonia.ValueEventData<Avalonia.Styling.ThemeVariant, Avalonia.Styling.ThemeVariant>>
 
-    let Activated =
-        Attributes.Mvu.defineEvent "Application_Activated" (fun target ->
-            (FabApplication.Current.TryGetFeature(typeof<IActivatableLifetime>) :?> IActivatableLifetime)
-                .Activated)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _RequestedThemeChangedInit: bool
 
-    let Deactivated =
-        Attributes.Mvu.defineEvent "Application_Deactivated" (fun target ->
-            (FabApplication.Current.TryGetFeature(typeof<IActivatableLifetime>) :?> IActivatableLifetime)
-                .Deactivated)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ResourcesChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Controls.ResourcesChangedEventArgs -> Fabulous.MsgValue)>
 
-    let ColorValuesChanged =
-        Attributes.Mvu.defineEvent "PlatformSettings_ColorValuesChanged" (fun target ->
-            (target :?> FabApplication)
-                .PlatformSettings.ColorValuesChanged)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ResourcesChangedInit: bool
 
-    let SafeAreaChanged =
-        Attributes.Mvu.defineEvent "PlatformSettings_SafeAreaChanged" (fun target -> (target :?> FabApplication).InsetsManager.SafeAreaChanged)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _Activated: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Controls.ApplicationLifetimes.ActivatedEventArgs -> Fabulous.MsgValue)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ActivatedInit: bool
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _Deactivated: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Controls.ApplicationLifetimes.ActivatedEventArgs -> Fabulous.MsgValue)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DeactivatedInit: bool
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ColorValuesChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Platform.PlatformColorValues -> Fabulous.MsgValue)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ColorValuesChangedInit: bool
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _SafeAreaChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Controls.Platform.SafeAreaChangedArgs -> Fabulous.MsgValue)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _SafeAreaChangedInit: bool
+
+    static member ActualThemeVariantChanged =
+        if not MvuApplication._ActualThemeVariantChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuApplication._ActualThemeVariantChangedInit then
+                    MvuApplication._ActualThemeVariantChanged <-
+                        Attributes.Mvu.defineAvaloniaPropertyWithChangedEvent' "Application_ActualThemeVariantChanged" FabApplication.ActualThemeVariantProperty
+
+                    MvuApplication._ActualThemeVariantChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuApplication._ActualThemeVariantChanged
+
+    static member RequestedThemeChanged =
+        if not MvuApplication._RequestedThemeChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuApplication._RequestedThemeChangedInit then
+                    MvuApplication._RequestedThemeChanged <-
+                        Attributes.Mvu.defineAvaloniaPropertyWithChangedEvent' "Application_RequestedThemeChanged" FabApplication.RequestedThemeVariantProperty
+
+                    MvuApplication._RequestedThemeChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuApplication._RequestedThemeChanged
+
+    static member ResourcesChanged =
+        if not MvuApplication._ResourcesChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuApplication._ResourcesChangedInit then
+                    MvuApplication._ResourcesChanged <-
+                        Attributes.Mvu.defineEvent "Application_ResourcesChangedEvent" (fun target -> (target :?> FabApplication).ResourcesChanged)
+
+                    MvuApplication._ResourcesChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuApplication._ResourcesChanged
+
+    static member Activated =
+        if not MvuApplication._ActivatedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuApplication._ActivatedInit then
+                    MvuApplication._Activated <-
+                        Attributes.Mvu.defineEvent "Application_Activated" (fun target ->
+                            (FabApplication.Current.TryGetFeature(typeof<IActivatableLifetime>) :?> IActivatableLifetime)
+                                .Activated)
+
+                    MvuApplication._ActivatedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuApplication._Activated
+
+    static member Deactivated =
+        if not MvuApplication._DeactivatedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuApplication._DeactivatedInit then
+                    MvuApplication._Deactivated <-
+                        Attributes.Mvu.defineEvent "Application_Deactivated" (fun target ->
+                            (FabApplication.Current.TryGetFeature(typeof<IActivatableLifetime>) :?> IActivatableLifetime)
+                                .Deactivated)
+
+                    MvuApplication._DeactivatedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuApplication._Deactivated
+
+    static member ColorValuesChanged =
+        if not MvuApplication._ColorValuesChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuApplication._ColorValuesChangedInit then
+                    MvuApplication._ColorValuesChanged <-
+                        Attributes.Mvu.defineEvent "PlatformSettings_ColorValuesChanged" (fun target ->
+                            (target :?> FabApplication)
+                                .PlatformSettings.ColorValuesChanged)
+
+                    MvuApplication._ColorValuesChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuApplication._ColorValuesChanged
+
+    static member SafeAreaChanged =
+        if not MvuApplication._SafeAreaChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuApplication._SafeAreaChangedInit then
+                    MvuApplication._SafeAreaChanged <-
+                        Attributes.Mvu.defineEvent "PlatformSettings_SafeAreaChanged" (fun target -> (target :?> FabApplication).InsetsManager.SafeAreaChanged)
+
+                    MvuApplication._SafeAreaChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuApplication._SafeAreaChanged
 
 type MvuApplicationModifiers =
     /// <summary>Listens to the application ActualThemeVariantChanged event.</summary>

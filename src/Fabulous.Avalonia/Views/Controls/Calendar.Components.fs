@@ -8,19 +8,77 @@ open Fabulous.StackAllocatedCollections.StackList
 open Fabulous.Avalonia
 
 
-module ComponentCalendar =
-    let SelectedDateChanged =
-        Attributes.Component.defineAvaloniaPropertyWithChangedEvent
-            "Calendar_SelectedDateChanged"
-            Calendar.SelectedDateProperty
-            Option.toNullable
-            Option.ofNullable
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type ComponentCalendar =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _SelectedDateChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<Fabulous.Avalonia.ComponentValueEventData<(System.DateTime option), (System.DateTime option)>>
 
-    let DisplayDateChanged =
-        Attributes.Component.defineEvent "Calendar_DisplayDateChanged" (fun target -> (target :?> Calendar).DisplayDateChanged)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _SelectedDateChangedInit: bool
 
-    let DisplayModeChanged =
-        Attributes.Component.defineEvent "Calendar_DisplayModeChanged" (fun target -> (target :?> Calendar).DisplayModeChanged)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DisplayDateChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Controls.CalendarDateChangedEventArgs -> Microsoft.FSharp.Core.Unit)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DisplayDateChangedInit: bool
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DisplayModeChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Controls.CalendarModeChangedEventArgs -> Microsoft.FSharp.Core.Unit)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DisplayModeChangedInit: bool
+
+    static member SelectedDateChanged =
+        if not ComponentCalendar._SelectedDateChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentCalendar._SelectedDateChangedInit then
+                    ComponentCalendar._SelectedDateChanged <-
+                        Attributes.Component.defineAvaloniaPropertyWithChangedEvent
+                            "Calendar_SelectedDateChanged"
+                            Calendar.SelectedDateProperty
+                            Option.toNullable
+                            Option.ofNullable
+
+                    ComponentCalendar._SelectedDateChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentCalendar._SelectedDateChanged
+
+    static member DisplayDateChanged =
+        if not ComponentCalendar._DisplayDateChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentCalendar._DisplayDateChangedInit then
+                    ComponentCalendar._DisplayDateChanged <-
+                        Attributes.Component.defineEvent "Calendar_DisplayDateChanged" (fun target -> (target :?> Calendar).DisplayDateChanged)
+
+                    ComponentCalendar._DisplayDateChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentCalendar._DisplayDateChanged
+
+    static member DisplayModeChanged =
+        if not ComponentCalendar._DisplayModeChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentCalendar._DisplayModeChangedInit then
+                    ComponentCalendar._DisplayModeChanged <-
+                        Attributes.Component.defineEvent "Calendar_DisplayModeChanged" (fun target -> (target :?> Calendar).DisplayModeChanged)
+
+                    ComponentCalendar._DisplayModeChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentCalendar._DisplayModeChanged
 
 [<AutoOpen>]
 module ComponentCalendarBuilders =

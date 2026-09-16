@@ -5,9 +5,31 @@ open Avalonia.Controls
 open Fabulous
 open Fabulous.Avalonia
 
-module ComponentHyperlinkButton =
-    let IsVisitedChanged =
-        Attributes.Component.defineAvaloniaPropertyWithChangedEvent' "HyperlinkButton_VisitedChanged" HyperlinkButton.IsVisitedProperty
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type ComponentHyperlinkButton =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _IsVisitedChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<Fabulous.Avalonia.ComponentValueEventData<bool, bool>>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _IsVisitedChangedInit: bool
+
+    static member IsVisitedChanged =
+        if not ComponentHyperlinkButton._IsVisitedChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentHyperlinkButton._IsVisitedChangedInit then
+                    ComponentHyperlinkButton._IsVisitedChanged <-
+                        Attributes.Component.defineAvaloniaPropertyWithChangedEvent' "HyperlinkButton_VisitedChanged" HyperlinkButton.IsVisitedProperty
+
+                    ComponentHyperlinkButton._IsVisitedChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentHyperlinkButton._IsVisitedChanged
 
 type ComponentHyperlinkButtonModifiers =
     /// <summary>Listen to the HyperlinkButton IsVisitedChanged event.</summary>

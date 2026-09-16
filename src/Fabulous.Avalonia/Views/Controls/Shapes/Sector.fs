@@ -12,10 +12,10 @@ module Sector =
     let WidgetKey = Widgets.register<Sector>()
 
     let StartAngle =
-        Attributes.defineAvaloniaPropertyWithEquality Sector.StartAngleProperty
+        Attributes.defineAvaloniaPropertyFloat Sector.StartAngleProperty
 
     let SweepAngle =
-        Attributes.defineAvaloniaPropertyWithEquality Sector.SweepAngleProperty
+        Attributes.defineAvaloniaPropertyFloat Sector.SweepAngleProperty
 
 [<AutoOpen>]
 module SectorBuilders =

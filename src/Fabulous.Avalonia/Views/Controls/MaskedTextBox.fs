@@ -12,13 +12,13 @@ module MaskedTextBox =
     let WidgetKey = Widgets.register<MaskedTextBox>()
 
     let AsciiOnly =
-        Attributes.defineAvaloniaPropertyWithEquality MaskedTextBox.AsciiOnlyProperty
+        Attributes.defineAvaloniaPropertyBool MaskedTextBox.AsciiOnlyProperty
 
     let Culture =
         Attributes.defineAvaloniaPropertyWithEquality MaskedTextBox.CultureProperty
 
     let HidePromptOnLeave =
-        Attributes.defineAvaloniaPropertyWithEquality MaskedTextBox.HidePromptOnLeaveProperty
+        Attributes.defineAvaloniaPropertyBool MaskedTextBox.HidePromptOnLeaveProperty
 
     let Mask = Attributes.defineAvaloniaPropertyWithEquality MaskedTextBox.MaskProperty
 
@@ -29,10 +29,10 @@ module MaskedTextBox =
         Attributes.defineAvaloniaPropertyWithEquality MaskedTextBox.PromptCharProperty
 
     let ResetOnPrompt =
-        Attributes.defineAvaloniaPropertyWithEquality MaskedTextBox.ResetOnPromptProperty
+        Attributes.defineAvaloniaPropertyBool MaskedTextBox.ResetOnPromptProperty
 
     let ResetOnSpace =
-        Attributes.defineAvaloniaPropertyWithEquality MaskedTextBox.ResetOnSpaceProperty
+        Attributes.defineAvaloniaPropertyBool MaskedTextBox.ResetOnSpaceProperty
 
 
 type MaskedTextBoxModifiers =

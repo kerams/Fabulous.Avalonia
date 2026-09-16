@@ -10,16 +10,16 @@ type IFabVisual =
 
 module Visual =
     let ClipToBounds =
-        Attributes.defineAvaloniaPropertyWithEquality Visual.ClipToBoundsProperty
+        Attributes.defineAvaloniaPropertyBool Visual.ClipToBoundsProperty
 
     let ClipWidget = Attributes.defineAvaloniaPropertyWidget Visual.ClipProperty
 
     let Clip = Attributes.defineAvaloniaPropertyWithEquality Visual.ClipProperty
 
     let IsVisible =
-        Attributes.defineAvaloniaPropertyWithEquality Visual.IsVisibleProperty
+        Attributes.defineAvaloniaPropertyBool Visual.IsVisibleProperty
 
-    let Opacity = Attributes.defineAvaloniaPropertyWithEquality Visual.OpacityProperty
+    let Opacity = Attributes.defineAvaloniaPropertyFloat Visual.OpacityProperty
 
     let OpacityMaskWidget =
         Attributes.defineAvaloniaPropertyWidget Visual.OpacityMaskProperty
@@ -36,10 +36,10 @@ module Visual =
     let RenderTransformOrigin =
         Attributes.defineAvaloniaPropertyWithEquality Visual.RenderTransformOriginProperty
 
-    let ZIndex = Attributes.defineAvaloniaPropertyWithEquality Visual.ZIndexProperty
+    let ZIndex = Attributes.defineAvaloniaPropertyInt Visual.ZIndexProperty
 
     let FlowDirection =
-        Attributes.defineAvaloniaPropertyWithEquality Visual.FlowDirectionProperty
+        Attributes.defineAvaloniaPropertyEnum Visual.FlowDirectionProperty
 
     let EffectWidget = Attributes.defineAvaloniaPropertyWidget Visual.EffectProperty
 

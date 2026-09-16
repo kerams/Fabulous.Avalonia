@@ -10,7 +10,7 @@ type IFabSpinner =
 module Spinner =
 
     let ValidSpinDirection =
-        Attributes.defineAvaloniaPropertyWithEquality Spinner.ValidSpinDirectionProperty
+        Attributes.defineAvaloniaPropertyEnum Spinner.ValidSpinDirectionProperty
 
 type SpinnerModifiers =
 

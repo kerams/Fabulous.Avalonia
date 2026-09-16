@@ -12,10 +12,10 @@ module Arc =
     let WidgetKey = Widgets.register<Arc>()
 
     let StartAngle =
-        Attributes.defineAvaloniaPropertyWithEquality Arc.StartAngleProperty
+        Attributes.defineAvaloniaPropertyFloat Arc.StartAngleProperty
 
     let SweepAngle =
-        Attributes.defineAvaloniaPropertyWithEquality Arc.SweepAngleProperty
+        Attributes.defineAvaloniaPropertyFloat Arc.SweepAngleProperty
 
 [<AutoOpen>]
 module ArcBuilders =

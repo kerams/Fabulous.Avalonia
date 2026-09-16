@@ -5,12 +5,52 @@ open System.Runtime.CompilerServices
 open Avalonia.Controls.Primitives
 open Fabulous
 
-module ComponentPopupFlyoutBase =
-    let Opening =
-        Attributes.Component.defineEventNoArg "PopupFlyoutBase_Opening" (fun target -> (target :?> PopupFlyoutBase).Opening)
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type ComponentPopupFlyoutBase =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _Opening: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Microsoft.FSharp.Core.Unit -> Microsoft.FSharp.Core.Unit)>
 
-    let Closing =
-        Attributes.Component.defineEvent "PopupFlyoutBase_Closing" (fun target -> (target :?> PopupFlyoutBase).Closing)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _OpeningInit: bool
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _Closing: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(System.ComponentModel.CancelEventArgs -> Microsoft.FSharp.Core.Unit)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ClosingInit: bool
+
+    static member Opening =
+        if not ComponentPopupFlyoutBase._OpeningInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentPopupFlyoutBase._OpeningInit then
+                    ComponentPopupFlyoutBase._Opening <-
+                        Attributes.Component.defineEventNoArg "PopupFlyoutBase_Opening" (fun target -> (target :?> PopupFlyoutBase).Opening)
+
+                    ComponentPopupFlyoutBase._OpeningInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentPopupFlyoutBase._Opening
+
+    static member Closing =
+        if not ComponentPopupFlyoutBase._ClosingInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentPopupFlyoutBase._ClosingInit then
+                    ComponentPopupFlyoutBase._Closing <-
+                        Attributes.Component.defineEvent "PopupFlyoutBase_Closing" (fun target -> (target :?> PopupFlyoutBase).Closing)
+
+                    ComponentPopupFlyoutBase._ClosingInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentPopupFlyoutBase._Closing
 
 type ComponentPopupFlyoutBaseModifiers =
     /// <summary>Listens to the PopupFlyoutBase Opening event.</summary>

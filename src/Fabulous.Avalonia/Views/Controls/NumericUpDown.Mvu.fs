@@ -6,9 +6,31 @@ open Fabulous.Avalonia
 open Fabulous.StackAllocatedCollections.StackList
 
 
-module MvuNumericUpDown =
-    let ValueChanged =
-        Attributes.Mvu.defineAvaloniaPropertyWithChangedEvent "NumericUpDown_ValueChanged" NumericUpDown.ValueProperty Option.toNullable Option.ofNullable
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type MvuNumericUpDown =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ValueChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<Fabulous.Avalonia.ValueEventData<(System.Decimal option), (System.Decimal option)>>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ValueChangedInit: bool
+
+    static member ValueChanged =
+        if not MvuNumericUpDown._ValueChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuNumericUpDown._ValueChangedInit then
+                    MvuNumericUpDown._ValueChanged <-
+                        Attributes.Mvu.defineAvaloniaPropertyWithChangedEvent "NumericUpDown_ValueChanged" NumericUpDown.ValueProperty Option.toNullable Option.ofNullable
+
+                    MvuNumericUpDown._ValueChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuNumericUpDown._ValueChanged
 
 [<AutoOpen>]
 module MvuNumericUpDownBuilders =

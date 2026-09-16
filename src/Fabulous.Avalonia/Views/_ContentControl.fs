@@ -16,10 +16,10 @@ module ContentControl =
         Attributes.defineAvaloniaProperty<string, obj> ContentControl.ContentProperty box ScalarAttributeComparers.equalityCompare
 
     let HorizontalContentAlignment =
-        Attributes.defineAvaloniaPropertyWithEquality ContentControl.HorizontalContentAlignmentProperty
+        Attributes.defineAvaloniaPropertyEnum ContentControl.HorizontalContentAlignmentProperty
 
     let VerticalContentAlignment =
-        Attributes.defineAvaloniaPropertyWithEquality ContentControl.VerticalContentAlignmentProperty
+        Attributes.defineAvaloniaPropertyEnum ContentControl.VerticalContentAlignmentProperty
 
 type ContentControlModifiers =
     /// <summary>Sets the HorizontalContentAlignment property.</summary>

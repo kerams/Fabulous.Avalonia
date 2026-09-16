@@ -13,7 +13,7 @@ module ListBox =
     let WidgetKey = Widgets.register<ListBox>()
 
     let SelectionMode =
-        Attributes.defineAvaloniaPropertyWithEquality ListBox.SelectionModeProperty
+        Attributes.defineAvaloniaPropertyEnum ListBox.SelectionModeProperty
 
     let SelectionModel =
         Attributes.defineAvaloniaPropertyWithEquality ListBox.SelectionProperty

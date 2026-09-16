@@ -16,7 +16,7 @@ module PolylineGeometry =
         Attributes.defineAvaloniaPropertyWithEquality PolylineGeometry.PointsProperty
 
     let IsFilled =
-        Attributes.defineAvaloniaPropertyWithEquality PolylineGeometry.IsFilledProperty
+        Attributes.defineAvaloniaPropertyBool PolylineGeometry.IsFilledProperty
 
 [<AutoOpen>]
 module PolylineGeometryBuilders =

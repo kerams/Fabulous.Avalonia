@@ -8,15 +8,73 @@ open Fabulous.Avalonia
 open Fabulous.StackAllocatedCollections.StackList
 
 
-module ComponentThumb =
-    let DragStarted =
-        Attributes.Mvu.defineEvent<VectorEventArgs> "Thumb_DragStarted" (fun target -> (target :?> Thumb).DragStarted)
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type ComponentThumb =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DragStarted: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Input.VectorEventArgs -> Fabulous.MsgValue)>
 
-    let DragDelta =
-        Attributes.Mvu.defineEvent<VectorEventArgs> "Thumb_DragDelta" (fun target -> (target :?> Thumb).DragDelta)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DragStartedInit: bool
 
-    let DragCompleted =
-        Attributes.Mvu.defineEvent<VectorEventArgs> "Thumb_DragCompleted" (fun target -> (target :?> Thumb).DragCompleted)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DragDelta: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Input.VectorEventArgs -> Fabulous.MsgValue)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DragDeltaInit: bool
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DragCompleted: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Input.VectorEventArgs -> Fabulous.MsgValue)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DragCompletedInit: bool
+
+    static member DragStarted =
+        if not ComponentThumb._DragStartedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentThumb._DragStartedInit then
+                    ComponentThumb._DragStarted <-
+                        Attributes.Mvu.defineEvent<VectorEventArgs> "Thumb_DragStarted" (fun target -> (target :?> Thumb).DragStarted)
+
+                    ComponentThumb._DragStartedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentThumb._DragStarted
+
+    static member DragDelta =
+        if not ComponentThumb._DragDeltaInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentThumb._DragDeltaInit then
+                    ComponentThumb._DragDelta <-
+                        Attributes.Mvu.defineEvent<VectorEventArgs> "Thumb_DragDelta" (fun target -> (target :?> Thumb).DragDelta)
+
+                    ComponentThumb._DragDeltaInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentThumb._DragDelta
+
+    static member DragCompleted =
+        if not ComponentThumb._DragCompletedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentThumb._DragCompletedInit then
+                    ComponentThumb._DragCompleted <-
+                        Attributes.Mvu.defineEvent<VectorEventArgs> "Thumb_DragCompleted" (fun target -> (target :?> Thumb).DragCompleted)
+
+                    ComponentThumb._DragCompletedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentThumb._DragCompleted
 
 type ComponentThumbModifiers =
 

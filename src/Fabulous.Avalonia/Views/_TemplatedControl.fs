@@ -32,16 +32,16 @@ module TemplatedControl =
         Attributes.defineAvaloniaPropertyWithEquality TemplatedControl.FontFamilyProperty
 
     let FontSize =
-        Attributes.defineAvaloniaPropertyWithEquality TemplatedControl.FontSizeProperty
+        Attributes.defineAvaloniaPropertyFloat TemplatedControl.FontSizeProperty
 
     let FontStyle =
-        Attributes.defineAvaloniaPropertyWithEquality TemplatedControl.FontStyleProperty
+        Attributes.defineAvaloniaPropertyEnum TemplatedControl.FontStyleProperty
 
     let FontWeight =
-        Attributes.defineAvaloniaPropertyWithEquality TemplatedControl.FontWeightProperty
+        Attributes.defineAvaloniaPropertyEnum TemplatedControl.FontWeightProperty
 
     let FontStretch =
-        Attributes.defineAvaloniaPropertyWithEquality TemplatedControl.FontStretchProperty
+        Attributes.defineAvaloniaPropertyEnum TemplatedControl.FontStretchProperty
 
     let ForegroundWidget =
         Attributes.defineAvaloniaPropertyWidget TemplatedControl.ForegroundProperty
@@ -53,12 +53,13 @@ module TemplatedControl =
         Attributes.defineAvaloniaPropertyWithEquality TemplatedControl.PaddingProperty
 
     let Template =
-        Attributes.defineSimpleScalar<Widget> "TemplatedControl_Template" ScalarAttributeComparers.equalityCompare (fun _ newValueOpt node ->
+        Attributes.defineSimpleScalar<Widget> "TemplatedControl_Template" ScalarAttributeComparers.equalityCompare (fun _ newValue node ->
             let templatedControl = node.Target :?> TemplatedControl
 
-            match newValueOpt with
-            | ValueNone -> templatedControl.ClearValue(TemplatedControl.TemplateProperty)
-            | ValueSome value ->
+            if not newValue.HasValue then
+                templatedControl.ClearValue(TemplatedControl.TemplateProperty)
+            else
+                let value = newValue.Value
                 templatedControl.SetValue(TemplatedControl.TemplateProperty, WidgetControlTemplate(node, value))
                 |> ignore)
 

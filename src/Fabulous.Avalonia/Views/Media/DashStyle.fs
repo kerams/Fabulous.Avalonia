@@ -14,17 +14,18 @@ module DashStyle =
     let WidgetKey = Widgets.register<DashStyle>()
 
     let Dashes =
-        Attributes.defineSimpleScalarWithEquality<float list> "DashStyle_Dashes" (fun _ newValueOpt node ->
+        Attributes.defineSimpleScalarWithEquality<float list> "DashStyle_Dashes" (fun _ newValue node ->
             let target = node.Target :?> AvaloniaObject
 
-            match newValueOpt with
-            | ValueNone -> target.ClearValue(DashStyle.DashesProperty)
-            | ValueSome points ->
+            if not newValue.HasValue then
+                target.ClearValue(DashStyle.DashesProperty)
+            else
+                let points = newValue.Value
                 let coll = AvaloniaList<float>()
                 points |> List.iter coll.Add
                 target.SetValue(DashStyle.DashesProperty, coll) |> ignore)
 
-    let Offset = Attributes.defineAvaloniaPropertyWithEquality DashStyle.OffsetProperty
+    let Offset = Attributes.defineAvaloniaPropertyFloat DashStyle.OffsetProperty
 
 [<AutoOpen>]
 module DashStyleBuilders =

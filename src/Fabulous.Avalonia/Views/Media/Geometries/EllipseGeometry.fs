@@ -16,10 +16,10 @@ module EllipseGeometry =
         Attributes.defineAvaloniaPropertyWithEquality EllipseGeometry.RectProperty
 
     let RadiusX =
-        Attributes.defineAvaloniaPropertyWithEquality EllipseGeometry.RadiusXProperty
+        Attributes.defineAvaloniaPropertyFloat EllipseGeometry.RadiusXProperty
 
     let RadiusY =
-        Attributes.defineAvaloniaPropertyWithEquality EllipseGeometry.RadiusYProperty
+        Attributes.defineAvaloniaPropertyFloat EllipseGeometry.RadiusYProperty
 
     let Center =
         Attributes.defineAvaloniaPropertyWithEquality EllipseGeometry.CenterProperty

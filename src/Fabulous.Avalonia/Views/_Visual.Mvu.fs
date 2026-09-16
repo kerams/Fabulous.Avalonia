@@ -6,12 +6,52 @@ open Avalonia.Media
 open Fabulous
 open Fabulous.Avalonia
 
-module MvuVisual =
-    let AttachedToVisualTree =
-        Attributes.Mvu.defineEvent "VisualAttachedToVisualTree" (fun target -> (target :?> Visual).AttachedToVisualTree)
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type MvuVisual =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _AttachedToVisualTree: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.VisualTreeAttachmentEventArgs -> Fabulous.MsgValue)>
 
-    let DetachedFromVisualTree =
-        Attributes.Mvu.defineEvent "VisualAttachedToVisualTree" (fun target -> (target :?> Visual).DetachedFromVisualTree)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _AttachedToVisualTreeInit: bool
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DetachedFromVisualTree: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.VisualTreeAttachmentEventArgs -> Fabulous.MsgValue)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DetachedFromVisualTreeInit: bool
+
+    static member AttachedToVisualTree =
+        if not MvuVisual._AttachedToVisualTreeInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuVisual._AttachedToVisualTreeInit then
+                    MvuVisual._AttachedToVisualTree <-
+                        Attributes.Mvu.defineEvent "VisualAttachedToVisualTree" (fun target -> (target :?> Visual).AttachedToVisualTree)
+
+                    MvuVisual._AttachedToVisualTreeInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuVisual._AttachedToVisualTree
+
+    static member DetachedFromVisualTree =
+        if not MvuVisual._DetachedFromVisualTreeInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuVisual._DetachedFromVisualTreeInit then
+                    MvuVisual._DetachedFromVisualTree <-
+                        Attributes.Mvu.defineEvent "VisualAttachedToVisualTree" (fun target -> (target :?> Visual).DetachedFromVisualTree)
+
+                    MvuVisual._DetachedFromVisualTreeInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuVisual._DetachedFromVisualTree
 
 type MvuVisualModifiers =
     /// <summary>Listens to the Visual AttachedToVisualTree event.</summary>

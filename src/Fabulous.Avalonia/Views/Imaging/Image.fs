@@ -19,10 +19,10 @@ module Image =
 
     let SourceWidget = Attributes.defineAvaloniaPropertyWidget Image.SourceProperty
 
-    let Stretch = Attributes.defineAvaloniaPropertyWithEquality Image.StretchProperty
+    let Stretch = Attributes.defineAvaloniaPropertyEnum Image.StretchProperty
 
     let StretchDirection =
-        Attributes.defineAvaloniaPropertyWithEquality Image.StretchDirectionProperty
+        Attributes.defineAvaloniaPropertyEnum Image.StretchDirectionProperty
 
     let BlendMode =
         Attributes.defineAvaloniaPropertyWithEquality Image.BlendModeProperty

@@ -9,13 +9,13 @@ type IFabDropShadowEffectBase =
 
 module DropShadowEffectBase =
     let BlurRadius =
-        Attributes.defineAvaloniaPropertyWithEquality DropShadowEffectBase.BlurRadiusProperty
+        Attributes.defineAvaloniaPropertyFloat DropShadowEffectBase.BlurRadiusProperty
 
     let Color =
         Attributes.defineAvaloniaPropertyWithEquality DropShadowEffectBase.ColorProperty
 
     let Opacity =
-        Attributes.defineAvaloniaPropertyWithEquality DropShadowEffectBase.OpacityProperty
+        Attributes.defineAvaloniaPropertyFloat DropShadowEffectBase.OpacityProperty
 
 type DropShadowEffectBaseModifiers =
     /// <summary>Sets the BlurRadius property.</summary>

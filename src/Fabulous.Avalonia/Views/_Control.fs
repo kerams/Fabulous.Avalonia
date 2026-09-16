@@ -24,7 +24,7 @@ module Control =
         Attributes.defineAvaloniaPropertyWidget Control.ContextFlyoutProperty
 
     let FlowDirection =
-        Attributes.defineAvaloniaPropertyWithEquality Control.FlowDirectionProperty
+        Attributes.defineAvaloniaPropertyEnum Control.FlowDirectionProperty
 
 type ControlModifiers =
     /// <summary>Sets the ContextFlyout property.</summary>

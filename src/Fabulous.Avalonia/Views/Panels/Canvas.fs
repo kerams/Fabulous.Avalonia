@@ -11,13 +11,13 @@ module Canvas =
 
     let WidgetKey = Widgets.register<Canvas>()
 
-    let Left = Attributes.defineAvaloniaPropertyWithEquality Canvas.LeftProperty
+    let Left = Attributes.defineAvaloniaPropertyFloat Canvas.LeftProperty
 
-    let Top = Attributes.defineAvaloniaPropertyWithEquality Canvas.TopProperty
+    let Top = Attributes.defineAvaloniaPropertyFloat Canvas.TopProperty
 
-    let Right = Attributes.defineAvaloniaPropertyWithEquality Canvas.RightProperty
+    let Right = Attributes.defineAvaloniaPropertyFloat Canvas.RightProperty
 
-    let Bottom = Attributes.defineAvaloniaPropertyWithEquality Canvas.BottomProperty
+    let Bottom = Attributes.defineAvaloniaPropertyFloat Canvas.BottomProperty
 
 [<AutoOpen>]
 module CanvasBuilders =

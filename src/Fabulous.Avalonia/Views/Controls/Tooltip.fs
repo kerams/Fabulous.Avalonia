@@ -17,28 +17,28 @@ module ToolTip =
     let TipString =
         Attributes.defineAvaloniaProperty<string, obj> ToolTip.TipProperty box ScalarAttributeComparers.equalityCompare
 
-    let IsOpen = Attributes.defineAvaloniaPropertyWithEquality ToolTip.IsOpenProperty
+    let IsOpen = Attributes.defineAvaloniaPropertyBool ToolTip.IsOpenProperty
 
     let Placement =
-        Attributes.defineAvaloniaPropertyWithEquality ToolTip.PlacementProperty
+        Attributes.defineAvaloniaPropertyEnum ToolTip.PlacementProperty
 
     let HorizontalOffset =
-        Attributes.defineAvaloniaPropertyWithEquality ToolTip.HorizontalOffsetProperty
+        Attributes.defineAvaloniaPropertyFloat ToolTip.HorizontalOffsetProperty
 
     let VerticalOffset =
-        Attributes.defineAvaloniaPropertyWithEquality ToolTip.VerticalOffsetProperty
+        Attributes.defineAvaloniaPropertyFloat ToolTip.VerticalOffsetProperty
 
     let ShowDelay =
-        Attributes.defineAvaloniaPropertyWithEquality ToolTip.ShowDelayProperty
+        Attributes.defineAvaloniaPropertyInt ToolTip.ShowDelayProperty
 
     let BetweenShowDelay =
-        Attributes.defineAvaloniaPropertyWithEquality ToolTip.BetweenShowDelayProperty
+        Attributes.defineAvaloniaPropertyInt ToolTip.BetweenShowDelayProperty
 
     let ShowOnDisabled =
-        Attributes.defineAvaloniaPropertyWithEquality ToolTip.ShowOnDisabledProperty
+        Attributes.defineAvaloniaPropertyBool ToolTip.ShowOnDisabledProperty
 
     let ServiceEnabled =
-        Attributes.defineAvaloniaPropertyWithEquality ToolTip.ServiceEnabledProperty
+        Attributes.defineAvaloniaPropertyBool ToolTip.ServiceEnabledProperty
 
     let CustomPopupPlacementCallback =
         Attributes.defineAvaloniaPropertyWithEquality ToolTip.CustomPopupPlacementCallbackProperty

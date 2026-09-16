@@ -6,9 +6,31 @@ open Fabulous
 open Fabulous.Avalonia
 open Fabulous.StackAllocatedCollections.StackList
 
-module ComponentButton =
-    let Clicked =
-        Attributes.Component.defineEvent "Button_Clicked" (fun target -> (target :?> Button).Click)
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type ComponentButton =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _Clicked: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Interactivity.RoutedEventArgs -> Microsoft.FSharp.Core.Unit)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ClickedInit: bool
+
+    static member Clicked =
+        if not ComponentButton._ClickedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentButton._ClickedInit then
+                    ComponentButton._Clicked <-
+                        Attributes.Component.defineEvent "Button_Clicked" (fun target -> (target :?> Button).Click)
+
+                    ComponentButton._ClickedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentButton._Clicked
 
 [<AutoOpen>]
 module ComponentButtonBuilders =

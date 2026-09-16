@@ -13,64 +13,64 @@ module TextBox =
     let WidgetKey = Widgets.register<TextBox>()
 
     let TextAlignment =
-        Attributes.defineAvaloniaPropertyWithEquality TextBox.TextAlignmentProperty
+        Attributes.defineAvaloniaPropertyEnum TextBox.TextAlignmentProperty
 
     let TextWrapping =
-        Attributes.defineAvaloniaPropertyWithEquality TextBox.TextWrappingProperty
+        Attributes.defineAvaloniaPropertyEnum TextBox.TextWrappingProperty
 
     let HorizontalContentAlignment =
-        Attributes.defineAvaloniaPropertyWithEquality TextBox.HorizontalContentAlignmentProperty
+        Attributes.defineAvaloniaPropertyEnum TextBox.HorizontalContentAlignmentProperty
 
     let VerticalContentAlignment =
-        Attributes.defineAvaloniaPropertyWithEquality TextBox.VerticalContentAlignmentProperty
+        Attributes.defineAvaloniaPropertyEnum TextBox.VerticalContentAlignmentProperty
 
     let AcceptsReturn =
-        Attributes.defineAvaloniaPropertyWithEquality TextBox.AcceptsReturnProperty
+        Attributes.defineAvaloniaPropertyBool TextBox.AcceptsReturnProperty
 
     let AcceptsTab =
-        Attributes.defineAvaloniaPropertyWithEquality TextBox.AcceptsTabProperty
+        Attributes.defineAvaloniaPropertyBool TextBox.AcceptsTabProperty
 
     let IsReadOnly =
-        Attributes.defineAvaloniaPropertyWithEquality TextBox.IsReadOnlyProperty
+        Attributes.defineAvaloniaPropertyBool TextBox.IsReadOnlyProperty
 
     let IsUndoEnabled =
-        Attributes.defineAvaloniaPropertyWithEquality TextBox.IsUndoEnabledProperty
+        Attributes.defineAvaloniaPropertyBool TextBox.IsUndoEnabledProperty
 
     let UndoLimit =
-        Attributes.defineAvaloniaPropertyWithEquality TextBox.UndoLimitProperty
+        Attributes.defineAvaloniaPropertyInt TextBox.UndoLimitProperty
 
     let LetterSpacing =
-        Attributes.defineAvaloniaPropertyWithEquality TextBox.LetterSpacingProperty
+        Attributes.defineAvaloniaPropertyFloat TextBox.LetterSpacingProperty
 
     let LineHeight =
-        Attributes.defineAvaloniaPropertyWithEquality TextBox.LineHeightProperty
+        Attributes.defineAvaloniaPropertyFloat TextBox.LineHeightProperty
 
     let MaxLength =
-        Attributes.defineAvaloniaPropertyWithEquality TextBox.MaxLengthProperty
+        Attributes.defineAvaloniaPropertyInt TextBox.MaxLengthProperty
 
     let MaxLines =
-        Attributes.defineAvaloniaPropertyWithEquality TextBox.MaxLinesProperty
+        Attributes.defineAvaloniaPropertyInt TextBox.MaxLinesProperty
 
     let PasswordChar =
         Attributes.defineAvaloniaPropertyWithEquality TextBox.PasswordCharProperty
 
     let RevealPassword =
-        Attributes.defineAvaloniaPropertyWithEquality TextBox.RevealPasswordProperty
+        Attributes.defineAvaloniaPropertyBool TextBox.RevealPasswordProperty
 
     let SelectionStart =
-        Attributes.defineAvaloniaPropertyWithEquality TextBox.SelectionStartProperty
+        Attributes.defineAvaloniaPropertyInt TextBox.SelectionStartProperty
 
     let SelectionEnd =
-        Attributes.defineAvaloniaPropertyWithEquality TextBox.SelectionEndProperty
+        Attributes.defineAvaloniaPropertyInt TextBox.SelectionEndProperty
 
     let PlaceholderText =
         Attributes.defineAvaloniaPropertyWithEquality TextBox.PlaceholderTextProperty
 
     let UseFloatingPlaceholder =
-        Attributes.defineAvaloniaPropertyWithEquality TextBox.UseFloatingPlaceholderProperty
+        Attributes.defineAvaloniaPropertyBool TextBox.UseFloatingPlaceholderProperty
 
     let CaretIndex =
-        Attributes.defineAvaloniaPropertyWithEquality TextBox.CaretIndexProperty
+        Attributes.defineAvaloniaPropertyInt TextBox.CaretIndexProperty
 
     let NewLine = Attributes.defineAvaloniaPropertyWithEquality TextBox.NewLineProperty
 

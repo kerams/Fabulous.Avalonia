@@ -16,34 +16,35 @@ module Shape =
 
     let Fill = Attributes.defineAvaloniaPropertyWithEquality Shape.FillProperty
 
-    let Stretch = Attributes.defineAvaloniaPropertyWithEquality Shape.StretchProperty
+    let Stretch = Attributes.defineAvaloniaPropertyEnum Shape.StretchProperty
 
     let StrokeWidget = Attributes.defineAvaloniaPropertyWidget Shape.StrokeProperty
 
     let Stroke = Attributes.defineAvaloniaPropertyWithEquality Shape.StrokeProperty
 
     let StrokeDashArray =
-        Attributes.defineSimpleScalarWithEquality<float list> "Shape_StrokeDashArray" (fun _ newValueOpt node ->
+        Attributes.defineSimpleScalarWithEquality<float list> "Shape_StrokeDashArray" (fun _ newValue node ->
             let target = node.Target :?> AvaloniaObject
 
-            match newValueOpt with
-            | ValueNone -> target.ClearValue(Shape.StrokeDashArrayProperty)
-            | ValueSome points ->
+            if not newValue.HasValue then
+                target.ClearValue(Shape.StrokeDashArrayProperty)
+            else
+                let points = newValue.Value
                 let coll = AvaloniaList<float>()
                 points |> List.iter coll.Add
                 target.SetValue(Shape.StrokeDashArrayProperty, coll) |> ignore)
 
     let StrokeDashOffset =
-        Attributes.defineAvaloniaPropertyWithEquality Shape.StrokeDashOffsetProperty
+        Attributes.defineAvaloniaPropertyFloat Shape.StrokeDashOffsetProperty
 
     let StrokeThickness =
-        Attributes.defineAvaloniaPropertyWithEquality Shape.StrokeThicknessProperty
+        Attributes.defineAvaloniaPropertyFloat Shape.StrokeThicknessProperty
 
     let StrokeLineCap =
-        Attributes.defineAvaloniaPropertyWithEquality Shape.StrokeLineCapProperty
+        Attributes.defineAvaloniaPropertyEnum Shape.StrokeLineCapProperty
 
     let StrokeJoin =
-        Attributes.defineAvaloniaPropertyWithEquality Shape.StrokeJoinProperty
+        Attributes.defineAvaloniaPropertyEnum Shape.StrokeJoinProperty
 
 type ShapeModifiers =
     /// <summary>Sets the Fill property.</summary>

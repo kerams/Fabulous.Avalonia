@@ -5,9 +5,31 @@ open Fabulous
 open Fabulous.StackAllocatedCollections.StackList
 open Fabulous.Avalonia
 
-module MvuMaskedTextBox =
-    let TextChanged =
-        Attributes.Mvu.defineAvaloniaPropertyWithChangedEvent' "MaskedTextBox_TextChanged" MaskedTextBox.TextProperty
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type MvuMaskedTextBox =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _TextChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<Fabulous.Avalonia.ValueEventData<string, string>>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _TextChangedInit: bool
+
+    static member TextChanged =
+        if not MvuMaskedTextBox._TextChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuMaskedTextBox._TextChangedInit then
+                    MvuMaskedTextBox._TextChanged <-
+                        Attributes.Mvu.defineAvaloniaPropertyWithChangedEvent' "MaskedTextBox_TextChanged" MaskedTextBox.TextProperty
+
+                    MvuMaskedTextBox._TextChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuMaskedTextBox._TextChanged
 
 [<AutoOpen>]
 module MvuMaskedTextBoxBuilders =

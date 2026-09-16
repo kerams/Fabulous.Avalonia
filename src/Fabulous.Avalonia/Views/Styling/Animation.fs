@@ -21,10 +21,10 @@ module Animation =
         Attributes.defineAvaloniaPropertyWithEquality Animation.IterationCountProperty
 
     let PlaybackDirection =
-        Attributes.defineAvaloniaPropertyWithEquality Animation.PlaybackDirectionProperty
+        Attributes.defineAvaloniaPropertyEnum Animation.PlaybackDirectionProperty
 
     let FillMode =
-        Attributes.defineAvaloniaPropertyWithEquality Animation.FillModeProperty
+        Attributes.defineAvaloniaPropertyEnum Animation.FillModeProperty
 
     let Easing = Attributes.defineAvaloniaPropertyWithEquality Animation.EasingProperty
 
@@ -34,7 +34,7 @@ module Animation =
         Attributes.defineAvaloniaPropertyWithEquality Animation.DelayBetweenIterationsProperty
 
     let SpeedRatio =
-        Attributes.defineAvaloniaPropertyWithEquality Animation.SpeedRatioProperty
+        Attributes.defineAvaloniaPropertyFloat Animation.SpeedRatioProperty
 
 type AnimationModifiers =
     /// <summary>Sets the IterationCount property to Infinite.</summary>

@@ -4,18 +4,94 @@ open System.Runtime.CompilerServices
 open Avalonia.Controls
 open Fabulous
 
-module MvuWindowBase =
-    let Activated =
-        Attributes.Mvu.defineEventNoArg "WindowBase_Activated" (fun target -> (target :?> WindowBase).Activated)
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type MvuWindowBase =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _Activated: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<Fabulous.MsgValue>
 
-    let Deactivated =
-        Attributes.Mvu.defineEventNoArg "WindowBase_Deactivated" (fun target -> (target :?> WindowBase).Deactivated)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ActivatedInit: bool
 
-    let PositionChanged =
-        Attributes.Mvu.defineEvent "WindowBase_PositionChanged" (fun target -> (target :?> WindowBase).PositionChanged)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _Deactivated: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<Fabulous.MsgValue>
 
-    let Resized =
-        Attributes.Mvu.defineEvent "WindowBase_Resized" (fun target -> (target :?> WindowBase).Resized)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DeactivatedInit: bool
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _PositionChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Controls.PixelPointEventArgs -> Fabulous.MsgValue)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _PositionChangedInit: bool
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _Resized: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Controls.WindowResizedEventArgs -> Fabulous.MsgValue)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ResizedInit: bool
+
+    static member Activated =
+        if not MvuWindowBase._ActivatedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuWindowBase._ActivatedInit then
+                    MvuWindowBase._Activated <-
+                        Attributes.Mvu.defineEventNoArg "WindowBase_Activated" (fun target -> (target :?> WindowBase).Activated)
+
+                    MvuWindowBase._ActivatedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuWindowBase._Activated
+
+    static member Deactivated =
+        if not MvuWindowBase._DeactivatedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuWindowBase._DeactivatedInit then
+                    MvuWindowBase._Deactivated <-
+                        Attributes.Mvu.defineEventNoArg "WindowBase_Deactivated" (fun target -> (target :?> WindowBase).Deactivated)
+
+                    MvuWindowBase._DeactivatedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuWindowBase._Deactivated
+
+    static member PositionChanged =
+        if not MvuWindowBase._PositionChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuWindowBase._PositionChangedInit then
+                    MvuWindowBase._PositionChanged <-
+                        Attributes.Mvu.defineEvent "WindowBase_PositionChanged" (fun target -> (target :?> WindowBase).PositionChanged)
+
+                    MvuWindowBase._PositionChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuWindowBase._PositionChanged
+
+    static member Resized =
+        if not MvuWindowBase._ResizedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuWindowBase._ResizedInit then
+                    MvuWindowBase._Resized <-
+                        Attributes.Mvu.defineEvent "WindowBase_Resized" (fun target -> (target :?> WindowBase).Resized)
+
+                    MvuWindowBase._ResizedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuWindowBase._Resized
 
 type MvuWindowBaseModifiers =
     /// <summary>Listens to the WindowBase Activated event.</summary>

@@ -6,22 +6,98 @@ open Avalonia.Controls
 open Fabulous
 open Fabulous.Avalonia
 
-module ComponentCalendarDatePicker =
-    let SelectedDateChanged =
-        Attributes.Component.defineAvaloniaPropertyWithChangedEvent
-            "CalendarDatePicker_SelectedDateChanged"
-            CalendarDatePicker.SelectedDateProperty
-            Option.toNullable
-            Option.ofNullable
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type ComponentCalendarDatePicker =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _SelectedDateChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<Fabulous.Avalonia.ComponentValueEventData<(System.DateTime option), (System.DateTime option)>>
 
-    let DateValidationError =
-        Attributes.Component.defineEvent "CalendarDatePicker_DateValidationError" (fun target -> (target :?> CalendarDatePicker).DateValidationError)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _SelectedDateChangedInit: bool
 
-    let CalendarClosed =
-        Attributes.Component.defineEventNoArg "CalendarDatePicker_CalendarClosed" (fun target -> (target :?> CalendarDatePicker).CalendarClosed)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DateValidationError: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Controls.CalendarDatePickerDateValidationErrorEventArgs -> Microsoft.FSharp.Core.Unit)>
 
-    let CalendarOpened =
-        Attributes.Component.defineEventNoArg "CalendarDatePicker_CalendarOpened" (fun target -> (target :?> CalendarDatePicker).CalendarOpened)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DateValidationErrorInit: bool
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _CalendarClosed: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Microsoft.FSharp.Core.Unit -> Microsoft.FSharp.Core.Unit)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _CalendarClosedInit: bool
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _CalendarOpened: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Microsoft.FSharp.Core.Unit -> Microsoft.FSharp.Core.Unit)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _CalendarOpenedInit: bool
+
+    static member SelectedDateChanged =
+        if not ComponentCalendarDatePicker._SelectedDateChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentCalendarDatePicker._SelectedDateChangedInit then
+                    ComponentCalendarDatePicker._SelectedDateChanged <-
+                        Attributes.Component.defineAvaloniaPropertyWithChangedEvent
+                            "CalendarDatePicker_SelectedDateChanged"
+                            CalendarDatePicker.SelectedDateProperty
+                            Option.toNullable
+                            Option.ofNullable
+
+                    ComponentCalendarDatePicker._SelectedDateChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentCalendarDatePicker._SelectedDateChanged
+
+    static member DateValidationError =
+        if not ComponentCalendarDatePicker._DateValidationErrorInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentCalendarDatePicker._DateValidationErrorInit then
+                    ComponentCalendarDatePicker._DateValidationError <-
+                        Attributes.Component.defineEvent "CalendarDatePicker_DateValidationError" (fun target -> (target :?> CalendarDatePicker).DateValidationError)
+
+                    ComponentCalendarDatePicker._DateValidationErrorInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentCalendarDatePicker._DateValidationError
+
+    static member CalendarClosed =
+        if not ComponentCalendarDatePicker._CalendarClosedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentCalendarDatePicker._CalendarClosedInit then
+                    ComponentCalendarDatePicker._CalendarClosed <-
+                        Attributes.Component.defineEventNoArg "CalendarDatePicker_CalendarClosed" (fun target -> (target :?> CalendarDatePicker).CalendarClosed)
+
+                    ComponentCalendarDatePicker._CalendarClosedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentCalendarDatePicker._CalendarClosed
+
+    static member CalendarOpened =
+        if not ComponentCalendarDatePicker._CalendarOpenedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentCalendarDatePicker._CalendarOpenedInit then
+                    ComponentCalendarDatePicker._CalendarOpened <-
+                        Attributes.Component.defineEventNoArg "CalendarDatePicker_CalendarOpened" (fun target -> (target :?> CalendarDatePicker).CalendarOpened)
+
+                    ComponentCalendarDatePicker._CalendarOpenedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentCalendarDatePicker._CalendarOpened
 
 [<AutoOpen>]
 module ComponentCalendarDatePickerBuilders =

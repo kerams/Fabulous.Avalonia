@@ -5,9 +5,31 @@ open Fabulous
 open Fabulous.Avalonia
 open Fabulous.StackAllocatedCollections.StackList
 
-module MvuToggleSplitButton =
-    let CheckedChanged =
-        Attributes.Mvu.defineAvaloniaPropertyWithChangedEvent' "ToggleSplitButton_CheckedChanged" ToggleSplitButton.IsCheckedProperty
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type MvuToggleSplitButton =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _CheckedChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<Fabulous.Avalonia.ValueEventData<bool, bool>>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _CheckedChangedInit: bool
+
+    static member CheckedChanged =
+        if not MvuToggleSplitButton._CheckedChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuToggleSplitButton._CheckedChangedInit then
+                    MvuToggleSplitButton._CheckedChanged <-
+                        Attributes.Mvu.defineAvaloniaPropertyWithChangedEvent' "ToggleSplitButton_CheckedChanged" ToggleSplitButton.IsCheckedProperty
+
+                    MvuToggleSplitButton._CheckedChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuToggleSplitButton._CheckedChanged
 
 [<AutoOpen>]
 module MvuToggleSplitButtonBuilders =

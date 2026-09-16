@@ -5,9 +5,31 @@ open Fabulous
 open Fabulous.Avalonia
 open Fabulous.StackAllocatedCollections.StackList
 
-module MvuButton =
-    let Clicked =
-        Attributes.Mvu.defineEvent "Button_Clicked" (fun target -> (target :?> Button).Click)
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type MvuButton =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _Clicked: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Interactivity.RoutedEventArgs -> Fabulous.MsgValue)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ClickedInit: bool
+
+    static member Clicked =
+        if not MvuButton._ClickedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuButton._ClickedInit then
+                    MvuButton._Clicked <-
+                        Attributes.Mvu.defineEvent "Button_Clicked" (fun target -> (target :?> Button).Click)
+
+                    MvuButton._ClickedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuButton._Clicked
 
 [<AutoOpen>]
 module MvuButtonBuilders =

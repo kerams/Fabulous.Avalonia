@@ -13,10 +13,10 @@ module ScaleTransform =
     let WidgetKey = Widgets.register<ScaleTransform>()
 
     let ScaleX =
-        Attributes.defineAvaloniaPropertyWithEquality ScaleTransform.ScaleXProperty
+        Attributes.defineAvaloniaPropertyFloat ScaleTransform.ScaleXProperty
 
     let ScaleY =
-        Attributes.defineAvaloniaPropertyWithEquality ScaleTransform.ScaleYProperty
+        Attributes.defineAvaloniaPropertyFloat ScaleTransform.ScaleYProperty
 
 [<AutoOpen>]
 module ScaleTransformBuilders =

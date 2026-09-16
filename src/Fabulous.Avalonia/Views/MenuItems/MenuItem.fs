@@ -22,10 +22,10 @@ module MenuItem =
         Attributes.defineAvaloniaPropertyWithEquality MenuItem.InputGestureProperty
 
     let StaysOpenOnClick =
-        Attributes.defineAvaloniaPropertyWithEquality MenuItem.StaysOpenOnClickProperty
+        Attributes.defineAvaloniaPropertyBool MenuItem.StaysOpenOnClickProperty
 
     let IsSubMenuOpen =
-        Attributes.defineAvaloniaPropertyWithEquality MenuItem.IsSubMenuOpenProperty
+        Attributes.defineAvaloniaPropertyBool MenuItem.IsSubMenuOpenProperty
 
 [<AutoOpen>]
 module MenuItemBuilders =

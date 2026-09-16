@@ -11,9 +11,9 @@ type IFabToggleButton =
 module ThreeState =
     let inline fromOption (value: bool option) =
         match value with
-        | Some true -> ValueSome(Nullable(true))
-        | Some false -> ValueSome(Nullable(false))
-        | None -> ValueNone
+        | Some true -> ScalarValue(Nullable(true))
+        | Some false -> ScalarValue(Nullable(false))
+        | None -> Unchecked.defaultof<ScalarValue<Nullable<bool>>>
 
     let inline fromOption' (value: bool option) =
         match value with
@@ -27,7 +27,7 @@ module ToggleButton =
     let WidgetKey = Widgets.register<ToggleButton>()
 
     let IsThreeState =
-        Attributes.defineAvaloniaPropertyWithEquality ToggleButton.IsThreeStateProperty
+        Attributes.defineAvaloniaPropertyBool ToggleButton.IsThreeStateProperty
 
 type ToggleButtonModifiers =
     /// <summary>Link a ViewRef to access the direct ToggleButton control instance.</summary>

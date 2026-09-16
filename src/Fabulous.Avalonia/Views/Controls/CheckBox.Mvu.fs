@@ -42,7 +42,7 @@ module MvuCheckBoxBuilders =
         /// <param name="fn">Raised when the ThreeStateCheckBox is clicked.</param>
         static member inline ThreeStateCheckBox(isChecked: bool option, fn: bool option -> 'msg) =
             let s1 = ToggleButton.IsThreeState.WithValue(true)
-            let s2 = MvuToggleButton.ThreeStateCheckedChanged.WithValue(ValueEventData.createVOption (ThreeState.fromOption(isChecked)) (ThreeState.toOption >> fn))
+            let s2 = MvuToggleButton.ThreeStateCheckedChanged.WithValue(ValueEventData.createOptional (ThreeState.fromOption(isChecked)) (ThreeState.toOption >> fn))
             let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
             WidgetBuilder<'msg, IFabCheckBox>(CheckBox.WidgetKey, &bundle)
 
@@ -53,7 +53,7 @@ module MvuCheckBoxBuilders =
         static member inline ThreeStateCheckBox(text: string, isChecked: bool option, fn: bool option -> 'msg) =
             let s1 = ToggleButton.IsThreeState.WithValue(true)
             let s2 = ContentControl.ContentString.WithValue(text)
-            let s3 = MvuToggleButton.ThreeStateCheckedChanged.WithValue(ValueEventData.createVOption (ThreeState.fromOption(isChecked)) (ThreeState.toOption >> fn))
+            let s3 = MvuToggleButton.ThreeStateCheckedChanged.WithValue(ValueEventData.createOptional (ThreeState.fromOption(isChecked)) (ThreeState.toOption >> fn))
             let bundle = AttributesBundle(StackList.three(s1, s2, s3), [||], [||])
             WidgetBuilder<'msg, IFabCheckBox>(CheckBox.WidgetKey, &bundle)
 
@@ -65,7 +65,7 @@ module MvuCheckBoxBuilders =
             let bundle = AttributesBundle(
                 StackList.two(
                     MvuToggleButton.ThreeStateCheckedChanged.WithValue(
-                        ValueEventData.createVOption (ThreeState.fromOption(isChecked)) (ThreeState.toOption >> fn)
+                        ValueEventData.createOptional (ThreeState.fromOption(isChecked)) (ThreeState.toOption >> fn)
                     ),
                     ToggleButton.IsThreeState.WithValue(true)
                 ),

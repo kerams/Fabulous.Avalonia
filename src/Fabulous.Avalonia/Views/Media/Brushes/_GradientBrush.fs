@@ -10,7 +10,7 @@ type IFabGradientBrush =
 module GradientBrush =
 
     let SpreadMethod =
-        Attributes.defineAvaloniaPropertyWithEquality GradientBrush.SpreadMethodProperty
+        Attributes.defineAvaloniaPropertyEnum GradientBrush.SpreadMethodProperty
 
 type GradientBrushModifiers =
 

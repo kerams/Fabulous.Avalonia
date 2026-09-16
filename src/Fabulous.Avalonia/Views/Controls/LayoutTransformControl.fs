@@ -19,7 +19,7 @@ module LayoutTransformControl =
         Attributes.defineAvaloniaPropertyWithEquality LayoutTransformControl.LayoutTransformProperty
 
     let UseRenderTransform =
-        Attributes.defineAvaloniaPropertyWithEquality LayoutTransformControl.UseRenderTransformProperty
+        Attributes.defineAvaloniaPropertyBool LayoutTransformControl.UseRenderTransformProperty
 
 [<AutoOpen>]
 module LayoutTransformControlBuilders =

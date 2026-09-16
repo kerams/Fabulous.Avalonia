@@ -13,7 +13,7 @@ module TextDecoration =
     let WidgetKey = Widgets.register<TextDecoration>()
 
     let Location =
-        Attributes.defineAvaloniaPropertyWithEquality TextDecoration.LocationProperty
+        Attributes.defineAvaloniaPropertyEnum TextDecoration.LocationProperty
 
     let StrokeWidget =
         Attributes.defineAvaloniaPropertyWidget TextDecoration.StrokeProperty
@@ -22,33 +22,34 @@ module TextDecoration =
         Attributes.defineAvaloniaPropertyWithEquality TextDecoration.StrokeProperty
 
     let StrokeThicknessUnit =
-        Attributes.defineAvaloniaPropertyWithEquality TextDecoration.StrokeThicknessUnitProperty
+        Attributes.defineAvaloniaPropertyEnum TextDecoration.StrokeThicknessUnitProperty
 
     let StrokeDashArray =
-        Attributes.defineSimpleScalarWithEquality<float list> "TextDecoration_StrokeDashArray" (fun _ newValueOpt node ->
+        Attributes.defineSimpleScalarWithEquality<float list> "TextDecoration_StrokeDashArray" (fun _ newValue node ->
             let target = node.Target :?> AvaloniaObject
 
-            match newValueOpt with
-            | ValueNone -> target.ClearValue(TextDecoration.StrokeDashArrayProperty)
-            | ValueSome points ->
+            if not newValue.HasValue then
+                target.ClearValue(TextDecoration.StrokeDashArrayProperty)
+            else
+                let points = newValue.Value
                 let coll = AvaloniaList<float>()
                 points |> List.iter coll.Add
                 target.SetValue(TextDecoration.StrokeDashArrayProperty, coll) |> ignore)
 
     let StrokeDashOffset =
-        Attributes.defineAvaloniaPropertyWithEquality TextDecoration.StrokeDashOffsetProperty
+        Attributes.defineAvaloniaPropertyFloat TextDecoration.StrokeDashOffsetProperty
 
     let StrokeThickness =
-        Attributes.defineAvaloniaPropertyWithEquality TextDecoration.StrokeThicknessProperty
+        Attributes.defineAvaloniaPropertyFloat TextDecoration.StrokeThicknessProperty
 
     let StrokeLineCap =
-        Attributes.defineAvaloniaPropertyWithEquality TextDecoration.StrokeLineCapProperty
+        Attributes.defineAvaloniaPropertyEnum TextDecoration.StrokeLineCapProperty
 
     let StrokeOffset =
-        Attributes.defineAvaloniaPropertyWithEquality TextDecoration.StrokeOffsetProperty
+        Attributes.defineAvaloniaPropertyFloat TextDecoration.StrokeOffsetProperty
 
     let StrokeOffsetUnit =
-        Attributes.defineAvaloniaPropertyWithEquality TextDecoration.StrokeOffsetUnitProperty
+        Attributes.defineAvaloniaPropertyEnum TextDecoration.StrokeOffsetUnitProperty
 
 [<AutoOpen>]
 module TextDecorationBuilders =

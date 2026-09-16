@@ -11,13 +11,13 @@ module ButtonSpinner =
     let WidgetKey = Widgets.register<ButtonSpinner>()
 
     let AllowSpin =
-        Attributes.defineAvaloniaPropertyWithEquality ButtonSpinner.AllowSpinProperty
+        Attributes.defineAvaloniaPropertyBool ButtonSpinner.AllowSpinProperty
 
     let ButtonSpinnerLocation =
-        Attributes.defineAvaloniaPropertyWithEquality ButtonSpinner.ButtonSpinnerLocationProperty
+        Attributes.defineAvaloniaPropertyEnum ButtonSpinner.ButtonSpinnerLocationProperty
 
     let ShowButtonSpinner =
-        Attributes.defineAvaloniaPropertyWithEquality ButtonSpinner.ShowButtonSpinnerProperty
+        Attributes.defineAvaloniaPropertyBool ButtonSpinner.ShowButtonSpinnerProperty
 
 type ButtonSpinnerModifiers =
 

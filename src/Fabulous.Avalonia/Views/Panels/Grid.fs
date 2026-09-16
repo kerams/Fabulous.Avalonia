@@ -21,12 +21,13 @@ type Dimension =
     | SharedSizeGroup of string
 
 module GridUpdaters =
-    let updateGridColumnDefinitions _ (newValueOpt: Dimension[] voption) (node: IViewNode) =
+    let updateGridColumnDefinitions _ (newValue: ScalarValue<Dimension[]>) (node: IViewNode) =
         let grid = node.Target :?> Grid
 
-        match newValueOpt with
-        | ValueNone -> grid.ColumnDefinitions.Clear()
-        | ValueSome coll ->
+        if not newValue.HasValue then
+            grid.ColumnDefinitions.Clear()
+        else
+            let coll = newValue.Value
             grid.ColumnDefinitions.Clear()
 
             for c in coll do
@@ -40,12 +41,13 @@ module GridUpdaters =
 
                 grid.ColumnDefinitions.Add(columnDef)
 
-    let updateGridRowDefinitions _ (newValueOpt: Dimension[] voption) (node: IViewNode) =
+    let updateGridRowDefinitions _ (newValue: ScalarValue<Dimension[]>) (node: IViewNode) =
         let grid = node.Target :?> Grid
 
-        match newValueOpt with
-        | ValueNone -> grid.RowDefinitions.Clear()
-        | ValueSome coll ->
+        if not newValue.HasValue then
+            grid.RowDefinitions.Clear()
+        else
+            let coll = newValue.Value
             grid.RowDefinitions.Clear()
 
             for c in coll do
@@ -69,25 +71,25 @@ module Grid =
         Attributes.defineSimpleScalarWithEquality<Dimension array> "Grid_RowDefinitions" GridUpdaters.updateGridRowDefinitions
 
     let ShowGridLines =
-        Attributes.defineAvaloniaPropertyWithEquality Grid.ShowGridLinesProperty
+        Attributes.defineAvaloniaPropertyBool Grid.ShowGridLinesProperty
 
-    let Column = Attributes.defineAvaloniaPropertyWithEquality Grid.ColumnProperty
+    let Column = Attributes.defineAvaloniaPropertyInt Grid.ColumnProperty
 
     let ColumnSpacing =
-        Attributes.defineAvaloniaPropertyWithEquality Grid.ColumnSpacingProperty
+        Attributes.defineAvaloniaPropertyFloat Grid.ColumnSpacingProperty
 
-    let Row = Attributes.defineAvaloniaPropertyWithEquality Grid.RowProperty
+    let Row = Attributes.defineAvaloniaPropertyInt Grid.RowProperty
 
     let RowSpacing =
-        Attributes.defineAvaloniaPropertyWithEquality Grid.RowSpacingProperty
+        Attributes.defineAvaloniaPropertyFloat Grid.RowSpacingProperty
 
     let ColumnSpan =
-        Attributes.defineAvaloniaPropertyWithEquality Grid.ColumnSpanProperty
+        Attributes.defineAvaloniaPropertyInt Grid.ColumnSpanProperty
 
-    let RowSpan = Attributes.defineAvaloniaPropertyWithEquality Grid.RowSpanProperty
+    let RowSpan = Attributes.defineAvaloniaPropertyInt Grid.RowSpanProperty
 
     let IsSharedSizeScope =
-        Attributes.defineAvaloniaPropertyWithEquality Grid.IsSharedSizeScopeProperty
+        Attributes.defineAvaloniaPropertyBool Grid.IsSharedSizeScopeProperty
 
 [<AutoOpen>]
 module GridBuilders =

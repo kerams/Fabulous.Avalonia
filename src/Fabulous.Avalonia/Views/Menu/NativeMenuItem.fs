@@ -25,13 +25,13 @@ module NativeMenuItem =
         Attributes.defineAvaloniaPropertyWithEquality NativeMenuItem.GestureProperty
 
     let IsChecked =
-        Attributes.defineAvaloniaPropertyWithEquality NativeMenuItem.IsCheckedProperty
+        Attributes.defineAvaloniaPropertyBool NativeMenuItem.IsCheckedProperty
 
     let ToggleType =
-        Attributes.defineAvaloniaPropertyWithEquality NativeMenuItem.ToggleTypeProperty
+        Attributes.defineAvaloniaPropertyEnum NativeMenuItem.ToggleTypeProperty
 
     let IsEnabled =
-        Attributes.defineAvaloniaPropertyWithEquality NativeMenuItem.IsEnabledProperty
+        Attributes.defineAvaloniaPropertyBool NativeMenuItem.IsEnabledProperty
 
     let ToolTip =
         Attributes.defineAvaloniaPropertyWithEquality NativeMenuItem.ToolTipProperty

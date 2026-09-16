@@ -27,16 +27,16 @@ module TextBlock =
         Attributes.defineAvaloniaPropertyWithEquality TextBlock.FontFamilyProperty
 
     let FontSize =
-        Attributes.defineAvaloniaPropertyWithEquality TextBlock.FontSizeProperty
+        Attributes.defineAvaloniaPropertyFloat TextBlock.FontSizeProperty
 
     let FontStyle =
-        Attributes.defineAvaloniaPropertyWithEquality TextBlock.FontStyleProperty
+        Attributes.defineAvaloniaPropertyEnum TextBlock.FontStyleProperty
 
     let FontWeight =
-        Attributes.defineAvaloniaPropertyWithEquality TextBlock.FontWeightProperty
+        Attributes.defineAvaloniaPropertyEnum TextBlock.FontWeightProperty
 
     let FontStretch =
-        Attributes.defineAvaloniaPropertyWithEquality TextBlock.FontStretchProperty
+        Attributes.defineAvaloniaPropertyEnum TextBlock.FontStretchProperty
 
     let ForegroundWidget =
         Attributes.defineAvaloniaPropertyWidget TextBlock.ForegroundProperty
@@ -45,30 +45,30 @@ module TextBlock =
         Attributes.defineAvaloniaPropertyWithEquality TextBlock.ForegroundProperty
 
     let BaseLineOffset =
-        Attributes.defineAvaloniaPropertyWithEquality TextBlock.BaselineOffsetProperty
+        Attributes.defineAvaloniaPropertyFloat TextBlock.BaselineOffsetProperty
 
     let LineHeight =
-        Attributes.defineAvaloniaPropertyWithEquality TextBlock.LineHeightProperty
+        Attributes.defineAvaloniaPropertyFloat TextBlock.LineHeightProperty
 
     let LetterSpacing =
-        Attributes.defineAvaloniaPropertyWithEquality TextBlock.LetterSpacingProperty
+        Attributes.defineAvaloniaPropertyFloat TextBlock.LetterSpacingProperty
 
     let MaxLines =
-        Attributes.defineAvaloniaPropertyWithEquality TextBlock.MaxLinesProperty
+        Attributes.defineAvaloniaPropertyInt TextBlock.MaxLinesProperty
 
     let Text = Attributes.defineAvaloniaPropertyWithEquality TextBlock.TextProperty
 
     let TextAlignment =
-        Attributes.defineAvaloniaPropertyWithEquality TextBlock.TextAlignmentProperty
+        Attributes.defineAvaloniaPropertyEnum TextBlock.TextAlignmentProperty
 
     let TextWrapping =
-        Attributes.defineAvaloniaPropertyWithEquality TextBlock.TextWrappingProperty
+        Attributes.defineAvaloniaPropertyEnum TextBlock.TextWrappingProperty
 
     let TextTrimming =
         Attributes.defineAvaloniaPropertyWithEquality TextBlock.TextTrimmingProperty
 
     let LineSpacing =
-        Attributes.defineAvaloniaPropertyWithEquality TextBlock.LineSpacingProperty
+        Attributes.defineAvaloniaPropertyFloat TextBlock.LineSpacingProperty
 
     let TextDecorations =
         Attributes.defineAvaloniaListWidgetCollection "TextBlock_TextDecorations" (fun target ->

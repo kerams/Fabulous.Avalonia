@@ -19,7 +19,7 @@ module CombinedGeometry =
         Attributes.defineAvaloniaPropertyWidget CombinedGeometry.Geometry2Property
 
     let GeometryCombineMode =
-        Attributes.defineAvaloniaPropertyWithEquality CombinedGeometry.GeometryCombineModeProperty
+        Attributes.defineAvaloniaPropertyEnum CombinedGeometry.GeometryCombineModeProperty
 
 [<AutoOpen>]
 module CombinedGeometryBuilders =

@@ -5,9 +5,31 @@ open Avalonia.Controls
 open Fabulous
 open Fabulous.Avalonia
 
-module ComponentComboBox =
-    let DropDownOpened =
-        Attributes.Component.defineAvaloniaPropertyWithChangedEvent' "Opened" ComboBox.IsDropDownOpenProperty
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type ComponentComboBox =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DropDownOpened: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<Fabulous.Avalonia.ComponentValueEventData<bool, bool>>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DropDownOpenedInit: bool
+
+    static member DropDownOpened =
+        if not ComponentComboBox._DropDownOpenedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentComboBox._DropDownOpenedInit then
+                    ComponentComboBox._DropDownOpened <-
+                        Attributes.Component.defineAvaloniaPropertyWithChangedEvent' "Opened" ComboBox.IsDropDownOpenProperty
+
+                    ComponentComboBox._DropDownOpenedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentComboBox._DropDownOpened
 
 type ComponentComboBoxModifiers =
     /// <summary>Listens to the ComboBox DropDownOpened event.</summary>

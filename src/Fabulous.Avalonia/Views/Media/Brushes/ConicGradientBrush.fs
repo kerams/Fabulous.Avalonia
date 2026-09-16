@@ -16,7 +16,7 @@ module ConicGradientBrush =
         Attributes.defineAvaloniaPropertyWithEquality ConicGradientBrush.CenterProperty
 
     let Angle =
-        Attributes.defineAvaloniaPropertyWithEquality ConicGradientBrush.AngleProperty
+        Attributes.defineAvaloniaPropertyFloat ConicGradientBrush.AngleProperty
 
 [<AutoOpen>]
 module ConicGradientBrushBuilders =

@@ -15,10 +15,10 @@ module ComboBox =
     let WidgetKey = Widgets.register<ComboBox>()
 
     let IsDropDownOpen =
-        Attributes.defineAvaloniaPropertyWithEquality ComboBox.IsDropDownOpenProperty
+        Attributes.defineAvaloniaPropertyBool ComboBox.IsDropDownOpenProperty
 
     let MaxDropDownHeight =
-        Attributes.defineAvaloniaPropertyWithEquality ComboBox.MaxDropDownHeightProperty
+        Attributes.defineAvaloniaPropertyFloat ComboBox.MaxDropDownHeightProperty
 
     let PlaceholderText =
         Attributes.defineAvaloniaPropertyWithEquality ComboBox.PlaceholderTextProperty
@@ -30,18 +30,19 @@ module ComboBox =
         Attributes.defineAvaloniaPropertyWithEquality ComboBox.PlaceholderForegroundProperty
 
     let HorizontalContentAlignment =
-        Attributes.defineAvaloniaPropertyWithEquality ComboBox.HorizontalContentAlignmentProperty
+        Attributes.defineAvaloniaPropertyEnum ComboBox.HorizontalContentAlignmentProperty
 
     let VerticalContentAlignment =
-        Attributes.defineAvaloniaPropertyWithEquality ComboBox.VerticalContentAlignmentProperty
+        Attributes.defineAvaloniaPropertyEnum ComboBox.VerticalContentAlignmentProperty
 
     let ItemTemplate =
-        Attributes.defineSimpleScalar<obj -> Widget> "ComboBox_ItemTemplate" ScalarAttributeComparers.physicalEqualityCompare (fun _ newValueOpt node ->
+        Attributes.defineSimpleScalar<obj -> Widget> "ComboBox_ItemTemplate" ScalarAttributeComparers.physicalEqualityCompare (fun _ newValue node ->
             let comboBox = node.Target :?> ComboBox
 
-            match newValueOpt with
-            | ValueNone -> comboBox.ClearValue(ComboBox.ItemTemplateProperty)
-            | ValueSome template ->
+            if not newValue.HasValue then
+                comboBox.ClearValue(ComboBox.ItemTemplateProperty)
+            else
+                let template = newValue.Value
                 comboBox.SetValue(ComboBox.ItemTemplateProperty, WidgetDataTemplate(node, template))
                 |> ignore)
 

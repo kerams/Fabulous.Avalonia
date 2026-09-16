@@ -13,13 +13,13 @@ module TabControl =
     let WidgetKey = Widgets.register<TabControl>()
 
     let TabStripPlacement =
-        Attributes.defineAvaloniaPropertyWithEquality TabControl.TabStripPlacementProperty
+        Attributes.defineAvaloniaPropertyEnum TabControl.TabStripPlacementProperty
 
     let HorizontalContentAlignment =
-        Attributes.defineAvaloniaPropertyWithEquality TabControl.HorizontalContentAlignmentProperty
+        Attributes.defineAvaloniaPropertyEnum TabControl.HorizontalContentAlignmentProperty
 
     let VerticalContentAlignment =
-        Attributes.defineAvaloniaPropertyWithEquality TabControl.VerticalContentAlignmentProperty
+        Attributes.defineAvaloniaPropertyEnum TabControl.VerticalContentAlignmentProperty
 
 
 [<AutoOpen>]

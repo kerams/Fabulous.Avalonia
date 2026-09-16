@@ -14,16 +14,16 @@ module SplitView =
     let WidgetKey = Widgets.register<SplitView>()
 
     let CompactPaneLength =
-        Attributes.defineAvaloniaPropertyWithEquality SplitView.CompactPaneLengthProperty
+        Attributes.defineAvaloniaPropertyFloat SplitView.CompactPaneLengthProperty
 
     let DisplayMode =
-        Attributes.defineAvaloniaPropertyWithEquality SplitView.DisplayModeProperty
+        Attributes.defineAvaloniaPropertyEnum SplitView.DisplayModeProperty
 
     let IsPaneOpen =
-        Attributes.defineAvaloniaPropertyWithEquality SplitView.IsPaneOpenProperty
+        Attributes.defineAvaloniaPropertyBool SplitView.IsPaneOpenProperty
 
     let OpenPaneLength =
-        Attributes.defineAvaloniaPropertyWithEquality SplitView.OpenPaneLengthProperty
+        Attributes.defineAvaloniaPropertyFloat SplitView.OpenPaneLengthProperty
 
     let PaneBackgroundWidget =
         Attributes.defineAvaloniaPropertyWidget SplitView.PaneBackgroundProperty
@@ -32,15 +32,15 @@ module SplitView =
         Attributes.defineAvaloniaPropertyWithEquality SplitView.PaneBackgroundProperty
 
     let PanePlacement =
-        Attributes.defineAvaloniaPropertyWithEquality SplitView.PanePlacementProperty
+        Attributes.defineAvaloniaPropertyEnum SplitView.PanePlacementProperty
 
     let Pane = Attributes.defineAvaloniaPropertyWidget SplitView.PaneProperty
 
     let UseLightDismissOverlayMode =
-        Attributes.defineAvaloniaPropertyWithEquality SplitView.UseLightDismissOverlayModeProperty
+        Attributes.defineAvaloniaPropertyBool SplitView.UseLightDismissOverlayModeProperty
 
     let ClosedPaneWidth =
-        Attributes.defineAvaloniaPropertyWithEquality SplitViewTemplateSettings.ClosedPaneWidthProperty
+        Attributes.defineAvaloniaPropertyFloat SplitViewTemplateSettings.ClosedPaneWidthProperty
 
     let PaneColumnGridLength =
         Attributes.defineAvaloniaPropertyWithEquality SplitViewTemplateSettings.PaneColumnGridLengthProperty

@@ -10,7 +10,7 @@ module AutomationProperties =
         Attributes.defineAvaloniaPropertyWithEquality AutomationProperties.AcceleratorKeyProperty
 
     let AccessibilityView =
-        Attributes.defineAvaloniaPropertyWithEquality AutomationProperties.AccessibilityViewProperty
+        Attributes.defineAvaloniaPropertyEnum AutomationProperties.AccessibilityViewProperty
 
     let AccessKey =
         Attributes.defineAvaloniaPropertyWithEquality AutomationProperties.AccessKeyProperty
@@ -25,16 +25,16 @@ module AutomationProperties =
         Attributes.defineAvaloniaPropertyWithEquality AutomationProperties.HelpTextProperty
 
     let IsIsColumnHeader =
-        Attributes.defineAvaloniaPropertyWithEquality AutomationProperties.IsColumnHeaderProperty
+        Attributes.defineAvaloniaPropertyBool AutomationProperties.IsColumnHeaderProperty
 
     let IsRequiredForForm =
-        Attributes.defineAvaloniaPropertyWithEquality AutomationProperties.IsRequiredForFormProperty
+        Attributes.defineAvaloniaPropertyBool AutomationProperties.IsRequiredForFormProperty
 
     let IsRowHeader =
-        Attributes.defineAvaloniaPropertyWithEquality AutomationProperties.IsRowHeaderProperty
+        Attributes.defineAvaloniaPropertyBool AutomationProperties.IsRowHeaderProperty
 
     let IsOffscreenBehavior =
-        Attributes.defineAvaloniaPropertyWithEquality AutomationProperties.IsOffscreenBehaviorProperty
+        Attributes.defineAvaloniaPropertyEnum AutomationProperties.IsOffscreenBehaviorProperty
 
     let ItemStatus =
         Attributes.defineAvaloniaPropertyWithEquality AutomationProperties.ItemStatusProperty
@@ -43,16 +43,16 @@ module AutomationProperties =
         Attributes.defineAvaloniaPropertyWithEquality AutomationProperties.ItemTypeProperty
 
     let LiveSetting =
-        Attributes.defineAvaloniaPropertyWithEquality AutomationProperties.LiveSettingProperty
+        Attributes.defineAvaloniaPropertyEnum AutomationProperties.LiveSettingProperty
 
     let Name =
         Attributes.defineAvaloniaPropertyWithEquality AutomationProperties.NameProperty
 
     let PositionInSet =
-        Attributes.defineAvaloniaPropertyWithEquality AutomationProperties.PositionInSetProperty
+        Attributes.defineAvaloniaPropertyInt AutomationProperties.PositionInSetProperty
 
     let SizeOfSet =
-        Attributes.defineAvaloniaPropertyWithEquality AutomationProperties.SizeOfSetProperty
+        Attributes.defineAvaloniaPropertyInt AutomationProperties.SizeOfSetProperty
 
 type AutomationPropertiesModifiers =
     /// <summary>Sets the AcceleratorKey property.</summary>

@@ -13,16 +13,16 @@ module ScrollBar =
     let WidgetKey = Widgets.register<ScrollBar>()
 
     let ViewportSize =
-        Attributes.defineAvaloniaPropertyWithEquality ScrollBar.ViewportSizeProperty
+        Attributes.defineAvaloniaPropertyFloat ScrollBar.ViewportSizeProperty
 
     let Visibility =
-        Attributes.defineAvaloniaPropertyWithEquality ScrollBar.VisibilityProperty
+        Attributes.defineAvaloniaPropertyEnum ScrollBar.VisibilityProperty
 
     let Orientation =
-        Attributes.defineAvaloniaPropertyWithEquality ScrollBar.OrientationProperty
+        Attributes.defineAvaloniaPropertyEnum ScrollBar.OrientationProperty
 
     let AllowAutoHide =
-        Attributes.defineAvaloniaPropertyWithEquality ScrollBar.AllowAutoHideProperty
+        Attributes.defineAvaloniaPropertyBool ScrollBar.AllowAutoHideProperty
 
     let HideDelay =
         Attributes.defineAvaloniaPropertyWithEquality ScrollBar.HideDelayProperty

@@ -7,21 +7,115 @@ open Avalonia.Media
 open Fabulous
 open Fabulous.Avalonia
 
-module MvuTopLevel =
-    let Opened =
-        Attributes.Mvu.defineEventNoArg "TopLevel_OpenedEvent" (fun target -> (target :?> TopLevel).Opened)
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type MvuTopLevel =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _Opened: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<Fabulous.MsgValue>
 
-    let Closed =
-        Attributes.Mvu.defineEventNoArg "TopLevel_ClosedEvent" (fun target -> (target :?> TopLevel).Closed)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _OpenedInit: bool
 
-    let ScalingChanged =
-        Attributes.Mvu.defineEventNoArg "TopLevel_ScalingChangedEvent" (fun target -> (target :?> TopLevel).ScalingChanged)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _Closed: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<Fabulous.MsgValue>
 
-    let BackRequested =
-        Attributes.Mvu.defineEvent "TopLevel_BackRequestedEvent" (fun target -> (target :?> TopLevel).BackRequested)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ClosedInit: bool
 
-    let ActualThemeVariantChanged =
-        Attributes.Mvu.defineEventNoArg "TopLevel_ThemeVariantChanged" (fun target -> (target :?> TopLevel).ActualThemeVariantChanged)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ScalingChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<Fabulous.MsgValue>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ScalingChangedInit: bool
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _BackRequested: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Interactivity.RoutedEventArgs -> Fabulous.MsgValue)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _BackRequestedInit: bool
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ActualThemeVariantChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<Fabulous.MsgValue>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ActualThemeVariantChangedInit: bool
+
+    static member Opened =
+        if not MvuTopLevel._OpenedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuTopLevel._OpenedInit then
+                    MvuTopLevel._Opened <-
+                        Attributes.Mvu.defineEventNoArg "TopLevel_OpenedEvent" (fun target -> (target :?> TopLevel).Opened)
+
+                    MvuTopLevel._OpenedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuTopLevel._Opened
+
+    static member Closed =
+        if not MvuTopLevel._ClosedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuTopLevel._ClosedInit then
+                    MvuTopLevel._Closed <-
+                        Attributes.Mvu.defineEventNoArg "TopLevel_ClosedEvent" (fun target -> (target :?> TopLevel).Closed)
+
+                    MvuTopLevel._ClosedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuTopLevel._Closed
+
+    static member ScalingChanged =
+        if not MvuTopLevel._ScalingChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuTopLevel._ScalingChangedInit then
+                    MvuTopLevel._ScalingChanged <-
+                        Attributes.Mvu.defineEventNoArg "TopLevel_ScalingChangedEvent" (fun target -> (target :?> TopLevel).ScalingChanged)
+
+                    MvuTopLevel._ScalingChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuTopLevel._ScalingChanged
+
+    static member BackRequested =
+        if not MvuTopLevel._BackRequestedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuTopLevel._BackRequestedInit then
+                    MvuTopLevel._BackRequested <-
+                        Attributes.Mvu.defineEvent "TopLevel_BackRequestedEvent" (fun target -> (target :?> TopLevel).BackRequested)
+
+                    MvuTopLevel._BackRequestedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuTopLevel._BackRequested
+
+    static member ActualThemeVariantChanged =
+        if not MvuTopLevel._ActualThemeVariantChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuTopLevel._ActualThemeVariantChangedInit then
+                    MvuTopLevel._ActualThemeVariantChanged <-
+                        Attributes.Mvu.defineEventNoArg "TopLevel_ThemeVariantChanged" (fun target -> (target :?> TopLevel).ActualThemeVariantChanged)
+
+                    MvuTopLevel._ActualThemeVariantChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuTopLevel._ActualThemeVariantChanged
 
 type MvuTopLevelModifiers =
     /// <summary>Listens to the TopLevel ThemeVariantChanged event.</summary>

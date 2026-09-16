@@ -41,19 +41,19 @@ module StyledElement =
         Attributes.defineAvaloniaPropertyWithEquality<TextInputReturnKeyType> TextInputOptions.ReturnKeyTypeProperty
 
     let Multiline =
-        Attributes.defineAvaloniaPropertyWithEquality TextInputOptions.MultilineProperty
+        Attributes.defineAvaloniaPropertyBool TextInputOptions.MultilineProperty
 
     let Lowercase =
-        Attributes.defineAvaloniaPropertyWithEquality TextInputOptions.LowercaseProperty
+        Attributes.defineAvaloniaPropertyBool TextInputOptions.LowercaseProperty
 
     let Uppercase =
-        Attributes.defineAvaloniaPropertyWithEquality TextInputOptions.UppercaseProperty
+        Attributes.defineAvaloniaPropertyBool TextInputOptions.UppercaseProperty
 
     let AutoCapitalization =
-        Attributes.defineAvaloniaPropertyWithEquality TextInputOptions.AutoCapitalizationProperty
+        Attributes.defineAvaloniaPropertyBool TextInputOptions.AutoCapitalizationProperty
 
     let IsSensitive =
-        Attributes.defineAvaloniaPropertyWithEquality TextInputOptions.IsSensitiveProperty
+        Attributes.defineAvaloniaPropertyBool TextInputOptions.IsSensitiveProperty
 
     let ShowSuggestions =
         Attributes.defineAvaloniaPropertyWithEquality TextInputOptions.ShowSuggestionsProperty
@@ -69,12 +69,13 @@ module StyledElement =
     //            target.Styles.Add(style))
 
     let ThemeKey =
-        Attributes.defineSimpleScalarWithEquality<string> "StyledElement_ThemeKey" (fun _ newValueOpt node ->
+        Attributes.defineSimpleScalarWithEquality<string> "StyledElement_ThemeKey" (fun _ newValue node ->
             let target = node.Target :?> StyledElement
 
-            match newValueOpt with
-            | ValueNone -> target.Theme <- null
-            | ValueSome themeKey ->
+            if not newValue.HasValue then
+                target.Theme <- null
+            else
+                let themeKey = newValue.Value
                 match Application.Current.Styles.TryGetResource(themeKey, null) with
                 | true, value ->
                     match value with

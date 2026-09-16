@@ -10,10 +10,10 @@ type IFabRepeatButton =
 module RepeatButton =
     let WidgetKey = Widgets.register<RepeatButton>()
 
-    let Delay = Attributes.defineAvaloniaPropertyWithEquality RepeatButton.DelayProperty
+    let Delay = Attributes.defineAvaloniaPropertyInt RepeatButton.DelayProperty
 
     let Interval =
-        Attributes.defineAvaloniaPropertyWithEquality RepeatButton.IntervalProperty
+        Attributes.defineAvaloniaPropertyInt RepeatButton.IntervalProperty
 
 type RepeatButtonModifiers =
     /// <summary>Sets the Delay property.</summary>

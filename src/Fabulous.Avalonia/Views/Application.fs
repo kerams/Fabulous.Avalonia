@@ -147,37 +147,6 @@ module ApplicationUpdaters =
 module Application =
     let WidgetKey = Widgets.register<FabApplication>()
 
-    let TrayIcons =
-        Attributes.defineAvaloniaListWidgetCollection "TrayIcon_TrayIcons" (fun target ->
-            let target = target :?> FabApplication
-            let trayIcons = TrayIcon.GetIcons(target)
-
-            if isNull trayIcons then
-                let trayIcons = TrayIcons()
-                TrayIcon.SetIcons(target, trayIcons)
-                trayIcons
-            else
-                trayIcons)
-
-    let Windows =
-        Attributes.defineAvaloniaListWidgetCollectionWithCustomDiff<FabWindow>
-            "Application_Windows"
-            (fun target -> (target :?> FabApplication).InternalWindows)
-            (fun target _ view ->
-                let app = target :?> FabApplication
-                let window = view :?> FabWindow
-                app.AddWindow(window))
-            (fun target _ view ->
-                let app = target :?> FabApplication
-                let window = view :?> FabWindow
-                app.RemoveWindow(window))
-            (fun target _ oldView newView ->
-                let app = target :?> FabApplication
-                let oldWindow = oldView :?> FabWindow
-                let newWindow = newView :?> FabWindow
-                app.RemoveWindow(oldWindow)
-                app.AddWindow(newWindow))
-
     let MainView =
         Attributes.defineWidget "MainView" ApplicationUpdaters.mainViewApplyDiff ApplicationUpdaters.mainViewUpdateNode
 
@@ -224,12 +193,6 @@ module Application =
 [<AutoOpen>]
 module ApplicationBuilders =
     type Fabulous.Avalonia.View with
-
-        /// <summary>Creates a DesktopApplication widget with a content widget.</summary>
-        static member DesktopApplication() =
-            let attr = Application.Windows
-            let bundle = AttributesBundle(StackList.empty(), [||], [||])
-            CollectionBuilder<'msg, IFabApplication, IFabWindow>(Application.WidgetKey, attr, bundle)
 
         /// <summary>Creates a SingleViewApplication widget with a content widget.</summary>
         /// <param name="view">The main View of the Application.</param>
@@ -300,42 +263,3 @@ type ApplicationModifiers =
     [<Extension>]
     static member inline reference(this: WidgetBuilder<'msg, IFabApplication>, value: ViewRef<FabApplication>) =
         this.AddScalar(ViewRefAttributes.ViewRef.WithValue(value.Unbox))
-
-type ApplicationYieldExtensions =
-    [<Extension>]
-    static member inline Yield(_: AttributeCollectionBuilder<'msg, #IFabApplication, IFabTrayIcon>, x: WidgetBuilder<'msg, #IFabTrayIcon>) : Content<'msg> =
-        { Widgets = MutStackArray1.One(x.Compile()) }
-
-    [<Extension>]
-    static member inline Yield
-        (_: AttributeCollectionBuilder<'msg, #IFabApplication, IFabTrayIcon>, x: WidgetBuilder<'msg, Memo.Memoized<#IFabTrayIcon>>)
-        : Content<'msg> =
-        { Widgets = MutStackArray1.One(x.Compile()) }
-
-    [<Extension>]
-    static member inline Yield<'msg, 'marker, 'itemType when 'msg: equality and 'marker :> IFabApplication and 'itemType :> IFabWindow>
-        (_: CollectionBuilder<'msg, 'marker, IFabWindow>, x: WidgetBuilder<'msg, 'itemType>)
-        : Content<'msg> =
-        { Widgets = MutStackArray1.One(x.Compile()) }
-
-    [<Extension>]
-    static member inline Yield<'msg, 'marker, 'itemType when 'msg: equality and 'marker :> IFabApplication and 'itemType :> IFabWindow>
-        (_: CollectionBuilder<'msg, 'marker, IFabWindow>, x: WidgetBuilder<'msg, Memo.Memoized<'itemType>>)
-        : Content<'msg> =
-        { Widgets = MutStackArray1.One(x.Compile()) }
-
-type TrayIconAttachedModifiers =
-    /// <summary>Sets the tray icons for the application.</summary>
-    /// <param name="this">Current widget.</param>
-    [<Extension>]
-    static member inline trayIcons<'msg, 'marker when 'msg: equality and 'marker :> IFabApplication>(this: WidgetBuilder<'msg, 'marker>) =
-        let attr = Application.TrayIcons
-        AttributeCollectionBuilder<'msg, 'marker, IFabTrayIcon>(&this, &attr)
-
-    /// <summary>Sets the tray icon for the application.</summary>
-    /// <param name="this">Current widget.</param>
-    /// <param name="trayIcon">The TrayIcon value</param>
-    [<Extension>]
-    static member inline trayIcon(this: WidgetBuilder<'msg, #IFabApplication>, trayIcon: WidgetBuilder<'msg, IFabTrayIcon>) =
-        let attr = Application.TrayIcons
-        AttributeCollectionBuilder<'msg, #IFabApplication, IFabTrayIcon>(&this, &attr) { trayIcon }

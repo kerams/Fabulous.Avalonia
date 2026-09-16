@@ -9,22 +9,22 @@ type IFabSelectingItemsControl =
 
 module SelectingItemsControl =
     let AutoScrollToSelectedItem =
-        Attributes.defineAvaloniaPropertyWithEquality SelectingItemsControl.AutoScrollToSelectedItemProperty
+        Attributes.defineAvaloniaPropertyBool SelectingItemsControl.AutoScrollToSelectedItemProperty
 
     let SelectedIndex =
-        Attributes.defineAvaloniaPropertyWithEquality SelectingItemsControl.SelectedIndexProperty
+        Attributes.defineAvaloniaPropertyInt SelectingItemsControl.SelectedIndexProperty
 
     let SelectedItem =
         Attributes.defineAvaloniaPropertyWithEquality SelectingItemsControl.SelectedItemProperty
 
     let IsTextSearchEnabled =
-        Attributes.defineAvaloniaPropertyWithEquality SelectingItemsControl.IsTextSearchEnabledProperty
+        Attributes.defineAvaloniaPropertyBool SelectingItemsControl.IsTextSearchEnabledProperty
 
     let WrapSelection =
-        Attributes.defineAvaloniaPropertyWithEquality SelectingItemsControl.WrapSelectionProperty
+        Attributes.defineAvaloniaPropertyBool SelectingItemsControl.WrapSelectionProperty
 
     let IsSelected =
-        Attributes.defineAvaloniaPropertyWithEquality SelectingItemsControl.IsSelectedProperty
+        Attributes.defineAvaloniaPropertyBool SelectingItemsControl.IsSelectedProperty
 
 type SelectingItemsControlModifiers =
     /// <summary>Sets the AutoScrollToSelectedItem property.</summary>

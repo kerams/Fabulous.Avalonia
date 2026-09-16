@@ -10,7 +10,7 @@ type IFabBrush =
 
 module Brush =
 
-    let Opacity = Attributes.defineAvaloniaPropertyWithEquality Brush.OpacityProperty
+    let Opacity = Attributes.defineAvaloniaPropertyFloat Brush.OpacityProperty
 
     let Transform = Attributes.defineAvaloniaPropertyWidget Brush.TransformProperty
 

@@ -12,10 +12,10 @@ module DropShadowDirectionEffect =
     let WidgetKey = Widgets.register<DropShadowDirectionEffect>()
 
     let ShadowDepth =
-        Attributes.defineAvaloniaPropertyWithEquality DropShadowDirectionEffect.ShadowDepthProperty
+        Attributes.defineAvaloniaPropertyFloat DropShadowDirectionEffect.ShadowDepthProperty
 
     let Direction =
-        Attributes.defineAvaloniaPropertyWithEquality DropShadowDirectionEffect.DirectionProperty
+        Attributes.defineAvaloniaPropertyFloat DropShadowDirectionEffect.DirectionProperty
 
 [<AutoOpen>]
 module DropShadowDirectionEffectBuilders =

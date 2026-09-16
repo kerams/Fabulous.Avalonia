@@ -11,7 +11,7 @@ type IFabBlurEffect =
 module BlurEffect =
     let WidgetKey = Widgets.register<BlurEffect>()
 
-    let Radius = Attributes.defineAvaloniaPropertyWithEquality BlurEffect.RadiusProperty
+    let Radius = Attributes.defineAvaloniaPropertyFloat BlurEffect.RadiusProperty
 
 [<AutoOpen>]
 module BlurEffectBuilders =

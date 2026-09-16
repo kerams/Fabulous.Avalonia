@@ -16,7 +16,7 @@ module HyperlinkButton =
         Attributes.defineAvaloniaPropertyWithEquality HyperlinkButton.NavigateUriProperty
 
     let IsVisited =
-        Attributes.defineAvaloniaPropertyWithEquality HyperlinkButton.IsVisitedProperty
+        Attributes.defineAvaloniaPropertyBool HyperlinkButton.IsVisitedProperty
 
 [<AutoOpen>]
 module HyperlinkButtonBuilders =

@@ -94,6 +94,7 @@
     <Compile Include="Views\Styling\Animation.fs" />
     <Compile Include="Views\Styling\Animation.Mvu.fs" />
     <Compile Include="Views\Styling\Animation.Components.fs" />
+    <Compile Include="Views\Styling\TransitionBase.fs" />
     <Compile Include="Views\Styling\Transition.fs" />
     <Compile Include="Views\Styling\Style.fs" />
     <Compile Include="Views\Media\_IDrawing.fs" />
@@ -344,6 +345,7 @@
     <Compile Include="Views\Panels\WrapPanel.fs" />
     <Compile Include="Views\Panels\UniformGrid.fs" />
     <Compile Include="Views\Application.fs" />
+    <Compile Include="Views\Application.Collections.fs" />
     <Compile Include="Views\Application.Mvu.fs" />
     <Compile Include="Views\Application.Components.fs" />
     <None Include="..\Fabulous.Avalonia.props">

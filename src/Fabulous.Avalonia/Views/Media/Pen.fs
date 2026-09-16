@@ -15,16 +15,16 @@ module Pen =
 
     let Brush = Attributes.defineAvaloniaPropertyWithEquality Pen.BrushProperty
 
-    let Thickness = Attributes.defineAvaloniaPropertyWithEquality Pen.ThicknessProperty
+    let Thickness = Attributes.defineAvaloniaPropertyFloat Pen.ThicknessProperty
 
     let DashStyle = Attributes.defineAvaloniaPropertyWidget Pen.DashStyleProperty
 
-    let LineCap = Attributes.defineAvaloniaPropertyWithEquality Pen.LineCapProperty
+    let LineCap = Attributes.defineAvaloniaPropertyEnum Pen.LineCapProperty
 
-    let LineJoin = Attributes.defineAvaloniaPropertyWithEquality Pen.LineJoinProperty
+    let LineJoin = Attributes.defineAvaloniaPropertyEnum Pen.LineJoinProperty
 
     let MiterLimit =
-        Attributes.defineAvaloniaPropertyWithEquality Pen.MiterLimitProperty
+        Attributes.defineAvaloniaPropertyFloat Pen.MiterLimitProperty
 
 [<AutoOpen>]
 module PenBuilders =

@@ -6,15 +6,73 @@ open Avalonia.Controls
 open Fabulous
 open Fabulous.Avalonia
 
-module MvuNativeMenu =
-    let Opening =
-        Attributes.Mvu.defineEvent "NativeMenu_Opening" (fun target -> (target :?> NativeMenu).Opening)
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type MvuNativeMenu =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _Opening: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(System.EventArgs -> Fabulous.MsgValue)>
 
-    let Closed =
-        Attributes.Mvu.defineEvent "NativeMenu_Opening" (fun target -> (target :?> NativeMenu).Closed)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _OpeningInit: bool
 
-    let NeedsUpdate =
-        Attributes.Mvu.defineEvent "NativeMenu_NeedsUpdate" (fun target -> (target :?> NativeMenu).NeedsUpdate)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _Closed: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(System.EventArgs -> Fabulous.MsgValue)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ClosedInit: bool
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _NeedsUpdate: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(System.EventArgs -> Fabulous.MsgValue)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _NeedsUpdateInit: bool
+
+    static member Opening =
+        if not MvuNativeMenu._OpeningInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuNativeMenu._OpeningInit then
+                    MvuNativeMenu._Opening <-
+                        Attributes.Mvu.defineEvent "NativeMenu_Opening" (fun target -> (target :?> NativeMenu).Opening)
+
+                    MvuNativeMenu._OpeningInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuNativeMenu._Opening
+
+    static member Closed =
+        if not MvuNativeMenu._ClosedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuNativeMenu._ClosedInit then
+                    MvuNativeMenu._Closed <-
+                        Attributes.Mvu.defineEvent "NativeMenu_Opening" (fun target -> (target :?> NativeMenu).Closed)
+
+                    MvuNativeMenu._ClosedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuNativeMenu._Closed
+
+    static member NeedsUpdate =
+        if not MvuNativeMenu._NeedsUpdateInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuNativeMenu._NeedsUpdateInit then
+                    MvuNativeMenu._NeedsUpdate <-
+                        Attributes.Mvu.defineEvent "NativeMenu_NeedsUpdate" (fun target -> (target :?> NativeMenu).NeedsUpdate)
+
+                    MvuNativeMenu._NeedsUpdateInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuNativeMenu._NeedsUpdate
 
 type MvuNativeMenuModifiers =
     /// <summary>Listens to the NativeMenu Opening event.</summary>

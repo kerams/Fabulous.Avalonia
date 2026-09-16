@@ -13,7 +13,7 @@ module RefreshVisualizer =
     let WidgetKey = Widgets.register<RefreshVisualizer>()
 
     let Orientation =
-        Attributes.defineAvaloniaPropertyWithEquality RefreshVisualizer.OrientationProperty
+        Attributes.defineAvaloniaPropertyEnum RefreshVisualizer.OrientationProperty
 
 [<AutoOpen>]
 module RefreshVisualizerBuilders =

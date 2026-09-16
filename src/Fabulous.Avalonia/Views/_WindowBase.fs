@@ -10,7 +10,7 @@ type IFabWindowBase =
 module WindowBase =
 
     let Topmost =
-        Attributes.defineAvaloniaPropertyWithEquality WindowBase.TopmostProperty
+        Attributes.defineAvaloniaPropertyBool WindowBase.TopmostProperty
 
 type WindowBaseModifiers =
     /// <summary>Sets the Topmost property.</summary>

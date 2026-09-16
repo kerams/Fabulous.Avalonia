@@ -42,20 +42,19 @@ module ComponentAttributes =
                         ScalarAttributeComparison.Identical
                     else
                         ScalarAttributeComparison.Different),
-                (fun (_oldValueOpt: OnReceiveValue voption) (newValueOpt: OnReceiveValue voption) (node: IViewNode) ->
-                    match newValueOpt with
-                    | ValueNone ->
+                (fun (_oldValue: ScalarValue<OnReceiveValue>) (newValue: ScalarValue<OnReceiveValue>) (node: IViewNode) ->
+                    if not newValue.HasValue then
                         match node.TryGetHandler(OnReceiveHandlerKey) with
-                        | ValueSome d ->
+                        | null -> ()
+                        | d ->
                             d.Dispose()
                             node.RemoveHandler(OnReceiveHandlerKey)
-                        | ValueNone -> ()
-                    | ValueSome value ->
-                        let newDisp = value.Subscribe node
+                    else
+                        let newDisp = newValue.Value.Subscribe node
 
                         match node.TryGetHandler(OnReceiveHandlerKey) with
-                        | ValueSome oldDisp -> oldDisp.Dispose()
-                        | ValueNone -> ()
+                        | null -> ()
+                        | oldDisp -> oldDisp.Dispose()
 
                         node.SetHandler(OnReceiveHandlerKey, newDisp))
             )

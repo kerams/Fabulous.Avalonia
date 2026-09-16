@@ -5,9 +5,31 @@ open Avalonia.Animation
 open Fabulous
 open Fabulous.Avalonia
 
-module ComponentAnimation =
-    let Children =
-        Attributes.defineAvaloniaListWidgetCollection "Animation_KeyFramesProperty" (fun target -> (target :?> Animation).Children)
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type ComponentAnimation =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _Children: Fabulous.WidgetCollectionAttributeDefinitions.WidgetCollectionAttributeDefinition
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ChildrenInit: bool
+
+    static member Children =
+        if not ComponentAnimation._ChildrenInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentAnimation._ChildrenInit then
+                    ComponentAnimation._Children <-
+                        Attributes.defineAvaloniaListWidgetCollection "Animation_KeyFramesProperty" (fun target -> (target :?> Animation).Children)
+
+                    ComponentAnimation._ChildrenInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentAnimation._Children
 
 [<AutoOpen>]
 module ComponentAnimationBuilders =

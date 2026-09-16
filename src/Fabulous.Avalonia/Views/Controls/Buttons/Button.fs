@@ -12,15 +12,15 @@ module Button =
     let WidgetKey = Widgets.register<Button>()
 
     let ClickMode =
-        Attributes.defineAvaloniaPropertyWithEquality Button.ClickModeProperty
+        Attributes.defineAvaloniaPropertyEnum Button.ClickModeProperty
 
 
     let HotKey = Attributes.defineAvaloniaPropertyWithEquality Button.HotKeyProperty
 
     let IsDefault =
-        Attributes.defineAvaloniaPropertyWithEquality Button.IsDefaultProperty
+        Attributes.defineAvaloniaPropertyBool Button.IsDefaultProperty
 
-    let IsCancel = Attributes.defineAvaloniaPropertyWithEquality Button.IsCancelProperty
+    let IsCancel = Attributes.defineAvaloniaPropertyBool Button.IsCancelProperty
 
     let Flyout = Attributes.defineAvaloniaPropertyWidget Button.FlyoutProperty
 

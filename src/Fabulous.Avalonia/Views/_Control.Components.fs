@@ -7,22 +7,115 @@ open Fabulous
 open Fabulous.Avalonia
 open Avalonia.Input
 
-module ComponentControl =
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type ComponentControl =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _RequestBringIntoView: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Controls.RequestBringIntoViewEventArgs -> Microsoft.FSharp.Core.Unit)>
 
-    let RequestBringIntoView =
-        Attributes.Component.defineRoutedEvent "Control_RequestBringIntoView" Control.RequestBringIntoViewEvent
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _RequestBringIntoViewInit: bool
 
-    let ContextRequested =
-        Attributes.Component.defineEvent "Control_ContextRequested" (fun target -> (target :?> Control).ContextRequested)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ContextRequested: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Input.ContextRequestedEventArgs -> Microsoft.FSharp.Core.Unit)>
 
-    let Loaded =
-        Attributes.Component.defineEvent "Control_Loaded" (fun target -> (target :?> Control).Loaded)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ContextRequestedInit: bool
 
-    let UnLoaded =
-        Attributes.Component.defineEvent "Control_UnLoaded" (fun target -> (target :?> Control).Unloaded)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _Loaded: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Interactivity.RoutedEventArgs -> Microsoft.FSharp.Core.Unit)>
 
-    let SizeChanged =
-        Attributes.Component.defineEvent "Control_SizeChanged" (fun target -> (target :?> Control).SizeChanged)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _LoadedInit: bool
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _UnLoaded: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Interactivity.RoutedEventArgs -> Microsoft.FSharp.Core.Unit)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _UnLoadedInit: bool
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _SizeChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Controls.SizeChangedEventArgs -> Microsoft.FSharp.Core.Unit)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _SizeChangedInit: bool
+
+    static member RequestBringIntoView =
+        if not ComponentControl._RequestBringIntoViewInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentControl._RequestBringIntoViewInit then
+                    ComponentControl._RequestBringIntoView <-
+                        Attributes.Component.defineRoutedEvent "Control_RequestBringIntoView" Control.RequestBringIntoViewEvent
+
+                    ComponentControl._RequestBringIntoViewInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentControl._RequestBringIntoView
+
+    static member ContextRequested =
+        if not ComponentControl._ContextRequestedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentControl._ContextRequestedInit then
+                    ComponentControl._ContextRequested <-
+                        Attributes.Component.defineEvent "Control_ContextRequested" (fun target -> (target :?> Control).ContextRequested)
+
+                    ComponentControl._ContextRequestedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentControl._ContextRequested
+
+    static member Loaded =
+        if not ComponentControl._LoadedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentControl._LoadedInit then
+                    ComponentControl._Loaded <-
+                        Attributes.Component.defineEvent "Control_Loaded" (fun target -> (target :?> Control).Loaded)
+
+                    ComponentControl._LoadedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentControl._Loaded
+
+    static member UnLoaded =
+        if not ComponentControl._UnLoadedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentControl._UnLoadedInit then
+                    ComponentControl._UnLoaded <-
+                        Attributes.Component.defineEvent "Control_UnLoaded" (fun target -> (target :?> Control).Unloaded)
+
+                    ComponentControl._UnLoadedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentControl._UnLoaded
+
+    static member SizeChanged =
+        if not ComponentControl._SizeChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentControl._SizeChangedInit then
+                    ComponentControl._SizeChanged <-
+                        Attributes.Component.defineEvent "Control_SizeChanged" (fun target -> (target :?> Control).SizeChanged)
+
+                    ComponentControl._SizeChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentControl._SizeChanged
 
 type ComponentControlModifiers =
     /// <summary>Listens to the Control ContextRequested event.</summary>

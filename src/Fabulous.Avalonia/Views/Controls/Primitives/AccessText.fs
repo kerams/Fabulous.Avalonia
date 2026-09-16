@@ -12,7 +12,7 @@ module AccessText =
     let WidgetKey = Widgets.register<AccessText>()
 
     let ShowAccessKey =
-        Attributes.defineAvaloniaPropertyWithEquality AccessText.ShowAccessKeyProperty
+        Attributes.defineAvaloniaPropertyBool AccessText.ShowAccessKeyProperty
 
 [<AutoOpen>]
 module AccessTextBuilders =

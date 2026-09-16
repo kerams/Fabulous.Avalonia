@@ -13,12 +13,13 @@ module Polygon =
     let WidgetKey = Widgets.register<Polygon>()
 
     let Points =
-        Attributes.defineSimpleScalarWithEquality<Point list> "Polygon_Points" (fun _ newValueOpt node ->
+        Attributes.defineSimpleScalarWithEquality<Point list> "Polygon_Points" (fun _ newValue node ->
             let target = node.Target :?> AvaloniaObject
 
-            match newValueOpt with
-            | ValueNone -> target.ClearValue(Polygon.PointsProperty)
-            | ValueSome points ->
+            if not newValue.HasValue then
+                target.ClearValue(Polygon.PointsProperty)
+            else
+                let points = newValue.Value
                 let coll = List<Point>()
                 points |> List.iter coll.Add
                 target.SetValue(Polygon.PointsProperty, coll) |> ignore)

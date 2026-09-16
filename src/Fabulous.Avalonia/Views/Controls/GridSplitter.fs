@@ -11,19 +11,19 @@ module GridSplitter =
     let WidgetKey = Widgets.register<GridSplitter>()
 
     let ResizeDirection =
-        Attributes.defineAvaloniaPropertyWithEquality GridSplitter.ResizeDirectionProperty
+        Attributes.defineAvaloniaPropertyEnum GridSplitter.ResizeDirectionProperty
 
     let ResizeBehavior =
-        Attributes.defineAvaloniaPropertyWithEquality GridSplitter.ResizeBehaviorProperty
+        Attributes.defineAvaloniaPropertyEnum GridSplitter.ResizeBehaviorProperty
 
     let ShowsPreview =
-        Attributes.defineAvaloniaPropertyWithEquality GridSplitter.ShowsPreviewProperty
+        Attributes.defineAvaloniaPropertyBool GridSplitter.ShowsPreviewProperty
 
     let KeyboardIncrement =
-        Attributes.defineAvaloniaPropertyWithEquality GridSplitter.KeyboardIncrementProperty
+        Attributes.defineAvaloniaPropertyFloat GridSplitter.KeyboardIncrementProperty
 
     let DragIncrement =
-        Attributes.defineAvaloniaPropertyWithEquality GridSplitter.DragIncrementProperty
+        Attributes.defineAvaloniaPropertyFloat GridSplitter.DragIncrementProperty
 
 [<AutoOpen>]
 module GridSplitterBuilders =

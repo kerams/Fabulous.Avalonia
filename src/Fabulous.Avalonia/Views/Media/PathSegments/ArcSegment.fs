@@ -13,17 +13,17 @@ module ArcSegment =
     let WidgetKey = Widgets.register<ArcSegment>()
 
     let IsLargeArc =
-        Attributes.defineAvaloniaPropertyWithEquality ArcSegment.IsLargeArcProperty
+        Attributes.defineAvaloniaPropertyBool ArcSegment.IsLargeArcProperty
 
     let Point = Attributes.defineAvaloniaPropertyWithEquality ArcSegment.PointProperty
 
     let RotationAngle =
-        Attributes.defineAvaloniaPropertyWithEquality ArcSegment.RotationAngleProperty
+        Attributes.defineAvaloniaPropertyFloat ArcSegment.RotationAngleProperty
 
     let Size = Attributes.defineAvaloniaPropertyWithEquality ArcSegment.SizeProperty
 
     let SweepDirection =
-        Attributes.defineAvaloniaPropertyWithEquality ArcSegment.SweepDirectionProperty
+        Attributes.defineAvaloniaPropertyEnum ArcSegment.SweepDirectionProperty
 
 [<AutoOpen>]
 module ArcSegmentBuilders =

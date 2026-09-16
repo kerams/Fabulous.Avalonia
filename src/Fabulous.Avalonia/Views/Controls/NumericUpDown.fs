@@ -9,14 +9,14 @@ open System.Globalization
 open System.Runtime.CompilerServices
 
 module NumericUpDownUpdaters =
-    let updateNumericUpDownMinMax _ (newValueOpt: struct (decimal * decimal) voption) (node: IViewNode) =
+    let updateNumericUpDownMinMax _ (newValue: ScalarValue<struct (decimal * decimal)>) (node: IViewNode) =
         let numericUpDown = node.Target :?> NumericUpDown
 
-        match newValueOpt with
-        | ValueNone ->
+        if not newValue.HasValue then
             numericUpDown.ClearValue(NumericUpDown.MinimumProperty)
             numericUpDown.ClearValue(NumericUpDown.MaximumProperty)
-        | ValueSome(min, max) ->
+        else
+            let struct (min, max) = newValue.Value
             let currMax = numericUpDown.GetValue(NumericUpDown.MaximumProperty)
 
             if min > currMax then
@@ -36,28 +36,28 @@ module NumericUpDown =
         Attributes.defineSimpleScalarWithEquality<struct (decimal * decimal)> "NumericUpDown_MinimumMaximum" NumericUpDownUpdaters.updateNumericUpDownMinMax
 
     let AllowSpin =
-        Attributes.defineAvaloniaPropertyWithEquality NumericUpDown.AllowSpinProperty
+        Attributes.defineAvaloniaPropertyBool NumericUpDown.AllowSpinProperty
 
     let ButtonSpinnerLocation =
-        Attributes.defineAvaloniaPropertyWithEquality NumericUpDown.ButtonSpinnerLocationProperty
+        Attributes.defineAvaloniaPropertyEnum NumericUpDown.ButtonSpinnerLocationProperty
 
     let ClipValueToMinMax =
-        Attributes.defineAvaloniaPropertyWithEquality NumericUpDown.ClipValueToMinMaxProperty
+        Attributes.defineAvaloniaPropertyBool NumericUpDown.ClipValueToMinMaxProperty
 
     let FormatString =
         Attributes.defineAvaloniaPropertyWithEquality NumericUpDown.FormatStringProperty
 
     let HorizontalContentAlignment =
-        Attributes.defineAvaloniaPropertyWithEquality NumericUpDown.HorizontalContentAlignmentProperty
+        Attributes.defineAvaloniaPropertyEnum NumericUpDown.HorizontalContentAlignmentProperty
 
     let VerticalContentAlignment =
-        Attributes.defineAvaloniaPropertyWithEquality NumericUpDown.VerticalContentAlignmentProperty
+        Attributes.defineAvaloniaPropertyEnum NumericUpDown.VerticalContentAlignmentProperty
 
     let Increment =
         Attributes.defineAvaloniaPropertyWithEquality NumericUpDown.IncrementProperty
 
     let IsReadOnly =
-        Attributes.defineAvaloniaPropertyWithEquality NumericUpDown.IsReadOnlyProperty
+        Attributes.defineAvaloniaPropertyBool NumericUpDown.IsReadOnlyProperty
 
     let Maximum =
         Attributes.defineAvaloniaPropertyWithEquality NumericUpDown.MaximumProperty
@@ -72,7 +72,7 @@ module NumericUpDown =
         Attributes.defineAvaloniaPropertyWithEquality NumericUpDown.ParsingNumberStyleProperty
 
     let ShowButtonSpinner =
-        Attributes.defineAvaloniaPropertyWithEquality NumericUpDown.ShowButtonSpinnerProperty
+        Attributes.defineAvaloniaPropertyBool NumericUpDown.ShowButtonSpinnerProperty
 
     let Text = Attributes.defineAvaloniaPropertyWithEquality NumericUpDown.TextProperty
 
@@ -83,7 +83,7 @@ module NumericUpDown =
         Attributes.defineAvaloniaPropertyWithEquality NumericUpDown.PlaceholderTextProperty
 
     let TextAlignment =
-        Attributes.defineAvaloniaPropertyWithEquality NumericUpDown.TextAlignmentProperty
+        Attributes.defineAvaloniaPropertyEnum NumericUpDown.TextAlignmentProperty
 
 
 type NumericUpDownModifiers =

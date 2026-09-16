@@ -13,19 +13,19 @@ module ProgressBar =
     let WidgetKey = Widgets.register<ProgressBar>()
 
     let IsIndeterminate =
-        Attributes.defineAvaloniaPropertyWithEquality ProgressBar.IsIndeterminateProperty
+        Attributes.defineAvaloniaPropertyBool ProgressBar.IsIndeterminateProperty
 
     let Orientation =
-        Attributes.defineAvaloniaPropertyWithEquality ProgressBar.OrientationProperty
+        Attributes.defineAvaloniaPropertyEnum ProgressBar.OrientationProperty
 
     let Percentage =
-        Attributes.defineAvaloniaPropertyWithEquality ProgressBar.PercentageProperty
+        Attributes.defineAvaloniaPropertyFloat ProgressBar.PercentageProperty
 
     let ProgressTextFormat =
         Attributes.defineAvaloniaPropertyWithEquality ProgressBar.ProgressTextFormatProperty
 
     let ShowProgressText =
-        Attributes.defineAvaloniaPropertyWithEquality ProgressBar.ShowProgressTextProperty
+        Attributes.defineAvaloniaPropertyBool ProgressBar.ShowProgressTextProperty
 
 type ProgressBarModifiers =
     /// <summary>Sets the IsIndeterminate property.</summary>

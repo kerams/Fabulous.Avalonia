@@ -26,7 +26,7 @@ module RadioButtonBuilders =
             let s1 = ToggleButton.IsThreeState.WithValue(true)
             let s2 = ContentControl.ContentString.WithValue(text)
             let s3 = ComponentToggleButton.ThreeStateCheckedChanged.WithValue(
-                        ComponentValueEventData.createVOption (ThreeState.fromOption(isChecked)) (ThreeState.toOption >> fn)
+                        ComponentValueEventData.createOptional (ThreeState.fromOption(isChecked)) (ThreeState.toOption >> fn)
                      )
             let bundle = AttributesBundle(StackList.three(s1, s2, s3), [||], [||])
             WidgetBuilder<'msg, IFabRadioButton>(RadioButton.WidgetKey, &bundle)
@@ -51,7 +51,7 @@ module RadioButtonBuilders =
             let bundle = AttributesBundle(
                 StackList.two(
                     ComponentToggleButton.ThreeStateCheckedChanged.WithValue(
-                        ComponentValueEventData.createVOption (ThreeState.fromOption(isChecked)) (ThreeState.toOption >> fn)
+                        ComponentValueEventData.createOptional (ThreeState.fromOption(isChecked)) (ThreeState.toOption >> fn)
                     ),
                     ToggleButton.IsThreeState.WithValue(true)
                 ),

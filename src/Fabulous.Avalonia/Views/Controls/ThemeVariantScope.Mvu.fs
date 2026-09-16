@@ -5,9 +5,31 @@ open Avalonia.Controls
 open Fabulous
 open Fabulous.Avalonia
 
-module MvuThemeVariantScope =
-    let ActualThemeVariantChanged =
-        Attributes.Mvu.defineEventNoArg "TopLevel_ThemeVariantChanged" (fun target -> (target :?> ThemeVariantScope).ActualThemeVariantChanged)
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type MvuThemeVariantScope =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ActualThemeVariantChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<Fabulous.MsgValue>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ActualThemeVariantChangedInit: bool
+
+    static member ActualThemeVariantChanged =
+        if not MvuThemeVariantScope._ActualThemeVariantChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuThemeVariantScope._ActualThemeVariantChangedInit then
+                    MvuThemeVariantScope._ActualThemeVariantChanged <-
+                        Attributes.Mvu.defineEventNoArg "TopLevel_ThemeVariantChanged" (fun target -> (target :?> ThemeVariantScope).ActualThemeVariantChanged)
+
+                    MvuThemeVariantScope._ActualThemeVariantChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuThemeVariantScope._ActualThemeVariantChanged
 
 type MvuThemeVariantScopeModifiers =
 

@@ -14,22 +14,22 @@ module WrapPanel =
     let WidgetKey = Widgets.register<WrapPanel>()
 
     let Orientation =
-        Attributes.defineAvaloniaPropertyWithEquality WrapPanel.OrientationProperty
+        Attributes.defineAvaloniaPropertyEnum WrapPanel.OrientationProperty
 
     let ItemWidth =
-        Attributes.defineAvaloniaPropertyWithEquality WrapPanel.ItemWidthProperty
+        Attributes.defineAvaloniaPropertyFloat WrapPanel.ItemWidthProperty
 
     let ItemHeight =
-        Attributes.defineAvaloniaPropertyWithEquality WrapPanel.ItemHeightProperty
+        Attributes.defineAvaloniaPropertyFloat WrapPanel.ItemHeightProperty
 
     let ItemsAlignment =
-        Attributes.defineAvaloniaPropertyWithEquality WrapPanel.ItemsAlignmentProperty
+        Attributes.defineAvaloniaPropertyEnum WrapPanel.ItemsAlignmentProperty
 
     let ItemSpacing =
-        Attributes.defineAvaloniaPropertyWithEquality WrapPanel.ItemSpacingProperty
+        Attributes.defineAvaloniaPropertyFloat WrapPanel.ItemSpacingProperty
 
     let LineSpacing =
-        Attributes.defineAvaloniaPropertyWithEquality WrapPanel.LineSpacingProperty
+        Attributes.defineAvaloniaPropertyFloat WrapPanel.LineSpacingProperty
 
 [<AutoOpen>]
 module WrapPanelBuilders =

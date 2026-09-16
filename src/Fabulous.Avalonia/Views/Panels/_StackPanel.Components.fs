@@ -5,12 +5,52 @@ open Avalonia.Controls
 open Avalonia.Interactivity
 open Fabulous
 
-module ComponentStackPanel =
-    let HorizontalSnapPointsChanged =
-        Attributes.Component.defineEvent "StackPanel_HorizontalSnapPointsChanged" (fun target -> (target :?> StackPanel).HorizontalSnapPointsChanged)
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type ComponentStackPanel =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _HorizontalSnapPointsChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Interactivity.RoutedEventArgs -> Microsoft.FSharp.Core.Unit)>
 
-    let VerticalSnapPointsChanged =
-        Attributes.Component.defineEvent "StackPanel_VerticalSnapPointsChanged" (fun target -> (target :?> StackPanel).VerticalSnapPointsChanged)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _HorizontalSnapPointsChangedInit: bool
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _VerticalSnapPointsChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Interactivity.RoutedEventArgs -> Microsoft.FSharp.Core.Unit)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _VerticalSnapPointsChangedInit: bool
+
+    static member HorizontalSnapPointsChanged =
+        if not ComponentStackPanel._HorizontalSnapPointsChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentStackPanel._HorizontalSnapPointsChangedInit then
+                    ComponentStackPanel._HorizontalSnapPointsChanged <-
+                        Attributes.Component.defineEvent "StackPanel_HorizontalSnapPointsChanged" (fun target -> (target :?> StackPanel).HorizontalSnapPointsChanged)
+
+                    ComponentStackPanel._HorizontalSnapPointsChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentStackPanel._HorizontalSnapPointsChanged
+
+    static member VerticalSnapPointsChanged =
+        if not ComponentStackPanel._VerticalSnapPointsChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentStackPanel._VerticalSnapPointsChangedInit then
+                    ComponentStackPanel._VerticalSnapPointsChanged <-
+                        Attributes.Component.defineEvent "StackPanel_VerticalSnapPointsChanged" (fun target -> (target :?> StackPanel).VerticalSnapPointsChanged)
+
+                    ComponentStackPanel._VerticalSnapPointsChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentStackPanel._VerticalSnapPointsChanged
 
 type ComponentStackPanelModifiers =
 

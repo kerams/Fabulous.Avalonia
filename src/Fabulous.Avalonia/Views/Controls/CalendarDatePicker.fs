@@ -25,13 +25,13 @@ module CalendarDatePicker =
         Attributes.defineAvaloniaPropertyWithEquality CalendarDatePicker.FirstDayOfWeekProperty
 
     let IsDropDownOpen =
-        Attributes.defineAvaloniaPropertyWithEquality CalendarDatePicker.IsDropDownOpenProperty
+        Attributes.defineAvaloniaPropertyBool CalendarDatePicker.IsDropDownOpenProperty
 
     let IsTodayHighlighted =
-        Attributes.defineAvaloniaPropertyWithEquality CalendarDatePicker.IsTodayHighlightedProperty
+        Attributes.defineAvaloniaPropertyBool CalendarDatePicker.IsTodayHighlightedProperty
 
     let SelectedDateFormat =
-        Attributes.defineAvaloniaPropertyWithEquality CalendarDatePicker.SelectedDateFormatProperty
+        Attributes.defineAvaloniaPropertyEnum CalendarDatePicker.SelectedDateFormatProperty
 
     let CustomDateFormatString =
         Attributes.defineAvaloniaPropertyWithEquality CalendarDatePicker.CustomDateFormatStringProperty
@@ -43,13 +43,13 @@ module CalendarDatePicker =
         Attributes.defineAvaloniaPropertyWithEquality CalendarDatePicker.PlaceholderTextProperty
 
     let UseFloatingPlaceholder =
-        Attributes.defineAvaloniaPropertyWithEquality CalendarDatePicker.UseFloatingPlaceholderProperty
+        Attributes.defineAvaloniaPropertyBool CalendarDatePicker.UseFloatingPlaceholderProperty
 
     let HorizontalContentAlignment =
-        Attributes.defineAvaloniaPropertyWithEquality CalendarDatePicker.HorizontalContentAlignmentProperty
+        Attributes.defineAvaloniaPropertyEnum CalendarDatePicker.HorizontalContentAlignmentProperty
 
     let VerticalContentAlignment =
-        Attributes.defineAvaloniaPropertyWithEquality CalendarDatePicker.VerticalContentAlignmentProperty
+        Attributes.defineAvaloniaPropertyEnum CalendarDatePicker.VerticalContentAlignmentProperty
 
 
 type CalendarDatePickerModifiers =

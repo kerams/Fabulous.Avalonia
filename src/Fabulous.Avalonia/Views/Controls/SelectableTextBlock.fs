@@ -13,10 +13,10 @@ module SelectableTextBlock =
     let WidgetKey = Widgets.register<SelectableTextBlock>()
 
     let SelectionStart =
-        Attributes.defineAvaloniaPropertyWithEquality SelectableTextBlock.SelectionStartProperty
+        Attributes.defineAvaloniaPropertyInt SelectableTextBlock.SelectionStartProperty
 
     let SelectionEnd =
-        Attributes.defineAvaloniaPropertyWithEquality SelectableTextBlock.SelectionEndProperty
+        Attributes.defineAvaloniaPropertyInt SelectableTextBlock.SelectionEndProperty
 
     let SelectionBrushWidget =
         Attributes.defineAvaloniaPropertyWidget SelectableTextBlock.SelectionBrushProperty

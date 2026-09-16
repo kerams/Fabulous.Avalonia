@@ -13,7 +13,7 @@ module ReversibleStackPanel =
     let WidgetKey = Widgets.register<ReversibleStackPanel>()
 
     let ReverseOrder =
-        Attributes.defineAvaloniaPropertyWithEquality ReversibleStackPanel.ReverseOrderProperty
+        Attributes.defineAvaloniaPropertyBool ReversibleStackPanel.ReverseOrderProperty
 
 [<AutoOpen>]
 module ReversibleStackPanelBuilders =

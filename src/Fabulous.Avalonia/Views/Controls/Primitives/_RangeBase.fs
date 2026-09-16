@@ -8,14 +8,14 @@ type IFabRangeBase =
     inherit IFabTemplatedControl
 
 module RangeBaseUpdaters =
-    let updateSliderMinMax _ (newValueOpt: struct (float * float) voption) (node: IViewNode) =
+    let updateSliderMinMax _ (newValue: ScalarValue<struct (float * float)>) (node: IViewNode) =
         let slider = node.Target :?> RangeBase
 
-        match newValueOpt with
-        | ValueNone ->
+        if not newValue.HasValue then
             slider.ClearValue(RangeBase.MinimumProperty)
             slider.ClearValue(RangeBase.MaximumProperty)
-        | ValueSome(min, max) ->
+        else
+            let struct (min, max) = newValue.Value
             let currMax = slider.GetValue(RangeBase.MaximumProperty)
 
             if min > currMax then
@@ -30,16 +30,16 @@ module RangeBase =
         Attributes.defineSimpleScalarWithEquality<struct (float * float)> "RangeBase_MinimumMaximum" RangeBaseUpdaters.updateSliderMinMax
 
     let Minimum =
-        Attributes.defineAvaloniaPropertyWithEquality RangeBase.MinimumProperty
+        Attributes.defineAvaloniaPropertyFloat RangeBase.MinimumProperty
 
     let Maximum =
-        Attributes.defineAvaloniaPropertyWithEquality RangeBase.MaximumProperty
+        Attributes.defineAvaloniaPropertyFloat RangeBase.MaximumProperty
 
     let SmallChange =
-        Attributes.defineAvaloniaPropertyWithEquality RangeBase.SmallChangeProperty
+        Attributes.defineAvaloniaPropertyFloat RangeBase.SmallChangeProperty
 
     let LargeChange =
-        Attributes.defineAvaloniaPropertyWithEquality RangeBase.LargeChangeProperty
+        Attributes.defineAvaloniaPropertyFloat RangeBase.LargeChangeProperty
 
 type RangeBaserModifiers =
     /// <summary>Sets the SmallChange property.</summary>

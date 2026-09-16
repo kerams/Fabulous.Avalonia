@@ -6,9 +6,31 @@ open Fabulous
 open Fabulous.StackAllocatedCollections.StackList
 open Fabulous.Avalonia
 
-module ComponentSelectableTextBlock =
-    let CopyingToClipboard =
-        Attributes.Component.defineEvent "SelectableTextBlock_CopyingToClipboard" (fun target -> (target :?> SelectableTextBlock).CopyingToClipboard)
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type ComponentSelectableTextBlock =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _CopyingToClipboard: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Interactivity.RoutedEventArgs -> Microsoft.FSharp.Core.Unit)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _CopyingToClipboardInit: bool
+
+    static member CopyingToClipboard =
+        if not ComponentSelectableTextBlock._CopyingToClipboardInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentSelectableTextBlock._CopyingToClipboardInit then
+                    ComponentSelectableTextBlock._CopyingToClipboard <-
+                        Attributes.Component.defineEvent "SelectableTextBlock_CopyingToClipboard" (fun target -> (target :?> SelectableTextBlock).CopyingToClipboard)
+
+                    ComponentSelectableTextBlock._CopyingToClipboardInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentSelectableTextBlock._CopyingToClipboard
 
 [<AutoOpen>]
 module ComponentSelectableTextBlockBuilders =

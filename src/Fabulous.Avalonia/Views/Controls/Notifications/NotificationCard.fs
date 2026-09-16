@@ -11,10 +11,10 @@ module NotificationCard =
     let WidgetKey = Widgets.register<NotificationCard>()
 
     let NotificationType =
-        Attributes.defineAvaloniaPropertyWithEquality NotificationCard.NotificationTypeProperty
+        Attributes.defineAvaloniaPropertyEnum NotificationCard.NotificationTypeProperty
 
     let CloseOnClick =
-        Attributes.defineAvaloniaPropertyWithEquality NotificationCard.CloseOnClickProperty
+        Attributes.defineAvaloniaPropertyBool NotificationCard.CloseOnClickProperty
 
 [<AutoOpen>]
 module NotificationCardBuilders =

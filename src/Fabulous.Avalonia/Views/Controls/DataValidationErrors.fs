@@ -13,15 +13,16 @@ module DataValidationErrors =
     let WidgetKey = Widgets.register<DataValidationErrors>()
 
     let Errors =
-        Attributes.defineSimpleScalarWithEquality<Exception list> "DataValidationErrors_Errors" (fun _ newValueOpt node ->
+        Attributes.defineSimpleScalarWithEquality<Exception list> "DataValidationErrors_Errors" (fun _ newValue node ->
             let target = node.Target :?> AvaloniaObject
 
-            match newValueOpt with
-            | ValueNone -> target.ClearValue(DataValidationErrors.ErrorsProperty)
-            | ValueSome errors -> target.SetValue(DataValidationErrors.ErrorsProperty, errors) |> ignore)
+            if newValue.HasValue then
+                target.SetValue(DataValidationErrors.ErrorsProperty, newValue.Value) |> ignore
+            else
+                target.ClearValue(DataValidationErrors.ErrorsProperty))
 
     let HasErrors =
-        Attributes.defineAvaloniaPropertyWithEquality DataValidationErrors.HasErrorsProperty
+        Attributes.defineAvaloniaPropertyBool DataValidationErrors.HasErrorsProperty
 
 type DataValidationErrorsModifiers =
 

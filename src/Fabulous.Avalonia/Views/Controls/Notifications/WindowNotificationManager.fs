@@ -13,10 +13,10 @@ module WindowNotificationManager =
         Widgets.registerWithFactory(fun _ -> WindowNotificationManager(null))
 
     let Position =
-        Attributes.defineAvaloniaPropertyWithEquality WindowNotificationManager.PositionProperty
+        Attributes.defineAvaloniaPropertyEnum WindowNotificationManager.PositionProperty
 
     let MaxItems =
-        Attributes.defineAvaloniaPropertyWithEquality WindowNotificationManager.MaxItemsProperty
+        Attributes.defineAvaloniaPropertyInt WindowNotificationManager.MaxItemsProperty
 
 [<AutoOpen>]
 module WindowNotificationManagerBuilders =

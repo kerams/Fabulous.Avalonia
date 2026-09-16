@@ -15,16 +15,16 @@ module ExperimentalAcrylicMaterial =
         Attributes.defineAvaloniaPropertyWithEquality ExperimentalAcrylicMaterial.TintColorProperty
 
     let BackgroundSource =
-        Attributes.defineAvaloniaPropertyWithEquality ExperimentalAcrylicMaterial.BackgroundSourceProperty
+        Attributes.defineAvaloniaPropertyEnum ExperimentalAcrylicMaterial.BackgroundSourceProperty
 
     let TintOpacity =
-        Attributes.defineAvaloniaPropertyWithEquality ExperimentalAcrylicMaterial.TintOpacityProperty
+        Attributes.defineAvaloniaPropertyFloat ExperimentalAcrylicMaterial.TintOpacityProperty
 
     let MaterialOpacity =
-        Attributes.defineAvaloniaPropertyWithEquality ExperimentalAcrylicMaterial.MaterialOpacityProperty
+        Attributes.defineAvaloniaPropertyFloat ExperimentalAcrylicMaterial.MaterialOpacityProperty
 
     let PlatformTransparencyCompensationLevel =
-        Attributes.defineAvaloniaPropertyWithEquality ExperimentalAcrylicMaterial.PlatformTransparencyCompensationLevelProperty
+        Attributes.defineAvaloniaPropertyFloat ExperimentalAcrylicMaterial.PlatformTransparencyCompensationLevelProperty
 
     let FallbackColor =
         Attributes.defineAvaloniaPropertyWithEquality ExperimentalAcrylicMaterial.FallbackColorProperty

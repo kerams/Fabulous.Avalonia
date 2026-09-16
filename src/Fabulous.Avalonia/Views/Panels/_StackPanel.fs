@@ -11,16 +11,16 @@ module StackPanel =
     let WidgetKey = Widgets.register<StackPanel>()
 
     let Spacing =
-        Attributes.defineAvaloniaPropertyWithEquality StackPanel.SpacingProperty
+        Attributes.defineAvaloniaPropertyFloat StackPanel.SpacingProperty
 
     let Orientation =
-        Attributes.defineAvaloniaPropertyWithEquality StackPanel.OrientationProperty
+        Attributes.defineAvaloniaPropertyEnum StackPanel.OrientationProperty
 
     let AreHorizontalSnapPointsRegular =
-        Attributes.defineAvaloniaPropertyWithEquality StackPanel.AreHorizontalSnapPointsRegularProperty
+        Attributes.defineAvaloniaPropertyBool StackPanel.AreHorizontalSnapPointsRegularProperty
 
     let AreVerticalSnapPointsRegular =
-        Attributes.defineAvaloniaPropertyWithEquality StackPanel.AreVerticalSnapPointsRegularProperty
+        Attributes.defineAvaloniaPropertyBool StackPanel.AreVerticalSnapPointsRegularProperty
 
 type StackPanelModifiers =
     /// <summary>Sets the AreHorizontalSnapPointsRegular property.</summary>

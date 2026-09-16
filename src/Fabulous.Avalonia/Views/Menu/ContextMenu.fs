@@ -14,22 +14,22 @@ module ContextMenu =
     let WidgetKey = Widgets.register<ContextMenu>()
 
     let HorizontalOffset =
-        Attributes.defineAvaloniaPropertyWithEquality ContextMenu.HorizontalOffsetProperty
+        Attributes.defineAvaloniaPropertyFloat ContextMenu.HorizontalOffsetProperty
 
     let VerticalOffset =
-        Attributes.defineAvaloniaPropertyWithEquality ContextMenu.VerticalOffsetProperty
+        Attributes.defineAvaloniaPropertyFloat ContextMenu.VerticalOffsetProperty
 
     let PlacementConstraintAdjustment =
-        Attributes.defineAvaloniaPropertyWithEquality ContextMenu.PlacementConstraintAdjustmentProperty
+        Attributes.defineAvaloniaPropertyEnum ContextMenu.PlacementConstraintAdjustmentProperty
 
     let PlacementAnchor =
-        Attributes.defineAvaloniaPropertyWithEquality ContextMenu.PlacementAnchorProperty
+        Attributes.defineAvaloniaPropertyEnum ContextMenu.PlacementAnchorProperty
 
     let PlacementGravity =
-        Attributes.defineAvaloniaPropertyWithEquality ContextMenu.PlacementGravityProperty
+        Attributes.defineAvaloniaPropertyEnum ContextMenu.PlacementGravityProperty
 
     let Placement =
-        Attributes.defineAvaloniaPropertyWithEquality ContextMenu.PlacementProperty
+        Attributes.defineAvaloniaPropertyEnum ContextMenu.PlacementProperty
 
     let PlacementRect =
         Attributes.defineAvaloniaPropertyWithEquality ContextMenu.PlacementRectProperty
@@ -38,7 +38,7 @@ module ContextMenu =
         Attributes.defineAvaloniaPropertyWithEquality ContextMenu.PlacementTargetProperty
 
     let WindowManagerAddShadowHint =
-        Attributes.defineAvaloniaPropertyWithEquality ContextMenu.WindowManagerAddShadowHintProperty
+        Attributes.defineAvaloniaPropertyBool ContextMenu.WindowManagerAddShadowHintProperty
 
 [<AutoOpen>]
 module ContextMenuBuilders =

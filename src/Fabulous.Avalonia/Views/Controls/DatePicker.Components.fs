@@ -5,13 +5,35 @@ open Avalonia.Controls
 open Fabulous
 open Fabulous.Avalonia
 
-module ComponentDatePicker =
-    let SelectedDateChanged =
-        Attributes.Component.defineAvaloniaPropertyWithChangedEvent
-            "DatePicker_SelectedDateChanged"
-            DatePicker.SelectedDateProperty
-            Nullable
-            Nullable.op_Explicit
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type ComponentDatePicker =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _SelectedDateChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<Fabulous.Avalonia.ComponentValueEventData<System.DateTimeOffset, System.DateTimeOffset>>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _SelectedDateChangedInit: bool
+
+    static member SelectedDateChanged =
+        if not ComponentDatePicker._SelectedDateChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentDatePicker._SelectedDateChangedInit then
+                    ComponentDatePicker._SelectedDateChanged <-
+                        Attributes.Component.defineAvaloniaPropertyWithChangedEvent
+                            "DatePicker_SelectedDateChanged"
+                            DatePicker.SelectedDateProperty
+                            Nullable
+                            Nullable.op_Explicit
+
+                    ComponentDatePicker._SelectedDateChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentDatePicker._SelectedDateChanged
 
 [<AutoOpen>]
 module ComponentDatePickerBuilders =

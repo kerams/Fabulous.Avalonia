@@ -19,32 +19,33 @@ module TickBar =
 
     let Fill = Attributes.defineAvaloniaPropertyWithEquality TickBar.FillProperty
 
-    let Minimum = Attributes.defineAvaloniaPropertyWithEquality TickBar.MinimumProperty
+    let Minimum = Attributes.defineAvaloniaPropertyFloat TickBar.MinimumProperty
 
-    let Maximum = Attributes.defineAvaloniaPropertyWithEquality TickBar.MaximumProperty
+    let Maximum = Attributes.defineAvaloniaPropertyFloat TickBar.MaximumProperty
 
     let TickFrequency =
-        Attributes.defineAvaloniaPropertyWithEquality TickBar.TickFrequencyProperty
+        Attributes.defineAvaloniaPropertyFloat TickBar.TickFrequencyProperty
 
     let Orientation =
-        Attributes.defineAvaloniaPropertyWithEquality TickBar.OrientationProperty
+        Attributes.defineAvaloniaPropertyEnum TickBar.OrientationProperty
 
     let Ticks =
-        Attributes.defineSimpleScalarWithEquality<float list> "TickBar_Ticks" (fun _ newValueOpt node ->
+        Attributes.defineSimpleScalarWithEquality<float list> "TickBar_Ticks" (fun _ newValue node ->
             let target = node.Target :?> AvaloniaObject
 
-            match newValueOpt with
-            | ValueNone -> target.ClearValue(TickBar.TicksProperty)
-            | ValueSome points ->
+            if not newValue.HasValue then
+                target.ClearValue(TickBar.TicksProperty)
+            else
+                let points = newValue.Value
                 let coll = AvaloniaList<float>()
                 points |> List.iter coll.Add
                 target.SetValue(TickBar.TicksProperty, coll) |> ignore)
 
     let IsDirectionReversed =
-        Attributes.defineAvaloniaPropertyWithEquality TickBar.IsDirectionReversedProperty
+        Attributes.defineAvaloniaPropertyBool TickBar.IsDirectionReversedProperty
 
     let Placement =
-        Attributes.defineAvaloniaPropertyWithEquality TickBar.PlacementProperty
+        Attributes.defineAvaloniaPropertyEnum TickBar.PlacementProperty
 
     let ReservedSpace =
         Attributes.defineAvaloniaPropertyWithEquality TickBar.ReservedSpaceProperty

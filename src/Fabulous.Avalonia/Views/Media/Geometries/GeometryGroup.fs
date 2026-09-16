@@ -15,7 +15,7 @@ module GeometryGroup =
         Attributes.defineAvaloniaListWidgetCollection "GeometryGroup_Children" (fun target -> (target :?> GeometryGroup).Children)
 
     let FillRule =
-        Attributes.defineAvaloniaPropertyWithEquality GeometryGroup.FillRuleProperty
+        Attributes.defineAvaloniaPropertyEnum GeometryGroup.FillRuleProperty
 
 [<AutoOpen>]
 module GeometryGroupBuilders =

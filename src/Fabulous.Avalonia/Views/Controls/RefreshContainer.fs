@@ -17,7 +17,7 @@ module RefreshContainer =
         Attributes.defineAvaloniaPropertyWidget RefreshContainer.VisualizerProperty
 
     let PullDirection =
-        Attributes.defineAvaloniaPropertyWithEquality RefreshContainer.PullDirectionProperty
+        Attributes.defineAvaloniaPropertyEnum RefreshContainer.PullDirectionProperty
 
 [<AutoOpen>]
 module RefreshContainerBuilders =

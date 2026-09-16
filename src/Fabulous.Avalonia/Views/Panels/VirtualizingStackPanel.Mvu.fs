@@ -6,16 +6,56 @@ open Avalonia.Interactivity
 open Fabulous
 open Fabulous.Avalonia
 
-module MvuVirtualizingStackPanel =
-    let HorizontalSnapPointsChanged =
-        Attributes.Mvu.defineEvent "VirtualizingStackPanel_HorizontalSnapPointsChanged" (fun target ->
-            (target :?> VirtualizingStackPanel)
-                .HorizontalSnapPointsChanged)
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type MvuVirtualizingStackPanel =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _HorizontalSnapPointsChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Interactivity.RoutedEventArgs -> Fabulous.MsgValue)>
 
-    let VerticalSnapPointsChanged =
-        Attributes.Mvu.defineEvent "VirtualizingStackPanel_VerticalSnapPointsChanged" (fun target ->
-            (target :?> VirtualizingStackPanel)
-                .VerticalSnapPointsChanged)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _HorizontalSnapPointsChangedInit: bool
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _VerticalSnapPointsChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Interactivity.RoutedEventArgs -> Fabulous.MsgValue)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _VerticalSnapPointsChangedInit: bool
+
+    static member HorizontalSnapPointsChanged =
+        if not MvuVirtualizingStackPanel._HorizontalSnapPointsChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuVirtualizingStackPanel._HorizontalSnapPointsChangedInit then
+                    MvuVirtualizingStackPanel._HorizontalSnapPointsChanged <-
+                        Attributes.Mvu.defineEvent "VirtualizingStackPanel_HorizontalSnapPointsChanged" (fun target ->
+                            (target :?> VirtualizingStackPanel)
+                                .HorizontalSnapPointsChanged)
+
+                    MvuVirtualizingStackPanel._HorizontalSnapPointsChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuVirtualizingStackPanel._HorizontalSnapPointsChanged
+
+    static member VerticalSnapPointsChanged =
+        if not MvuVirtualizingStackPanel._VerticalSnapPointsChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuVirtualizingStackPanel._VerticalSnapPointsChangedInit then
+                    MvuVirtualizingStackPanel._VerticalSnapPointsChanged <-
+                        Attributes.Mvu.defineEvent "VirtualizingStackPanel_VerticalSnapPointsChanged" (fun target ->
+                            (target :?> VirtualizingStackPanel)
+                                .VerticalSnapPointsChanged)
+
+                    MvuVirtualizingStackPanel._VerticalSnapPointsChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuVirtualizingStackPanel._VerticalSnapPointsChanged
 
 type MvuVirtualizingStackPanelModifiers =
 

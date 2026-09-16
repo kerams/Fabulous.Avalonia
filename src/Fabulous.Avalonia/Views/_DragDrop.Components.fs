@@ -5,18 +5,94 @@ open Avalonia.Input
 open Fabulous
 open Fabulous.Avalonia
 
-module ComponentDragDrop =
-    let DragEnter =
-        Attributes.Component.defineRoutedEvent<DragEventArgs> "DragDrop_DragEnter" DragDrop.DragEnterEvent
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type ComponentDragDrop =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DragEnter: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Input.DragEventArgs -> Microsoft.FSharp.Core.Unit)>
 
-    let DragLeave =
-        Attributes.Component.defineRoutedEvent<DragEventArgs> "DragDrop_DragLeave" DragDrop.DragLeaveEvent
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DragEnterInit: bool
 
-    let DragOver =
-        Attributes.Component.defineRoutedEvent<DragEventArgs> "DragDrop_DragOver" DragDrop.DragOverEvent
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DragLeave: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Input.DragEventArgs -> Microsoft.FSharp.Core.Unit)>
 
-    let Drop =
-        Attributes.Component.defineRoutedEvent<DragEventArgs> "DragDrop_Drop" DragDrop.DropEvent
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DragLeaveInit: bool
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DragOver: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Input.DragEventArgs -> Microsoft.FSharp.Core.Unit)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DragOverInit: bool
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _Drop: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Input.DragEventArgs -> Microsoft.FSharp.Core.Unit)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _DropInit: bool
+
+    static member DragEnter =
+        if not ComponentDragDrop._DragEnterInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentDragDrop._DragEnterInit then
+                    ComponentDragDrop._DragEnter <-
+                        Attributes.Component.defineRoutedEvent<DragEventArgs> "DragDrop_DragEnter" DragDrop.DragEnterEvent
+
+                    ComponentDragDrop._DragEnterInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentDragDrop._DragEnter
+
+    static member DragLeave =
+        if not ComponentDragDrop._DragLeaveInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentDragDrop._DragLeaveInit then
+                    ComponentDragDrop._DragLeave <-
+                        Attributes.Component.defineRoutedEvent<DragEventArgs> "DragDrop_DragLeave" DragDrop.DragLeaveEvent
+
+                    ComponentDragDrop._DragLeaveInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentDragDrop._DragLeave
+
+    static member DragOver =
+        if not ComponentDragDrop._DragOverInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentDragDrop._DragOverInit then
+                    ComponentDragDrop._DragOver <-
+                        Attributes.Component.defineRoutedEvent<DragEventArgs> "DragDrop_DragOver" DragDrop.DragOverEvent
+
+                    ComponentDragDrop._DragOverInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentDragDrop._DragOver
+
+    static member Drop =
+        if not ComponentDragDrop._DropInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentDragDrop._DropInit then
+                    ComponentDragDrop._Drop <-
+                        Attributes.Component.defineRoutedEvent<DragEventArgs> "DragDrop_Drop" DragDrop.DropEvent
+
+                    ComponentDragDrop._DropInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentDragDrop._Drop
 
 type ComponentDragDropModifiers =
     /// <summary>Listens to the DragDrop DragEnter event.</summary>

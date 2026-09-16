@@ -13,12 +13,13 @@ module Polyline =
     let WidgetKey = Widgets.register<Polyline>()
 
     let Points =
-        Attributes.defineSimpleScalarWithEquality<Point list> "Polyline_Points" (fun _ newValueOpt node ->
+        Attributes.defineSimpleScalarWithEquality<Point list> "Polyline_Points" (fun _ newValue node ->
             let target = node.Target :?> AvaloniaObject
 
-            match newValueOpt with
-            | ValueNone -> target.ClearValue(Polyline.PointsProperty)
-            | ValueSome points ->
+            if not newValue.HasValue then
+                target.ClearValue(Polyline.PointsProperty)
+            else
+                let points = newValue.Value
                 let coll = List<Point>()
                 points |> List.iter coll.Add
                 target.SetValue(Polyline.PointsProperty, coll) |> ignore)

@@ -10,16 +10,16 @@ type IFabDockPanel =
 module DockPanel =
     let WidgetKey = Widgets.register<DockPanel>()
 
-    let Dock = Attributes.defineAvaloniaPropertyWithEquality DockPanel.DockProperty
+    let Dock = Attributes.defineAvaloniaPropertyEnum DockPanel.DockProperty
 
     let LastChildFill =
-        Attributes.defineAvaloniaPropertyWithEquality DockPanel.LastChildFillProperty
+        Attributes.defineAvaloniaPropertyBool DockPanel.LastChildFillProperty
 
     let HorizontalSpacing =
-        Attributes.defineAvaloniaPropertyWithEquality DockPanel.HorizontalSpacingProperty
+        Attributes.defineAvaloniaPropertyFloat DockPanel.HorizontalSpacingProperty
 
     let VerticalSpacing =
-        Attributes.defineAvaloniaPropertyWithEquality DockPanel.VerticalSpacingProperty
+        Attributes.defineAvaloniaPropertyFloat DockPanel.VerticalSpacingProperty
 
 
 [<AutoOpen>]

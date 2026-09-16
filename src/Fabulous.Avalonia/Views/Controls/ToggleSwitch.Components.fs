@@ -28,7 +28,7 @@ module ComponentToggleSwitchBuilders =
         static member ThreeStateToggleSwitch(isChecked: bool option, fn: bool option -> unit) =
             let s1 = ToggleButton.IsThreeState.WithValue(true)
             let s2 = ComponentToggleButton.ThreeStateCheckedChanged.WithValue(
-                ComponentValueEventData.createVOption (ThreeState.fromOption(isChecked)) (ThreeState.toOption >> fn)
+                ComponentValueEventData.createOptional (ThreeState.fromOption(isChecked)) (ThreeState.toOption >> fn)
             )
             let bundle = AttributesBundle(StackList.two(s1, s2), [||], [||])
             WidgetBuilder<'msg, IFabToggleSwitch>(ToggleSwitch.WidgetKey, &bundle)

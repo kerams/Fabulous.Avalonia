@@ -20,7 +20,7 @@ module PathGeometry =
         Attributes.defineAvaloniaPropertyWithEquality PathGeometry.FiguresProperty
 
     let FillRule =
-        Attributes.defineAvaloniaPropertyWithEquality PathGeometry.FillRuleProperty
+        Attributes.defineAvaloniaPropertyEnum PathGeometry.FillRuleProperty
 
 [<AutoOpen>]
 module PathGeometryBuilders =

@@ -15,27 +15,28 @@ module Slider =
     let WidgetKey = Widgets.register<Slider>()
 
     let Orientation =
-        Attributes.defineAvaloniaPropertyWithEquality Slider.OrientationProperty
+        Attributes.defineAvaloniaPropertyEnum Slider.OrientationProperty
 
     let IsDirectionReversed =
-        Attributes.defineAvaloniaPropertyWithEquality Slider.IsDirectionReversedProperty
+        Attributes.defineAvaloniaPropertyBool Slider.IsDirectionReversedProperty
 
     let IsSnapToTickEnabled =
-        Attributes.defineAvaloniaPropertyWithEquality Slider.IsSnapToTickEnabledProperty
+        Attributes.defineAvaloniaPropertyBool Slider.IsSnapToTickEnabledProperty
 
     let TickFrequency =
-        Attributes.defineAvaloniaPropertyWithEquality Slider.TickFrequencyProperty
+        Attributes.defineAvaloniaPropertyFloat Slider.TickFrequencyProperty
 
     let TickPlacement =
-        Attributes.defineAvaloniaPropertyWithEquality Slider.TickPlacementProperty
+        Attributes.defineAvaloniaPropertyEnum Slider.TickPlacementProperty
 
     let Ticks =
-        Attributes.defineSimpleScalarWithEquality<float list> "Slider_Ticks" (fun _ newValueOpt node ->
+        Attributes.defineSimpleScalarWithEquality<float list> "Slider_Ticks" (fun _ newValue node ->
             let target = node.Target :?> AvaloniaObject
 
-            match newValueOpt with
-            | ValueNone -> target.ClearValue(Slider.TicksProperty)
-            | ValueSome points ->
+            if not newValue.HasValue then
+                target.ClearValue(Slider.TicksProperty)
+            else
+                let points = newValue.Value
                 let coll = AvaloniaList<float>()
                 points |> List.iter coll.Add
                 target.SetValue(Slider.TicksProperty, coll) |> ignore)

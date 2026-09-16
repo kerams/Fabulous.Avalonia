@@ -9,7 +9,7 @@ open Avalonia.Media.Imaging
 open Fabulous
 open Fabulous.ScalarAttributeDefinitions
 
-[<RequireQualifiedAccess>]
+[<RequireQualifiedAccess; NoComparison>]
 type ImageSourceValue =
     | Bitmap of source: Bitmap
     | File of source: string
@@ -24,31 +24,249 @@ module ScalarAttributeComparers =
         else
             ScalarAttributeComparison.Different
 
-[<Struct>]
+// Plain structs rather than records holding 'data voption, for the same NativeAOT size reason as ScalarValue.
+[<Struct; NoEquality; NoComparison>]
 type ComponentValueEventData<'data, 'eventArgs> =
-    { Value: 'data voption
-      Event: 'eventArgs -> unit }
+    val Value: ScalarValue<'data>
+    val Event: 'eventArgs -> unit
+    new(value, event) = { Value = value; Event = event }
 
 module ComponentValueEventData =
     let create (value: 'data) (event: 'eventArgs -> unit) =
-        { Value = ValueSome value
-          Event = event }
+        ComponentValueEventData(ScalarValue(value), event)
 
-    let createVOption (value: 'data voption) (event: 'eventArgs -> unit) = { Value = value; Event = event }
+    let createOptional (value: ScalarValue<'data>) (event: 'eventArgs -> unit) = ComponentValueEventData(value, event)
 
-[<Struct>]
+[<Struct; NoEquality; NoComparison>]
 type ValueEventData<'data, 'eventArgs> =
-    { Value: 'data voption
-      Event: 'eventArgs -> MsgValue }
+    val Value: ScalarValue<'data>
+    val Event: 'eventArgs -> MsgValue
+    new(value, event) = { Value = value; Event = event }
 
 module ValueEventData =
     let create (value: 'data) (event: 'eventArgs -> 'msg) =
-        { Value = ValueSome value
-          Event = event >> box >> MsgValue }
+        ValueEventData(ScalarValue(value), event >> box >> MsgValue)
 
-    let createVOption (value: 'data voption) (event: 'eventArgs -> 'msg) =
-        { Value = value
-          Event = event >> box >> MsgValue }
+    let createOptional (value: ScalarValue<'data>) (event: 'eventArgs -> 'msg) =
+        ValueEventData(value, event >> box >> MsgValue)
+
+// Dedicated attribute data classes for the definitions instantiated over many types (see ScalarAttributeData in Fabulous)
+
+[<Sealed>]
+type AvaloniaPropertyData<'modelType, 'valueType>
+    (
+        property: AvaloniaProperty<'valueType>,
+        convertValue: 'modelType -> 'valueType,
+        compare: 'modelType -> 'modelType -> ScalarAttributeComparison
+    ) =
+    inherit ScalarAttributeData()
+
+    override _.CompareBoxed(a, b) =
+        compare (unbox<'modelType> a) (unbox<'modelType> b)
+
+    override _.UpdateNode(_, newValue, node) =
+        let target = node.Target :?> AvaloniaObject
+
+        match newValue with
+        | ValueSome v -> target.SetValue(property, convertValue(unbox<'modelType> v)) |> ignore
+        | ValueNone -> target.ClearValue(property)
+
+[<Sealed>]
+type AvaloniaPropertyWithEqualityData<'T when 'T: equality>(property: AvaloniaProperty<'T>) =
+    inherit ScalarAttributeData()
+
+    override _.CompareBoxed(a, b) =
+        ScalarAttributeComparers.equalityCompare (unbox<'T> a) (unbox<'T> b)
+
+    override _.UpdateNode(_, newValue, node) =
+        let target = node.Target :?> AvaloniaObject
+
+        match newValue with
+        | ValueSome v -> target.SetValue(property, unbox<'T> v) |> ignore
+        | ValueNone -> target.ClearValue(property)
+
+/// bool/float/int/enum properties: the value travels in ScalarAttribute.NumericValue, so it is never boxed and the diff
+/// compares it as bits without calling the definition
+[<Sealed>]
+type AvaloniaPropertySmallData<'T>(property: AvaloniaProperty<'T>, decode: uint64 -> 'T) =
+    inherit SmallScalarAttributeData()
+
+    override _.UpdateNode(_, newValue, node) =
+        let target = node.Target :?> AvaloniaObject
+
+        match newValue with
+        | ValueSome v -> target.SetValue(property, decode v) |> ignore
+        | ValueNone -> target.ClearValue(property)
+
+[<Sealed>]
+type AvaloniaPropertyConverterData<'T, 'modelType, 'valueType>(property: AvaloniaProperty<'T>, convert: 'modelType -> 'valueType) =
+    inherit ScalarAttributeData()
+
+    override _.CompareBoxed(_, _) = ScalarAttributeComparison.Different
+
+    override _.UpdateNode(_, newValue, node) =
+        let target = node.Target :?> AvaloniaObject
+
+        match newValue with
+        | ValueSome v -> target.SetValue(property, convert(unbox<'modelType> v)) |> ignore
+        | ValueNone -> target.ClearValue(property)
+
+[<Sealed>]
+type PropertyWithDefaultData<'T when 'T: equality>(defaultValue: 'T, setter: obj -> 'T -> unit) =
+    inherit ScalarAttributeData()
+
+    override _.CompareBoxed(a, b) =
+        ScalarAttributeComparers.equalityCompare (unbox<'T> a) (unbox<'T> b)
+
+    override _.UpdateNode(_, newValue, node) =
+        let target = node.Target :?> AvaloniaObject
+
+        match newValue with
+        | ValueSome v -> setter target (unbox<'T> v)
+        | ValueNone -> setter target defaultValue
+
+[<Sealed>]
+type PropertyWithGetSetData<'T when 'T: equality>(getter: obj -> 'T, setter: obj -> 'T -> unit) =
+    inherit ScalarAttributeData()
+
+    override _.CompareBoxed(a, b) =
+        ScalarAttributeComparers.equalityCompare (unbox<'T> a) (unbox<'T> b)
+
+    override _.UpdateNode(_, newValue, node) =
+        let target = node.Target :?> AvaloniaObject
+
+        match newValue with
+        | ValueSome v -> setter target (unbox<'T> v)
+        | ValueNone -> setter target (getter target)
+
+/// Sets the property from the attribute value and reports its changes through the attribute's event
+[<AbstractClass>]
+type AvaloniaPropertyChangedEventData<'valueType>(property: AvaloniaProperty<'valueType>) =
+    inherit ScalarAttributeData()
+
+    /// Sets the property from the attribute value, if it carries one
+    abstract SetValue: value: obj * target: AvaloniaObject -> unit
+
+    /// Reports a change of the property to the event of the latest attribute value (slot.Handler)
+    abstract Report: slot: EventHandlerSlot * newValue: 'valueType * node: IViewNode -> unit
+
+    override _.CompareBoxed(_, _) = ScalarAttributeComparison.Different
+
+    override this.UpdateNode(oldValue, newValue, node) =
+        let target = node.Target :?> AvaloniaObject
+
+        match newValue with
+        | ValueNone ->
+            // The attribute is no longer applied, so we clean up the event
+            node.RemoveHandler(property.Name)
+
+            if oldValue.IsSome then
+                target.ClearValue(property)
+        | ValueSome value ->
+            match EventHandlerSlot.tryGet node property.Name with
+            | null ->
+                // subscribe after setting the value, so the initial value is not reported as a change
+                this.SetValue(value, target)
+
+                EventHandlerSlot.set node property.Name value (fun slot ->
+                    property.Changed.Subscribe(fun args ->
+                        if not slot.Suppressed && args.Sender = target && args.NewValue.HasValue then
+                            this.Report(slot, args.NewValue.Value, node)))
+            | slot ->
+                slot.Handler <- value
+                // the subscription stays in place, so the change caused by applying the value must not be reported
+                slot.Suppressed <- true
+
+                try
+                    this.SetValue(value, target)
+                finally
+                    slot.Suppressed <- false
+
+[<Sealed>]
+type MvuAvaloniaPropertyChangedEventData<'modelType, 'valueType>
+    (property: AvaloniaProperty<'valueType>, convertToValue: 'modelType -> 'valueType, convertToModel: 'valueType -> 'modelType) =
+    inherit AvaloniaPropertyChangedEventData<'valueType>(property)
+
+    override _.SetValue(value, target) =
+        let curr = unbox<ValueEventData<'modelType, 'modelType>> value
+
+        if curr.Value.HasValue then
+            target.SetValue(property, box(convertToValue curr.Value.Value)) |> ignore
+
+    override _.Report(slot, newValue, node) =
+        let curr = unbox<ValueEventData<'modelType, 'modelType>> slot.Handler
+        let (MsgValue r) = curr.Event(convertToModel newValue)
+        Dispatcher.dispatch node r
+
+[<Sealed>]
+type ComponentAvaloniaPropertyChangedEventData<'modelType, 'valueType>
+    (property: AvaloniaProperty<'valueType>, convertToValue: 'modelType -> 'valueType, convertToModel: 'valueType -> 'modelType) =
+    inherit AvaloniaPropertyChangedEventData<'valueType>(property)
+
+    override _.SetValue(value, target) =
+        let curr = unbox<ComponentValueEventData<'modelType, 'modelType>> value
+
+        if curr.Value.HasValue then
+            target.SetValue(property, box(convertToValue curr.Value.Value)) |> ignore
+
+    override _.Report(slot, newValue, _) =
+        let curr = unbox<ComponentValueEventData<'modelType, 'modelType>> slot.Handler
+        curr.Event(convertToModel newValue)
+
+/// Routed and plain event handlers; unlike the Fabulous event data, removing one disposes the whole node
+[<AbstractClass>]
+type AvaloniaEventData(name: string) =
+    inherit ScalarAttributeData()
+
+    /// Subscribes to the event, invoking slot.Handler (read on every event, not captured) when it fires
+    abstract Subscribe: slot: EventHandlerSlot * node: IViewNode -> IDisposable
+
+    override _.CompareBoxed(_, _) = ScalarAttributeComparison.Different
+
+    override this.UpdateNode(_, newValue, node) =
+        match newValue with
+        | ValueNone ->
+            match node.TryGetHandler(name) with
+            | null -> ()
+            | handler -> handler.Dispose()
+
+            node.Dispose()
+        | ValueSome handler -> EventHandlerSlot.set node name handler (fun slot -> this.Subscribe(slot, node))
+
+[<Sealed>]
+type MvuRoutedEventData<'args when 'args :> RoutedEventArgs>(name: string, property: RoutedEvent<'args>) =
+    inherit AvaloniaEventData(name)
+
+    override _.Subscribe(slot, node) =
+        property.AddClassHandler(fun _ args ->
+            let (MsgValue r) = (unbox<'args -> MsgValue> slot.Handler) args
+            Dispatcher.dispatch node r)
+
+[<Sealed>]
+type ComponentRoutedEventData<'args when 'args :> RoutedEventArgs>(name: string, property: RoutedEvent<'args>) =
+    inherit AvaloniaEventData(name)
+
+    override _.Subscribe(slot, _) =
+        property.AddClassHandler(fun _ args -> (unbox<'args -> unit> slot.Handler) args)
+
+[<Sealed>]
+type MvuEventHandlerData<'handler, 'args when 'handler :> Delegate and 'handler: delegate<'args, unit>>
+    (name: string, getEvent: obj -> IEvent<'handler, 'args>) =
+    inherit AvaloniaEventData(name)
+
+    override _.Subscribe(slot, node) =
+        (getEvent node.Target)
+            .Subscribe(fun args ->
+                let (MsgValue r) = (unbox<'args -> MsgValue> slot.Handler) args
+                Dispatcher.dispatch node r)
+
+[<Sealed>]
+type ComponentEventHandlerData<'handler, 'args when 'handler :> Delegate and 'handler: delegate<'args, unit>>
+    (name: string, getEvent: obj -> IEvent<'handler, 'args>) =
+    inherit AvaloniaEventData(name)
+
+    override _.Subscribe(slot, node) =
+        (getEvent node.Target).Subscribe(fun args -> (unbox<'args -> unit> slot.Handler) args)
 
 module Attributes =
     /// Define an attribute for an AvaloniaProperty
@@ -56,52 +274,56 @@ module Attributes =
         (property: AvaloniaProperty<'valueType>)
         (convertValue: 'modelType -> 'valueType)
         (compare: 'modelType -> 'modelType -> ScalarAttributeComparison)
-        =
-        Attributes.defineScalar<'modelType, 'valueType> property.Name convertValue compare (fun _ newValueOpt node ->
-            let target = node.Target :?> AvaloniaObject
-
-            match newValueOpt with
-            | ValueNone -> target.ClearValue(property)
-            | ValueSome v -> target.SetValue(property, v) |> ignore)
+        : ScalarAttributeDefinition<'modelType, 'valueType> =
+        { Key = AttributeDefinitionStore.registerScalar(AvaloniaPropertyData<'modelType, 'valueType>(property, convertValue, compare))
+          Name = property.Name }
 
     /// Define an attribute for an AvaloniaProperty supporting equality comparison
-    let defineAvaloniaPropertyWithEquality<'T when 'T: equality> (directProperty: AvaloniaProperty<'T>) =
-        Attributes.defineSimpleScalarWithEquality<'T> directProperty.Name (fun _ newValueOpt node ->
-            let target = node.Target :?> AvaloniaObject
+    let defineAvaloniaPropertyWithEquality<'T when 'T: equality> (directProperty: AvaloniaProperty<'T>) : SimpleScalarAttributeDefinition<'T> =
+        { Key = AttributeDefinitionStore.registerScalar(AvaloniaPropertyWithEqualityData<'T>(directProperty))
+          Name = directProperty.Name }
 
-            match newValueOpt with
-            | ValueNone -> target.ClearValue(directProperty)
-            | ValueSome v -> target.SetValue(directProperty, v) |> ignore)
+    /// Define an attribute for a bool AvaloniaProperty, stored unboxed
+    let defineAvaloniaPropertyBool (property: AvaloniaProperty<bool>) : SmallScalarAttributeDefinition<bool> =
+        { Key = AttributeDefinitionStore.registerSmallScalar(AvaloniaPropertySmallData<bool>(property, fun v -> SmallScalars.Bool.decode v))
+          Name = property.Name }
+
+    /// Define an attribute for a float AvaloniaProperty, stored unboxed
+    let defineAvaloniaPropertyFloat (property: AvaloniaProperty<float>) : SmallScalarAttributeDefinition<float> =
+        { Key = AttributeDefinitionStore.registerSmallScalar(AvaloniaPropertySmallData<float>(property, fun v -> SmallScalars.Float.decode v))
+          Name = property.Name }
+
+    /// Define an attribute for an int AvaloniaProperty, stored unboxed
+    let defineAvaloniaPropertyInt (property: AvaloniaProperty<int>) : SmallScalarAttributeDefinition<int> =
+        { Key = AttributeDefinitionStore.registerSmallScalar(AvaloniaPropertySmallData<int>(property, fun v -> SmallScalars.Int.decode v))
+          Name = property.Name }
+
+    /// Define an attribute for an int-backed enum AvaloniaProperty, stored unboxed
+    let defineAvaloniaPropertyEnum<'T when 'T: enum<int> and 'T: struct> (property: AvaloniaProperty<'T>) : SmallScalarAttributeDefinition<'T> =
+        let decode (v: uint64) =
+            let mutable value = int v
+            System.Runtime.CompilerServices.Unsafe.As<int, 'T>(&value)
+
+        { Key = AttributeDefinitionStore.registerSmallScalar(AvaloniaPropertySmallData<'T>(property, decode))
+          Name = property.Name }
 
     /// Define an attribute for an AvaloniaProperty supporting equality comparison with a default value and setter
-    let defineProperty<'T when 'T: equality> name (defaultValue: 'T) (setter: obj -> 'T -> unit) =
-        Attributes.defineSimpleScalarWithEquality<'T> name (fun _ newValueOpt node ->
-            let target = node.Target :?> AvaloniaObject
-
-            match newValueOpt with
-            | ValueNone -> setter target defaultValue
-            | ValueSome v -> setter target v)
+    let defineProperty<'T when 'T: equality> name (defaultValue: 'T) (setter: obj -> 'T -> unit) : SimpleScalarAttributeDefinition<'T> =
+        { Key = AttributeDefinitionStore.registerScalar(PropertyWithDefaultData<'T>(defaultValue, setter))
+          Name = name }
 
     /// Define an attribute for an AvaloniaProperty supporting equality comparison with getter and setter
-    let definePropertyWithGetSet<'T when 'T: equality> name (getter: obj -> 'T) (setter: obj -> 'T -> unit) =
-        Attributes.defineSimpleScalarWithEquality<'T> name (fun _ newValueOpt node ->
-            let target = node.Target :?> AvaloniaObject
-
-            match newValueOpt with
-            | ValueNone -> setter target (getter target)
-            | ValueSome v -> setter target v)
+    let definePropertyWithGetSet<'T when 'T: equality> name (getter: obj -> 'T) (setter: obj -> 'T -> unit) : SimpleScalarAttributeDefinition<'T> =
+        { Key = AttributeDefinitionStore.registerScalar(PropertyWithGetSetData<'T>(getter, setter))
+          Name = name }
 
     /// Define an attribute for an AvaloniaProperty supporting equality comparison and converter
     let defineAvaloniaPropertyWithEqualityConverter<'T, 'modelType, 'valueType when 'T: equality>
         (directProperty: AvaloniaProperty<'T>)
         (convert: 'modelType -> 'valueType)
-        =
-        Attributes.defineScalar<'modelType, 'valueType> directProperty.Name convert ScalarAttributeComparers.noCompare (fun _ newValueOpt node ->
-            let target = node.Target :?> AvaloniaObject
-
-            match newValueOpt with
-            | ValueNone -> target.ClearValue(directProperty)
-            | ValueSome v -> target.SetValue(directProperty, v) |> ignore)
+        : ScalarAttributeDefinition<'modelType, 'valueType> =
+        { Key = AttributeDefinitionStore.registerScalar(AvaloniaPropertyConverterData<'T, 'modelType, 'valueType>(directProperty, convert))
+          Name = directProperty.Name }
 
     /// Define an attribute storing a Widget for an AvaloniaProperty
     let defineAvaloniaPropertyWidget (property: AvaloniaProperty<'T | null>) =
@@ -117,14 +339,14 @@ module Attributes =
     /// Performance optimization: avoid allocating a new ImageSource instance on each update
     /// we store the user value (e.g. Bitmap, string, Uri, Stream) and convert it to an ImageSource only when needed
     let defineBindableImageSource (property: AvaloniaProperty) =
-        Attributes.defineScalar<ImageSourceValue, ImageSourceValue> property.Name id ScalarAttributeComparers.equalityCompare (fun _ newValueOpt node ->
+        Attributes.defineScalar<ImageSourceValue, ImageSourceValue> property.Name id ScalarAttributeComparers.equalityCompare (fun _ newValue node ->
             let target = node.Target :?> AvaloniaObject
 
-            match newValueOpt with
-            | ValueNone -> target.ClearValue(property)
-            | ValueSome v ->
+            if not newValue.HasValue then
+                target.ClearValue(property)
+            else
                 let value =
-                    match v with
+                    match newValue.Value with
                     | ImageSourceValue.Bitmap source -> source
                     | ImageSourceValue.File file -> ImageSource.fromString file
                     | ImageSourceValue.Uri uri -> ImageSource.fromUri uri
@@ -135,14 +357,14 @@ module Attributes =
     /// Performance optimization: avoid allocating a new WindowIcon instance on each update
     /// we store the user value (e.g. Bitmap, string, Uri, Stream) and convert it to an ImageSource only when needed
     let defineBindableWindowIconSource (property: AvaloniaProperty) =
-        Attributes.defineScalar<ImageSourceValue, ImageSourceValue> property.Name id ScalarAttributeComparers.equalityCompare (fun _ newValueOpt node ->
+        Attributes.defineScalar<ImageSourceValue, ImageSourceValue> property.Name id ScalarAttributeComparers.equalityCompare (fun _ newValue node ->
             let target = node.Target :?> AvaloniaObject
 
-            match newValueOpt with
-            | ValueNone -> target.ClearValue(property)
-            | ValueSome v ->
+            if not newValue.HasValue then
+                target.ClearValue(property)
+            else
                 let value =
-                    match v with
+                    match newValue.Value with
                     | ImageSourceValue.Bitmap source -> WindowIcon(source)
                     | ImageSourceValue.File file -> WindowIcon(ImageSource.fromString file)
                     | ImageSourceValue.Uri uri -> WindowIcon(ImageSource.fromUri uri)
@@ -378,106 +600,22 @@ module Attributes =
             (convertToValue: 'modelType -> 'valueType)
             (convertToModel: 'valueType -> 'modelType)
             : SimpleScalarAttributeDefinition<ValueEventData<'modelType, 'modelType>> =
-
-            let key =
-                SimpleScalarAttributeDefinition.CreateAttributeData(
-                    ScalarAttributeComparers.noCompare,
-                    (fun oldValueOpt (newValueOpt: ValueEventData<'modelType, 'modelType> voption) node ->
-                        let target = node.Target :?> AvaloniaObject
-
-                        // The attribute is no longer applied, so we clean up the event
-                        match node.TryGetHandler(property.Name) with
-                        | ValueNone -> ()
-                        | ValueSome handler -> handler.Dispose()
-
-                        match newValueOpt with
-                        | ValueNone ->
-                            match oldValueOpt with
-                            | ValueNone -> ()
-                            | ValueSome _ -> target.ClearValue(property)
-
-                        | ValueSome curr ->
-                            // Clean up the old event handler if any
-                            match node.TryGetHandler(property.Name) with
-                            | ValueNone -> ()
-                            | ValueSome handler -> handler.Dispose()
-
-                            // Set the new value
-
-                            match curr.Value with
-                            | ValueNone -> ()
-                            | ValueSome v ->
-                                let newValue = convertToValue v
-                                target.SetValue(property, box newValue) |> ignore
-
-                            let event = property.Changed
-                            // Set the new event handler
-                            let disposable =
-                                event.Subscribe(fun args ->
-                                    if args.Sender = target then
-                                        if args.NewValue.HasValue then
-                                            let args = args.NewValue.Value
-                                            let (MsgValue r) = curr.Event(convertToModel args)
-                                            Dispatcher.dispatch node r)
-
-                            node.SetHandler(property.Name, disposable))
+            { Key =
+                AttributeDefinitionStore.registerScalar(
+                    MvuAvaloniaPropertyChangedEventData<'modelType, 'valueType>(property, convertToValue, convertToModel)
                 )
-                |> AttributeDefinitionStore.registerScalar
-
-            { Key = key; Name = name }
+              Name = name }
 
         let defineAvaloniaPropertyWithChangedEvent'<'T> name (property: AvaloniaProperty<'T>) : SimpleScalarAttributeDefinition<ValueEventData<'T, 'T>> =
             defineAvaloniaPropertyWithChangedEvent<'T, 'T> name property id id
 
         let defineRoutedEvent<'args when 'args :> RoutedEventArgs> name (property: RoutedEvent<'args>) : SimpleScalarAttributeDefinition<'args -> MsgValue> =
-            let key =
-                SimpleScalarAttributeDefinition.CreateAttributeData(
-                    ScalarAttributeComparers.noCompare,
-                    (fun _ (newValueOpt: ('args -> MsgValue) voption) (node: IViewNode) ->
-                        match node.TryGetHandler(name) with
-                        | ValueNone -> ()
-                        | ValueSome handler -> handler.Dispose()
-
-                        match newValueOpt with
-                        | ValueNone -> node.Dispose()
-
-                        | ValueSome fn ->
-                            let event =
-                                property.AddClassHandler(fun _ args ->
-                                    let (MsgValue r) = fn args
-                                    Dispatcher.dispatch node r)
-
-                            node.SetHandler(name, event))
-                )
-                |> AttributeDefinitionStore.registerScalar
-
-            { Key = key; Name = name }
+            { Key = AttributeDefinitionStore.registerScalar(MvuRoutedEventData<'args>(name, property))
+              Name = name }
 
         let defineEventHandler name (getEvent: obj -> IEvent<'handler, 'args>) : SimpleScalarAttributeDefinition<'args -> MsgValue> =
-            let key =
-                SimpleScalarAttributeDefinition.CreateAttributeData(
-                    ScalarAttributeComparers.noCompare,
-                    (fun _ (newValueOpt: ('args -> MsgValue) voption) (node: IViewNode) ->
-                        match node.TryGetHandler(name) with
-                        | ValueNone -> ()
-                        | ValueSome handler -> handler.Dispose()
-
-                        match newValueOpt with
-                        | ValueNone -> node.Dispose()
-
-                        | ValueSome fn ->
-                            let event = getEvent node.Target
-
-                            let handler =
-                                event.Subscribe(fun args ->
-                                    let (MsgValue r) = fn args
-                                    Dispatcher.dispatch node r)
-
-                            node.SetHandler(name, handler))
-                )
-                |> AttributeDefinitionStore.registerScalar
-
-            { Key = key; Name = name }
+            { Key = AttributeDefinitionStore.registerScalar(MvuEventHandlerData<'handler, 'args>(name, getEvent))
+              Name = name }
 
     module Component =
 
@@ -487,51 +625,11 @@ module Attributes =
             (convertToValue: 'modelType -> 'valueType)
             (convertToModel: 'valueType -> 'modelType)
             : SimpleScalarAttributeDefinition<ComponentValueEventData<'modelType, 'modelType>> =
-
-            let key =
-                SimpleScalarAttributeDefinition.CreateAttributeData(
-                    ScalarAttributeComparers.noCompare,
-                    (fun oldValueOpt (newValueOpt: ComponentValueEventData<'modelType, 'modelType> voption) node ->
-                        let target = node.Target :?> AvaloniaObject
-
-                        // The attribute is no longer applied, so we clean up the event
-                        match node.TryGetHandler(property.Name) with
-                        | ValueNone -> ()
-                        | ValueSome handler -> handler.Dispose()
-
-                        match newValueOpt with
-                        | ValueNone ->
-                            match oldValueOpt with
-                            | ValueNone -> ()
-                            | ValueSome _ -> target.ClearValue(property)
-
-                        | ValueSome curr ->
-                            // Clean up the old event handler if any
-                            match node.TryGetHandler(property.Name) with
-                            | ValueNone -> ()
-                            | ValueSome handler -> handler.Dispose()
-
-                            // Set the new value
-
-                            match curr.Value with
-                            | ValueNone -> ()
-                            | ValueSome v ->
-                                let newValue = convertToValue v
-                                target.SetValue(property, box newValue) |> ignore
-
-                            let event = property.Changed
-                            // Set the new event handler
-                            let disposable =
-                                event.Subscribe(fun args ->
-                                    if args.Sender = target then
-                                        if args.NewValue.HasValue then
-                                            curr.Event(convertToModel args.NewValue.Value))
-
-                            node.SetHandler(property.Name, disposable))
+            { Key =
+                AttributeDefinitionStore.registerScalar(
+                    ComponentAvaloniaPropertyChangedEventData<'modelType, 'valueType>(property, convertToValue, convertToModel)
                 )
-                |> AttributeDefinitionStore.registerScalar
-
-            { Key = key; Name = name }
+              Name = name }
 
         let defineAvaloniaPropertyWithChangedEvent'<'T>
             name
@@ -540,45 +638,9 @@ module Attributes =
             defineAvaloniaPropertyWithChangedEvent<'T, 'T> name property id id
 
         let defineRoutedEvent<'args when 'args :> RoutedEventArgs> name (property: RoutedEvent<'args>) : SimpleScalarAttributeDefinition<'args -> unit> =
-            let key =
-                SimpleScalarAttributeDefinition.CreateAttributeData(
-                    ScalarAttributeComparers.noCompare,
-                    (fun _ (newValueOpt: ('args -> unit) voption) (node: IViewNode) ->
-                        match node.TryGetHandler(name) with
-                        | ValueNone -> ()
-                        | ValueSome handler -> handler.Dispose()
-
-                        match newValueOpt with
-                        | ValueNone -> node.Dispose()
-
-                        | ValueSome fn ->
-                            let event = property.AddClassHandler(fun _ args -> fn args)
-
-                            node.SetHandler(name, event))
-                )
-                |> AttributeDefinitionStore.registerScalar
-
-            { Key = key; Name = name }
+            { Key = AttributeDefinitionStore.registerScalar(ComponentRoutedEventData<'args>(name, property))
+              Name = name }
 
         let defineEventHandler name (getEvent: obj -> IEvent<'handler, 'args>) : SimpleScalarAttributeDefinition<'args -> unit> =
-            let key =
-                SimpleScalarAttributeDefinition.CreateAttributeData(
-                    ScalarAttributeComparers.noCompare,
-                    (fun _ (newValueOpt: ('args -> unit) voption) (node: IViewNode) ->
-                        match node.TryGetHandler(name) with
-                        | ValueNone -> ()
-                        | ValueSome handler -> handler.Dispose()
-
-                        match newValueOpt with
-                        | ValueNone -> node.Dispose()
-
-                        | ValueSome fn ->
-                            let event = getEvent node.Target
-
-                            let handler = event.Subscribe(fun args -> fn args)
-
-                            node.SetHandler(name, handler))
-                )
-                |> AttributeDefinitionStore.registerScalar
-
-            { Key = key; Name = name }
+            { Key = AttributeDefinitionStore.registerScalar(ComponentEventHandlerData<'handler, 'args>(name, getEvent))
+              Name = name }

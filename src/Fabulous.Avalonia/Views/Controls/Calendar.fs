@@ -16,7 +16,7 @@ module Calendar =
         Attributes.defineAvaloniaPropertyWithEquality Calendar.FirstDayOfWeekProperty
 
     let IsTodayHighlighted =
-        Attributes.defineAvaloniaPropertyWithEquality Calendar.IsTodayHighlightedProperty
+        Attributes.defineAvaloniaPropertyBool Calendar.IsTodayHighlightedProperty
 
     let HeaderBackgroundWidget =
         Attributes.defineAvaloniaPropertyWidget Calendar.HeaderBackgroundProperty
@@ -25,10 +25,10 @@ module Calendar =
         Attributes.defineAvaloniaPropertyWithEquality Calendar.HeaderBackgroundProperty
 
     let DisplayMode =
-        Attributes.defineAvaloniaPropertyWithEquality Calendar.DisplayModeProperty
+        Attributes.defineAvaloniaPropertyEnum Calendar.DisplayModeProperty
 
     let SelectionMode =
-        Attributes.defineAvaloniaPropertyWithEquality Calendar.SelectionModeProperty
+        Attributes.defineAvaloniaPropertyEnum Calendar.SelectionModeProperty
 
     let DisplayDate =
         Attributes.defineAvaloniaPropertyWithEquality Calendar.DisplayDateProperty

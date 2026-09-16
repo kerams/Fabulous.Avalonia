@@ -6,13 +6,52 @@ open Fabulous
 open Fabulous.Avalonia
 open Fabulous.StackAllocatedCollections.StackList
 
-module ComponentToggleButton =
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type ComponentToggleButton =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _CheckedChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<Fabulous.Avalonia.ComponentValueEventData<bool, bool>>
 
-    let CheckedChanged =
-        Attributes.Component.defineAvaloniaPropertyWithChangedEvent "ToggleButton_IsCheckedChanged" ToggleButton.IsCheckedProperty Nullable Nullable.op_Explicit
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _CheckedChangedInit: bool
 
-    let ThreeStateCheckedChanged =
-        Attributes.Component.defineAvaloniaPropertyWithChangedEvent' "ToggleButton_CheckedChanged" ToggleButton.IsCheckedProperty
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ThreeStateCheckedChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<Fabulous.Avalonia.ComponentValueEventData<System.Nullable<bool>, System.Nullable<bool>>>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ThreeStateCheckedChangedInit: bool
+
+    static member CheckedChanged =
+        if not ComponentToggleButton._CheckedChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentToggleButton._CheckedChangedInit then
+                    ComponentToggleButton._CheckedChanged <-
+                        Attributes.Component.defineAvaloniaPropertyWithChangedEvent "ToggleButton_IsCheckedChanged" ToggleButton.IsCheckedProperty Nullable Nullable.op_Explicit
+
+                    ComponentToggleButton._CheckedChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentToggleButton._CheckedChanged
+
+    static member ThreeStateCheckedChanged =
+        if not ComponentToggleButton._ThreeStateCheckedChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentToggleButton._ThreeStateCheckedChangedInit then
+                    ComponentToggleButton._ThreeStateCheckedChanged <-
+                        Attributes.Component.defineAvaloniaPropertyWithChangedEvent' "ToggleButton_CheckedChanged" ToggleButton.IsCheckedProperty
+
+                    ComponentToggleButton._ThreeStateCheckedChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentToggleButton._ThreeStateCheckedChanged
 
 [<AutoOpen>]
 module ComponentToggleButtonBuilders =
@@ -36,7 +75,7 @@ module ComponentToggleButtonBuilders =
             let s1 = ContentControl.ContentString.WithValue(text)
             let s2 = ToggleButton.IsThreeState.WithValue(true)
             let s3 = ComponentToggleButton.ThreeStateCheckedChanged.WithValue(
-                        ComponentValueEventData.createVOption (ThreeState.fromOption(isChecked)) (ThreeState.toOption >> fn)
+                        ComponentValueEventData.createOptional (ThreeState.fromOption(isChecked)) (ThreeState.toOption >> fn)
                      )
             let bundle = AttributesBundle(StackList.three(s1, s2, s3), [||], [||])
             WidgetBuilder<'msg, IFabToggleButton>(ToggleButton.WidgetKey, &bundle)
@@ -61,7 +100,7 @@ module ComponentToggleButtonBuilders =
             let bundle = AttributesBundle(
                 StackList.two(
                     ComponentToggleButton.ThreeStateCheckedChanged.WithValue(
-                        ComponentValueEventData.createVOption (ThreeState.fromOption(isChecked)) (ThreeState.toOption >> fn)
+                        ComponentValueEventData.createOptional (ThreeState.fromOption(isChecked)) (ThreeState.toOption >> fn)
                     ),
                     ToggleButton.IsThreeState.WithValue(true)
                 ),

@@ -12,10 +12,10 @@ module Rectangle =
     let WidgetKey = Widgets.register<Rectangle>()
 
     let RadiusX =
-        Attributes.defineAvaloniaPropertyWithEquality Rectangle.RadiusXProperty
+        Attributes.defineAvaloniaPropertyFloat Rectangle.RadiusXProperty
 
     let RadiusY =
-        Attributes.defineAvaloniaPropertyWithEquality Rectangle.RadiusYProperty
+        Attributes.defineAvaloniaPropertyFloat Rectangle.RadiusYProperty
 
 [<AutoOpen>]
 module RectangleBuilders =

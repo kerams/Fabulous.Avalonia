@@ -5,51 +5,237 @@ open Avalonia.Input
 open Avalonia.Input.TextInput
 open Avalonia.Interactivity
 open Fabulous
+open Fabulous.ScalarAttributeDefinitions
 
-module MvuInputElement =
+// Definitions are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps the
+// definitions whose property the app reads. Registered keys always carry a kind bit, so 0 means not created yet.
+[<AbstractClass; Sealed>]
+type MvuInputElement =
+    [<DefaultValue>]
+    static val mutable private keyDown: SimpleScalarAttributeDefinition<KeyEventArgs -> MsgValue>
 
-    let KeyDown =
-        Attributes.Mvu.defineEvent<KeyEventArgs> "InputElement_KeyDown" (fun target -> (target :?> InputElement).KeyDown)
+    [<DefaultValue>]
+    static val mutable private keyUp: SimpleScalarAttributeDefinition<KeyEventArgs -> MsgValue>
 
-    let KeyUp =
-        Attributes.Mvu.defineEvent<KeyEventArgs> "InputElement_KeyUp" (fun target -> (target :?> InputElement).KeyUp)
+    [<DefaultValue>]
+    static val mutable private textInput: SimpleScalarAttributeDefinition<TextInputEventArgs -> MsgValue>
 
-    let TextInput =
-        Attributes.Mvu.defineEvent<TextInputEventArgs> "InputElement_TextInput" (fun target -> (target :?> InputElement).TextInput)
+    [<DefaultValue>]
+    static val mutable private textInputMethodClientRequested: SimpleScalarAttributeDefinition<TextInputMethodClientRequestedEventArgs -> MsgValue>
 
-    let TextInputMethodClientRequested =
-        Attributes.Mvu.defineEvent<TextInputMethodClientRequestedEventArgs> "InputElement_TextInputMethodClientRequested" (fun target ->
-            (target :?> InputElement).TextInputMethodClientRequested)
+    [<DefaultValue>]
+    static val mutable private pointerEntered: SimpleScalarAttributeDefinition<PointerEventArgs -> MsgValue>
 
-    let PointerEntered =
-        Attributes.Mvu.defineEvent<PointerEventArgs> "InputElement_PointerEntered" (fun target -> (target :?> InputElement).PointerEntered)
+    [<DefaultValue>]
+    static val mutable private pointerExited: SimpleScalarAttributeDefinition<PointerEventArgs -> MsgValue>
 
-    let PointerExited =
-        Attributes.Mvu.defineEvent<PointerEventArgs> "InputElement_PointerExited" (fun target -> (target :?> InputElement).PointerExited)
+    [<DefaultValue>]
+    static val mutable private pointerMoved: SimpleScalarAttributeDefinition<PointerEventArgs -> MsgValue>
 
-    let PointerMoved =
-        Attributes.Mvu.defineEvent<PointerEventArgs> "InputElement_PointerMoved" (fun target -> (target :?> InputElement).PointerMoved)
+    [<DefaultValue>]
+    static val mutable private pointerPressed: SimpleScalarAttributeDefinition<PointerPressedEventArgs -> MsgValue>
 
-    let PointerPressed =
-        Attributes.Mvu.defineEvent<PointerPressedEventArgs> "InputElement_PointerPressed" (fun target -> (target :?> InputElement).PointerPressed)
+    [<DefaultValue>]
+    static val mutable private pointerReleased: SimpleScalarAttributeDefinition<PointerReleasedEventArgs -> MsgValue>
 
-    let PointerReleased =
-        Attributes.Mvu.defineEvent<PointerReleasedEventArgs> "InputElement_PointerReleased" (fun target -> (target :?> InputElement).PointerReleased)
+    [<DefaultValue>]
+    static val mutable private pointerCaptureLost: SimpleScalarAttributeDefinition<PointerCaptureLostEventArgs -> MsgValue>
 
-    let PointerCaptureLost =
-        Attributes.Mvu.defineEvent<PointerCaptureLostEventArgs> "InputElement_PointerCaptureLost" (fun target -> (target :?> InputElement).PointerCaptureLost)
+    [<DefaultValue>]
+    static val mutable private pointerWheelChanged: SimpleScalarAttributeDefinition<PointerWheelEventArgs -> MsgValue>
 
-    let PointerWheelChanged =
-        Attributes.Mvu.defineEvent<PointerWheelEventArgs> "InputElement_PointerWheelChanged" (fun target -> (target :?> InputElement).PointerWheelChanged)
+    [<DefaultValue>]
+    static val mutable private tapped: SimpleScalarAttributeDefinition<TappedEventArgs -> MsgValue>
 
-    let Tapped =
-        Attributes.Mvu.defineEvent<TappedEventArgs> "InputElement_Tapped" (fun target -> (target :?> InputElement).Tapped)
+    [<DefaultValue>]
+    static val mutable private holding: SimpleScalarAttributeDefinition<HoldingRoutedEventArgs -> MsgValue>
 
-    let Holding =
-        Attributes.Mvu.defineEvent<HoldingRoutedEventArgs> "InputElement_Holding" (fun target -> (target :?> InputElement).Holding)
+    [<DefaultValue>]
+    static val mutable private doubleTapped: SimpleScalarAttributeDefinition<TappedEventArgs -> MsgValue>
 
-    let DoubleTapped =
-        Attributes.Mvu.defineEvent<TappedEventArgs> "InputElement_DoubleTapped" (fun target -> (target :?> InputElement).DoubleTapped)
+    static member KeyDown =
+        if int MvuInputElement.keyDown.Key = 0 then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if int MvuInputElement.keyDown.Key = 0 then
+                    MvuInputElement.keyDown <-
+                        Attributes.Mvu.defineEvent<KeyEventArgs> "InputElement_KeyDown" (fun target -> (target :?> InputElement).KeyDown)
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuInputElement.keyDown
+
+    static member KeyUp =
+        if int MvuInputElement.keyUp.Key = 0 then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if int MvuInputElement.keyUp.Key = 0 then
+                    MvuInputElement.keyUp <-
+                        Attributes.Mvu.defineEvent<KeyEventArgs> "InputElement_KeyUp" (fun target -> (target :?> InputElement).KeyUp)
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuInputElement.keyUp
+
+    static member TextInput =
+        if int MvuInputElement.textInput.Key = 0 then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if int MvuInputElement.textInput.Key = 0 then
+                    MvuInputElement.textInput <-
+                        Attributes.Mvu.defineEvent<TextInputEventArgs> "InputElement_TextInput" (fun target -> (target :?> InputElement).TextInput)
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuInputElement.textInput
+
+    static member TextInputMethodClientRequested =
+        if int MvuInputElement.textInputMethodClientRequested.Key = 0 then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if int MvuInputElement.textInputMethodClientRequested.Key = 0 then
+                    MvuInputElement.textInputMethodClientRequested <-
+                        Attributes.Mvu.defineEvent<TextInputMethodClientRequestedEventArgs> "InputElement_TextInputMethodClientRequested" (fun target ->
+                            (target :?> InputElement).TextInputMethodClientRequested)
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuInputElement.textInputMethodClientRequested
+
+    static member PointerEntered =
+        if int MvuInputElement.pointerEntered.Key = 0 then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if int MvuInputElement.pointerEntered.Key = 0 then
+                    MvuInputElement.pointerEntered <-
+                        Attributes.Mvu.defineEvent<PointerEventArgs> "InputElement_PointerEntered" (fun target -> (target :?> InputElement).PointerEntered)
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuInputElement.pointerEntered
+
+    static member PointerExited =
+        if int MvuInputElement.pointerExited.Key = 0 then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if int MvuInputElement.pointerExited.Key = 0 then
+                    MvuInputElement.pointerExited <-
+                        Attributes.Mvu.defineEvent<PointerEventArgs> "InputElement_PointerExited" (fun target -> (target :?> InputElement).PointerExited)
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuInputElement.pointerExited
+
+    static member PointerMoved =
+        if int MvuInputElement.pointerMoved.Key = 0 then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if int MvuInputElement.pointerMoved.Key = 0 then
+                    MvuInputElement.pointerMoved <-
+                        Attributes.Mvu.defineEvent<PointerEventArgs> "InputElement_PointerMoved" (fun target -> (target :?> InputElement).PointerMoved)
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuInputElement.pointerMoved
+
+    static member PointerPressed =
+        if int MvuInputElement.pointerPressed.Key = 0 then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if int MvuInputElement.pointerPressed.Key = 0 then
+                    MvuInputElement.pointerPressed <-
+                        Attributes.Mvu.defineEvent<PointerPressedEventArgs> "InputElement_PointerPressed" (fun target -> (target :?> InputElement).PointerPressed)
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuInputElement.pointerPressed
+
+    static member PointerReleased =
+        if int MvuInputElement.pointerReleased.Key = 0 then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if int MvuInputElement.pointerReleased.Key = 0 then
+                    MvuInputElement.pointerReleased <-
+                        Attributes.Mvu.defineEvent<PointerReleasedEventArgs> "InputElement_PointerReleased" (fun target -> (target :?> InputElement).PointerReleased)
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuInputElement.pointerReleased
+
+    static member PointerCaptureLost =
+        if int MvuInputElement.pointerCaptureLost.Key = 0 then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if int MvuInputElement.pointerCaptureLost.Key = 0 then
+                    MvuInputElement.pointerCaptureLost <-
+                        Attributes.Mvu.defineEvent<PointerCaptureLostEventArgs> "InputElement_PointerCaptureLost" (fun target -> (target :?> InputElement).PointerCaptureLost)
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuInputElement.pointerCaptureLost
+
+    static member PointerWheelChanged =
+        if int MvuInputElement.pointerWheelChanged.Key = 0 then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if int MvuInputElement.pointerWheelChanged.Key = 0 then
+                    MvuInputElement.pointerWheelChanged <-
+                        Attributes.Mvu.defineEvent<PointerWheelEventArgs> "InputElement_PointerWheelChanged" (fun target -> (target :?> InputElement).PointerWheelChanged)
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuInputElement.pointerWheelChanged
+
+    static member Tapped =
+        if int MvuInputElement.tapped.Key = 0 then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if int MvuInputElement.tapped.Key = 0 then
+                    MvuInputElement.tapped <-
+                        Attributes.Mvu.defineEvent<TappedEventArgs> "InputElement_Tapped" (fun target -> (target :?> InputElement).Tapped)
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuInputElement.tapped
+
+    static member Holding =
+        if int MvuInputElement.holding.Key = 0 then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if int MvuInputElement.holding.Key = 0 then
+                    MvuInputElement.holding <-
+                        Attributes.Mvu.defineEvent<HoldingRoutedEventArgs> "InputElement_Holding" (fun target -> (target :?> InputElement).Holding)
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuInputElement.holding
+
+    static member DoubleTapped =
+        if int MvuInputElement.doubleTapped.Key = 0 then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if int MvuInputElement.doubleTapped.Key = 0 then
+                    MvuInputElement.doubleTapped <-
+                        Attributes.Mvu.defineEvent<TappedEventArgs> "InputElement_DoubleTapped" (fun target -> (target :?> InputElement).DoubleTapped)
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuInputElement.doubleTapped
 
 type MvuInputElementModifiers =
 

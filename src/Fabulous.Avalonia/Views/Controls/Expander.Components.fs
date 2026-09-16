@@ -7,15 +7,73 @@ open Fabulous
 open Fabulous.Avalonia
 open Fabulous.StackAllocatedCollections.StackList
 
-module ComponentExpander =
-    let ExpandedChanged =
-        Attributes.Component.defineAvaloniaPropertyWithChangedEvent' "Expander_IsExpandedChanged" Expander.IsExpandedProperty
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type ComponentExpander =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ExpandedChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<Fabulous.Avalonia.ComponentValueEventData<bool, bool>>
 
-    let Collapsing =
-        Attributes.Component.defineEvent "Expander_Collapsing" (fun target -> (target :?> Expander).Collapsing)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ExpandedChangedInit: bool
 
-    let Expanding =
-        Attributes.Component.defineEvent "Expander_Expanding" (fun target -> (target :?> Expander).Expanding)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _Collapsing: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Interactivity.CancelRoutedEventArgs -> Microsoft.FSharp.Core.Unit)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _CollapsingInit: bool
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _Expanding: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Interactivity.CancelRoutedEventArgs -> Microsoft.FSharp.Core.Unit)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ExpandingInit: bool
+
+    static member ExpandedChanged =
+        if not ComponentExpander._ExpandedChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentExpander._ExpandedChangedInit then
+                    ComponentExpander._ExpandedChanged <-
+                        Attributes.Component.defineAvaloniaPropertyWithChangedEvent' "Expander_IsExpandedChanged" Expander.IsExpandedProperty
+
+                    ComponentExpander._ExpandedChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentExpander._ExpandedChanged
+
+    static member Collapsing =
+        if not ComponentExpander._CollapsingInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentExpander._CollapsingInit then
+                    ComponentExpander._Collapsing <-
+                        Attributes.Component.defineEvent "Expander_Collapsing" (fun target -> (target :?> Expander).Collapsing)
+
+                    ComponentExpander._CollapsingInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentExpander._Collapsing
+
+    static member Expanding =
+        if not ComponentExpander._ExpandingInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentExpander._ExpandingInit then
+                    ComponentExpander._Expanding <-
+                        Attributes.Component.defineEvent "Expander_Expanding" (fun target -> (target :?> Expander).Expanding)
+
+                    ComponentExpander._ExpandingInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentExpander._Expanding
 
 [<AutoOpen>]
 module ComponentExpanderBuilders =

@@ -16,26 +16,26 @@ module Popup =
     let WidgetKey = Widgets.register<Popup>()
 
     let WindowManagerAddShadowHint =
-        Attributes.defineAvaloniaPropertyWithEquality Popup.WindowManagerAddShadowHintProperty
+        Attributes.defineAvaloniaPropertyBool Popup.WindowManagerAddShadowHintProperty
 
     let Child = Attributes.defineAvaloniaPropertyWidget Popup.ChildProperty
 
     let InheritsTransform =
-        Attributes.defineAvaloniaPropertyWithEquality Popup.InheritsTransformProperty
+        Attributes.defineAvaloniaPropertyBool Popup.InheritsTransformProperty
 
-    let IsOpen = Attributes.defineAvaloniaPropertyWithEquality Popup.IsOpenProperty
+    let IsOpen = Attributes.defineAvaloniaPropertyBool Popup.IsOpenProperty
 
     let PlacementAnchor =
-        Attributes.defineAvaloniaPropertyWithEquality Popup.PlacementAnchorProperty
+        Attributes.defineAvaloniaPropertyEnum Popup.PlacementAnchorProperty
 
     let PlacementConstraintAdjustment =
-        Attributes.defineAvaloniaPropertyWithEquality Popup.PlacementConstraintAdjustmentProperty
+        Attributes.defineAvaloniaPropertyEnum Popup.PlacementConstraintAdjustmentProperty
 
     let PlacementGravity =
-        Attributes.defineAvaloniaPropertyWithEquality Popup.PlacementGravityProperty
+        Attributes.defineAvaloniaPropertyEnum Popup.PlacementGravityProperty
 
     let Placement =
-        Attributes.defineAvaloniaPropertyWithEquality Popup.PlacementProperty
+        Attributes.defineAvaloniaPropertyEnum Popup.PlacementProperty
 
     let PlacementTarget =
         Attributes.defineAvaloniaPropertyWithEquality Popup.PlacementTargetProperty
@@ -44,18 +44,18 @@ module Popup =
         Attributes.defineAvaloniaPropertyWithEquality Popup.PlacementRectProperty
 
     let OverlayDismissEventPassThrough =
-        Attributes.defineAvaloniaPropertyWithEquality Popup.OverlayDismissEventPassThroughProperty
+        Attributes.defineAvaloniaPropertyBool Popup.OverlayDismissEventPassThroughProperty
 
     let HorizontalOffset =
-        Attributes.defineAvaloniaPropertyWithEquality Popup.HorizontalOffsetProperty
+        Attributes.defineAvaloniaPropertyFloat Popup.HorizontalOffsetProperty
 
     let IsLightDismissEnabled =
-        Attributes.defineAvaloniaPropertyWithEquality Popup.IsLightDismissEnabledProperty
+        Attributes.defineAvaloniaPropertyBool Popup.IsLightDismissEnabledProperty
 
     let VerticalOffset =
-        Attributes.defineAvaloniaPropertyWithEquality Popup.VerticalOffsetProperty
+        Attributes.defineAvaloniaPropertyFloat Popup.VerticalOffsetProperty
 
-    let Topmost = Attributes.defineAvaloniaPropertyWithEquality Popup.TopmostProperty
+    let Topmost = Attributes.defineAvaloniaPropertyBool Popup.TopmostProperty
 
     let OverlayInputPassThroughElement =
         Attributes.defineAvaloniaPropertyWithEquality Popup.OverlayInputPassThroughElementProperty
@@ -64,10 +64,10 @@ module Popup =
         Attributes.defineAvaloniaPropertyWithEquality Popup.CustomPopupPlacementCallbackProperty
 
     let ShouldUseOverlayLayer =
-        Attributes.defineAvaloniaPropertyWithEquality Popup.ShouldUseOverlayLayerProperty
+        Attributes.defineAvaloniaPropertyBool Popup.ShouldUseOverlayLayerProperty
 
     let TakesFocusFromNativeControl =
-        Attributes.defineAvaloniaPropertyWithEquality Popup.TakesFocusFromNativeControlProperty
+        Attributes.defineAvaloniaPropertyBool Popup.TakesFocusFromNativeControlProperty
 
 [<AutoOpen>]
 module PopupBuilders =

@@ -20,37 +20,37 @@ module ScrollViewer =
         Attributes.defineAvaloniaPropertyWithEquality ScrollViewer.OffsetProperty
 
     let BringIntoViewOnFocusChange =
-        Attributes.defineAvaloniaPropertyWithEquality ScrollViewer.BringIntoViewOnFocusChangeProperty
+        Attributes.defineAvaloniaPropertyBool ScrollViewer.BringIntoViewOnFocusChangeProperty
 
     let HorizontalScrollBarVisibility =
-        Attributes.defineAvaloniaPropertyWithEquality ScrollViewer.HorizontalScrollBarVisibilityProperty
+        Attributes.defineAvaloniaPropertyEnum ScrollViewer.HorizontalScrollBarVisibilityProperty
 
     let VerticalScrollBarVisibility =
-        Attributes.defineAvaloniaPropertyWithEquality ScrollViewer.VerticalScrollBarVisibilityProperty
+        Attributes.defineAvaloniaPropertyEnum ScrollViewer.VerticalScrollBarVisibilityProperty
 
     let AllowAutoHide =
-        Attributes.defineAvaloniaPropertyWithEquality ScrollViewer.AllowAutoHideProperty
+        Attributes.defineAvaloniaPropertyBool ScrollViewer.AllowAutoHideProperty
 
     let IsScrollChainingEnabled =
-        Attributes.defineAvaloniaPropertyWithEquality ScrollViewer.IsScrollChainingEnabledProperty
+        Attributes.defineAvaloniaPropertyBool ScrollViewer.IsScrollChainingEnabledProperty
 
     let HorizontalSnapPointsAlignment =
-        Attributes.defineAvaloniaPropertyWithEquality ScrollViewer.HorizontalSnapPointsAlignmentProperty
+        Attributes.defineAvaloniaPropertyEnum ScrollViewer.HorizontalSnapPointsAlignmentProperty
 
     let HorizontalSnapPointsType =
-        Attributes.defineAvaloniaPropertyWithEquality ScrollViewer.HorizontalSnapPointsTypeProperty
+        Attributes.defineAvaloniaPropertyEnum ScrollViewer.HorizontalSnapPointsTypeProperty
 
     let VerticalSnapPointsAlignment =
-        Attributes.defineAvaloniaPropertyWithEquality ScrollViewer.VerticalSnapPointsAlignmentProperty
+        Attributes.defineAvaloniaPropertyEnum ScrollViewer.VerticalSnapPointsAlignmentProperty
 
     let VerticalSnapPointsType =
-        Attributes.defineAvaloniaPropertyWithEquality ScrollViewer.VerticalSnapPointsTypeProperty
+        Attributes.defineAvaloniaPropertyEnum ScrollViewer.VerticalSnapPointsTypeProperty
 
     let IsScrollInertiaEnabled =
-        Attributes.defineAvaloniaPropertyWithEquality ScrollViewer.IsScrollInertiaEnabledProperty
+        Attributes.defineAvaloniaPropertyBool ScrollViewer.IsScrollInertiaEnabledProperty
 
     let IsDeferredScrollingEnabled =
-        Attributes.defineAvaloniaPropertyWithEquality ScrollViewer.IsDeferredScrollingEnabledProperty
+        Attributes.defineAvaloniaPropertyBool ScrollViewer.IsDeferredScrollingEnabledProperty
 
 [<AutoOpen>]
 module ScrollViewerBuilders =

@@ -23,11 +23,52 @@ module NativeMenuBuilders =
             let attr = NativeMenu.Items
             CollectionBuilder<'msg, IFabNativeMenu, IFabNativeMenuItem>(NativeMenu.WidgetKey, attr)
 
-module NativeMenuAttached =
-    let NativeMenu = Attributes.defineAvaloniaPropertyWidget NativeMenu.MenuProperty
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type NativeMenuAttached =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _NativeMenu: Fabulous.WidgetAttributeDefinitions.WidgetAttributeDefinition
 
-    let IsNativeMenuExported =
-        Attributes.defineAvaloniaPropertyWithEquality Avalonia.Controls.NativeMenu.IsNativeMenuExportedProperty
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _NativeMenuInit: bool
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _IsNativeMenuExported: Fabulous.ScalarAttributeDefinitions.SmallScalarAttributeDefinition<bool>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _IsNativeMenuExportedInit: bool
+
+    static member NativeMenu =
+        if not NativeMenuAttached._NativeMenuInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not NativeMenuAttached._NativeMenuInit then
+                    NativeMenuAttached._NativeMenu <-
+                        Attributes.defineAvaloniaPropertyWidget NativeMenu.MenuProperty
+
+                    NativeMenuAttached._NativeMenuInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        NativeMenuAttached._NativeMenu
+
+    static member IsNativeMenuExported =
+        if not NativeMenuAttached._IsNativeMenuExportedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not NativeMenuAttached._IsNativeMenuExportedInit then
+                    NativeMenuAttached._IsNativeMenuExported <-
+                        Attributes.defineAvaloniaPropertyBool Avalonia.Controls.NativeMenu.IsNativeMenuExportedProperty
+
+                    NativeMenuAttached._IsNativeMenuExportedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        NativeMenuAttached._IsNativeMenuExported
 
 type NativeMenuModifiers =
 

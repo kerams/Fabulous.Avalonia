@@ -5,9 +5,31 @@ open Fabulous
 open Fabulous.Avalonia
 open Fabulous.StackAllocatedCollections.StackList
 
-module ComponentNumericUpDown =
-    let ValueChanged =
-        Attributes.Component.defineAvaloniaPropertyWithChangedEvent "NumericUpDown_ValueChanged" NumericUpDown.ValueProperty Option.toNullable Option.ofNullable
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type ComponentNumericUpDown =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ValueChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<Fabulous.Avalonia.ComponentValueEventData<(System.Decimal option), (System.Decimal option)>>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ValueChangedInit: bool
+
+    static member ValueChanged =
+        if not ComponentNumericUpDown._ValueChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not ComponentNumericUpDown._ValueChangedInit then
+                    ComponentNumericUpDown._ValueChanged <-
+                        Attributes.Component.defineAvaloniaPropertyWithChangedEvent "NumericUpDown_ValueChanged" NumericUpDown.ValueProperty Option.toNullable Option.ofNullable
+
+                    ComponentNumericUpDown._ValueChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        ComponentNumericUpDown._ValueChanged
 
 [<AutoOpen>]
 module ComponentNumericUpDownBuilders =

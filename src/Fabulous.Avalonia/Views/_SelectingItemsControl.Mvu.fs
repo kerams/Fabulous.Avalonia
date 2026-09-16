@@ -6,16 +6,74 @@ open Avalonia.Controls.Primitives
 open Fabulous
 open Fabulous.Avalonia
 
-module MvuSelectingItemsControl =
-    let SelectionChanged =
-        Attributes.Mvu.defineEvent<SelectionChangedEventArgs> "SelectingItemsControl_SelectionChanged" (fun target ->
-            (target :?> SelectingItemsControl).SelectionChanged)
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type MvuSelectingItemsControl =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _SelectionChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(Avalonia.Controls.SelectionChangedEventArgs -> Fabulous.MsgValue)>
 
-    let SelectedIndexChanged =
-        Attributes.Mvu.defineAvaloniaPropertyWithChangedEvent' "SelectingItemsControl_SelectedIndexChanged" SelectingItemsControl.SelectedIndexProperty
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _SelectionChangedInit: bool
 
-    let SelectedChanged =
-        Attributes.Mvu.defineAvaloniaPropertyWithChangedEvent' "SelectingItemsControl_SelectedChanged" SelectingItemsControl.IsSelectedProperty
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _SelectedIndexChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<Fabulous.Avalonia.ValueEventData<int, int>>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _SelectedIndexChangedInit: bool
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _SelectedChanged: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<Fabulous.Avalonia.ValueEventData<bool, bool>>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _SelectedChangedInit: bool
+
+    static member SelectionChanged =
+        if not MvuSelectingItemsControl._SelectionChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuSelectingItemsControl._SelectionChangedInit then
+                    MvuSelectingItemsControl._SelectionChanged <-
+                        Attributes.Mvu.defineEvent<SelectionChangedEventArgs> "SelectingItemsControl_SelectionChanged" (fun target ->
+                            (target :?> SelectingItemsControl).SelectionChanged)
+
+                    MvuSelectingItemsControl._SelectionChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuSelectingItemsControl._SelectionChanged
+
+    static member SelectedIndexChanged =
+        if not MvuSelectingItemsControl._SelectedIndexChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuSelectingItemsControl._SelectedIndexChangedInit then
+                    MvuSelectingItemsControl._SelectedIndexChanged <-
+                        Attributes.Mvu.defineAvaloniaPropertyWithChangedEvent' "SelectingItemsControl_SelectedIndexChanged" SelectingItemsControl.SelectedIndexProperty
+
+                    MvuSelectingItemsControl._SelectedIndexChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuSelectingItemsControl._SelectedIndexChanged
+
+    static member SelectedChanged =
+        if not MvuSelectingItemsControl._SelectedChangedInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuSelectingItemsControl._SelectedChangedInit then
+                    MvuSelectingItemsControl._SelectedChanged <-
+                        Attributes.Mvu.defineAvaloniaPropertyWithChangedEvent' "SelectingItemsControl_SelectedChanged" SelectingItemsControl.IsSelectedProperty
+
+                    MvuSelectingItemsControl._SelectedChangedInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuSelectingItemsControl._SelectedChanged
 
 type MvuSelectingItemsControlModifiers =
     /// <summary>Listens to the SelectingItemsControl SelectionChanged event.</summary>

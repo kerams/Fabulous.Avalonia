@@ -12,28 +12,28 @@ type IFabPopupFlyoutBase =
 
 module PopupFlyoutBase =
     let Placement =
-        Attributes.defineAvaloniaPropertyWithEquality PopupFlyoutBase.PlacementProperty
+        Attributes.defineAvaloniaPropertyEnum PopupFlyoutBase.PlacementProperty
 
     let HorizontalOffset =
-        Attributes.defineAvaloniaPropertyWithEquality PopupFlyoutBase.HorizontalOffsetProperty
+        Attributes.defineAvaloniaPropertyFloat PopupFlyoutBase.HorizontalOffsetProperty
 
     let VerticalOffset =
-        Attributes.defineAvaloniaPropertyWithEquality PopupFlyoutBase.VerticalOffsetProperty
+        Attributes.defineAvaloniaPropertyFloat PopupFlyoutBase.VerticalOffsetProperty
 
     let PlacementAnchor =
-        Attributes.defineAvaloniaPropertyWithEquality PopupFlyoutBase.PlacementAnchorProperty
+        Attributes.defineAvaloniaPropertyEnum PopupFlyoutBase.PlacementAnchorProperty
 
     let PlacementGravity =
-        Attributes.defineAvaloniaPropertyWithEquality PopupFlyoutBase.PlacementGravityProperty
+        Attributes.defineAvaloniaPropertyEnum PopupFlyoutBase.PlacementGravityProperty
 
     let ShowMode =
-        Attributes.defineAvaloniaPropertyWithEquality PopupFlyoutBase.ShowModeProperty
+        Attributes.defineAvaloniaPropertyEnum PopupFlyoutBase.ShowModeProperty
 
     let OverlayInputPassThroughElement =
         Attributes.defineAvaloniaPropertyWithEquality PopupFlyoutBase.OverlayInputPassThroughElementProperty
 
     let PlacementConstraintAdjustment =
-        Attributes.defineAvaloniaPropertyWithEquality PopupFlyoutBase.PlacementConstraintAdjustmentProperty
+        Attributes.defineAvaloniaPropertyEnum PopupFlyoutBase.PlacementConstraintAdjustmentProperty
 
 type PopupFlyoutBaseModifiers =
     /// <summary>Sets the Placement property.</summary>

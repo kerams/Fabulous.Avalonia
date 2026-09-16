@@ -16,10 +16,10 @@ module Expander =
         Attributes.defineAvaloniaPropertyWithEquality Expander.ContentTransitionProperty
 
     let ExpandDirection =
-        Attributes.defineAvaloniaPropertyWithEquality Expander.ExpandDirectionProperty
+        Attributes.defineAvaloniaPropertyEnum Expander.ExpandDirectionProperty
 
     let IsExpanded =
-        Attributes.defineAvaloniaPropertyWithEquality Expander.IsExpandedProperty
+        Attributes.defineAvaloniaPropertyBool Expander.IsExpandedProperty
 
 [<AutoOpen>]
 module ExpanderBuilders =

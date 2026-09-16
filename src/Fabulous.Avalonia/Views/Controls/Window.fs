@@ -24,40 +24,38 @@ module Window =
     let WidgetKey = Widgets.register<FabWindow>()
 
     let SizeToContent =
-        Attributes.defineAvaloniaPropertyWithEquality Window.SizeToContentProperty
+        Attributes.defineAvaloniaPropertyEnum Window.SizeToContentProperty
 
     let ExtendClientAreaToDecorationsHint =
-        Attributes.defineAvaloniaPropertyWithEquality Window.ExtendClientAreaToDecorationsHintProperty
+        Attributes.defineAvaloniaPropertyBool Window.ExtendClientAreaToDecorationsHintProperty
 
     let ExtendClientAreaTitleBarHeightHint =
-        Attributes.defineAvaloniaPropertyWithEquality Window.ExtendClientAreaTitleBarHeightHintProperty
+        Attributes.defineAvaloniaPropertyFloat Window.ExtendClientAreaTitleBarHeightHintProperty
 
     let ShowActivated =
-        Attributes.defineAvaloniaPropertyWithEquality Window.ShowActivatedProperty
+        Attributes.defineAvaloniaPropertyBool Window.ShowActivatedProperty
 
     let ShowInTaskbar =
-        Attributes.defineAvaloniaPropertyWithEquality Window.ShowInTaskbarProperty
+        Attributes.defineAvaloniaPropertyBool Window.ShowInTaskbarProperty
 
     let WindowState =
-        Attributes.defineAvaloniaPropertyWithEquality Window.WindowStateProperty
+        Attributes.defineAvaloniaPropertyEnum Window.WindowStateProperty
 
     let Title = Attributes.defineAvaloniaPropertyWithEquality Window.TitleProperty
 
     let IconSource = Attributes.defineBindableWindowIconSource Window.IconProperty
 
     let WindowStartupLocation =
-        Attributes.defineAvaloniaPropertyWithEquality Window.WindowStartupLocationProperty
+        Attributes.defineAvaloniaPropertyEnum Window.WindowStartupLocationProperty
 
     let CanResize =
-        Attributes.defineAvaloniaPropertyWithEquality Window.CanResizeProperty
+        Attributes.defineAvaloniaPropertyBool Window.CanResizeProperty
 
     let WindowId =
-        Attributes.defineSimpleScalarWithEquality<string> "WindowId" (fun _ newValueOpt node ->
+        Attributes.defineSimpleScalarWithEquality<string> "WindowId" (fun _ newValue node ->
             let target = node.Target :?> FabWindow
 
-            match newValueOpt with
-            | ValueSome id -> target.WindowId <- id
-            | ValueNone -> target.WindowId <- "")
+            target.WindowId <- if newValue.HasValue then newValue.Value else "")
 
 [<AutoOpen>]
 module WindowBuilders =

@@ -6,12 +6,52 @@ open Avalonia.Controls
 open Fabulous
 open Fabulous.Avalonia
 
-module MvuContextMenu =
-    let Opening =
-        Attributes.Mvu.defineEventHandler "ContextMenu_Opening" (fun target -> (target :?> ContextMenu).Opening)
+// Values are created on first access instead of in the file's static initializer, which F# runs for every
+// top-level value at once. [<DefaultValue>] static fields have no initializer code, so NativeAOT only keeps
+// the definitions whose property the app reads.
+[<AbstractClass; Sealed>]
+type MvuContextMenu =
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _Opening: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(System.ComponentModel.CancelEventArgs -> Fabulous.MsgValue)>
 
-    let Closing =
-        Attributes.Mvu.defineEventHandler "ContextMenu_Closing" (fun target -> (target :?> ContextMenu).Closing)
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _OpeningInit: bool
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _Closing: Fabulous.ScalarAttributeDefinitions.SimpleScalarAttributeDefinition<(System.ComponentModel.CancelEventArgs -> Fabulous.MsgValue)>
+
+    [<Microsoft.FSharp.Core.DefaultValue>]
+    static val mutable private _ClosingInit: bool
+
+    static member Opening =
+        if not MvuContextMenu._OpeningInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuContextMenu._OpeningInit then
+                    MvuContextMenu._Opening <-
+                        Attributes.Mvu.defineEventHandler "ContextMenu_Opening" (fun target -> (target :?> ContextMenu).Opening)
+
+                    MvuContextMenu._OpeningInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuContextMenu._Opening
+
+    static member Closing =
+        if not MvuContextMenu._ClosingInit then
+            Fabulous.AttributeDefinitionStore.SyncRoot.Enter()
+
+            try
+                if not MvuContextMenu._ClosingInit then
+                    MvuContextMenu._Closing <-
+                        Attributes.Mvu.defineEventHandler "ContextMenu_Closing" (fun target -> (target :?> ContextMenu).Closing)
+
+                    MvuContextMenu._ClosingInit <- true
+            finally
+                Fabulous.AttributeDefinitionStore.SyncRoot.Exit()
+
+        MvuContextMenu._Closing
 
 type MvuContextMenuModifiers =
     /// <summary>Listens to the ContextMenu Opening event.</summary>
